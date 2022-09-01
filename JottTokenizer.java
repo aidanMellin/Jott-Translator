@@ -15,6 +15,17 @@ public class JottTokenizer {
      * @return an ArrayList of Jott Tokens
      */
     public static ArrayList<Token> tokenize(String filename){
+      /**
+       * Will need line number from here
+       */
 		return null;
 	}
+
+
+  public static void main(String[] args) {
+    /**
+     * Need to have the filename assigned
+     */
+  }
+
 }
