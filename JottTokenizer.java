@@ -5,6 +5,7 @@
  **/
 
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class JottTokenizer {
 
@@ -14,12 +15,24 @@ public class JottTokenizer {
      * @param filename the name of the file to tokenize; can be relative or absolute path
      * @return an ArrayList of Jott Tokens
      */
-    public static ArrayList<Token> tokenize(String filename){
+  public static ArrayList<Token> tokenize(String filename){
       /**
        * Will need line number from here
        */
 		return null;
 	}
+
+  /**
+   * 
+   * @param filename
+   * @param lineNumber
+   * @param body
+   * @return Token
+   */
+  public static Token makeNewToken(String filename, int lineNumber, String body, TokenType type){
+    Token newToken = new Token(body, filename, lineNumber, type);
+    return newToken;
+  }
 
 
   public static void main(String[] args) {
