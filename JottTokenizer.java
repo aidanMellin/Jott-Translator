@@ -4,6 +4,8 @@
  * @author 
  **/
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -16,6 +18,16 @@ public class JottTokenizer {
      * @return an ArrayList of Jott Tokens
      */
   public static ArrayList<Token> tokenize(String filename){
+      try {
+          File file = new File(filename);
+          Scanner scanner = new Scanner(file);
+          while (scanner.hasNextLine()) {
+              String line = scanner.nextLine();
+              System.out.println(line);
+          }
+      } catch (FileNotFoundException e) {
+          e.printStackTrace();
+      }
       /**
        * Will need line number from here
        */
@@ -39,6 +51,7 @@ public class JottTokenizer {
     /**
      * Need to have the filename assigned
      */
+    tokenize("phase1_tester/tokenizerTestCases/strings.jott");
   }
 
 }
