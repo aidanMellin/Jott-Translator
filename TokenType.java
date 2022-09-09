@@ -15,5 +15,6 @@ public enum TokenType {
     ID_KEYWORD,
     COLON,
     NOT_EQUALS,
-    STRING;
+    STRING,
+    ERROR; // catch all error handling for now
 }

@@ -4,6 +4,7 @@
  * @author 
  **/
 
+import javax.sound.midi.SysexMessage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -18,13 +19,31 @@ public class JottTokenizer {
      * @return an ArrayList of Jott Tokens
      */
   public static ArrayList<Token> tokenize(String filename){
+      ArrayList<Token> tokens = new ArrayList<>();
       try {
           File file = new File(filename);
           Scanner scanner = new Scanner(file);
+          int lineCount = 1;
           while (scanner.hasNextLine()) {
               String line = scanner.nextLine();
               System.out.println(line);
+              for (int i=0; i<line.length(); i++) {
+                  switch (line.charAt(i)) {
+                      case '[' -> tokens.add(makeNewToken(filename, lineCount, "[", TokenType.L_BRACKET));
+                      case ']' -> tokens.add(makeNewToken(filename, lineCount, "[", TokenType.R_BRACKET));
+                      case ',' -> tokens.add(makeNewToken(filename, lineCount, ",", TokenType.COMMA));
+                      case '{' -> tokens.add(makeNewToken(filename, lineCount, "{", TokenType.L_BRACE));
+                      case '}' -> tokens.add(makeNewToken(filename, lineCount, "}", TokenType.R_BRACE));
+                      case '+','-','*','/' -> tokens.add(makeNewToken(filename, lineCount, String.valueOf(line.charAt(i)), TokenType.MATH_OP));
+                      case ';' -> tokens.add(makeNewToken(filename, lineCount, ";", TokenType.SEMICOLON));
+                      case ':' -> tokens.add(makeNewToken(filename, lineCount, ":", TokenType.COLON));
+                      default -> {tokens.add(makeNewToken(filename, lineCount, String.valueOf(line.charAt(i)), TokenType.ERROR));
+                      }
+                  }
+              }
+              lineCount++;
           }
+          System.out.println(tokens);
       } catch (FileNotFoundException e) {
           e.printStackTrace();
       }
@@ -51,7 +70,7 @@ public class JottTokenizer {
     /**
      * Need to have the filename assigned
      */
-    tokenize("phase1_tester/tokenizerTestCases/strings.jott");
+    tokenize("phase1_tester/tokenizerTestCases/mathOpsTest.jott");
   }
 
 }
