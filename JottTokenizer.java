@@ -40,48 +40,28 @@ public class JottTokenizer {
                     case '{' -> tokens.add(makeNewToken(filename, lineNumber, "{", TokenType.L_BRACE));
                     case '=' -> {
                       //Conditional: if no other = -> ASSIGN, if == -> relOp. Else -> Error
-                      char returned = checkEquals(line.charAt(i+1));
-                      if (returned == 'a'){
+                      if(i + 1 < line.length()){
+                        char returned = checkEquals(line.charAt(i+1));
+                        if (returned == 'a'){
+                          tokens.add(makeNewToken(filename, lineNumber, "=", TokenType.ASSIGN));
+                        } else {
+                          tokens.add(makeNewToken(filename, lineNumber, "==", TokenType.REL_OP));
+                          i+=1;
+                        }
+                      }else{
                         tokens.add(makeNewToken(filename, lineNumber, "=", TokenType.ASSIGN));
-                      } else if (returned == 'r'){
-                        tokens.add(makeNewToken(filename, lineNumber, "==", TokenType.REL_OP));
-                        i+=1;
-                      } else{
-                        tokens.add(makeError(filename, lineNumber, line, i));
+
                       }
                     } 
                     case '<' -> tokens.add(makeNewToken(filename, lineNumber, "<", TokenType.REL_OP));
                     case '>' -> tokens.add(makeNewToken(filename, lineNumber, ">", TokenType.REL_OP));
                     case '+','-','*','/' -> tokens.add(makeNewToken(filename, lineNumber, String.valueOf(line.charAt(i)), TokenType.MATH_OP));
                     case ';' -> tokens.add(makeNewToken(filename, lineNumber, ";", TokenType.SEMICOLON));
-                    case '.' -> {
-                      List<Object> cycled = cycleDigit(line, i); //Get all following digits. 
-                      String returned = (String) cycled.get(0);
-                      i = (int) cycled.get(1); // Update the index value (should be first non-digit value)
-                      Token toAdd = (returned == "**ERROR**") ? makeError(filename, lineNumber, line, i) : makeNewToken(filename, lineNumber, returned, TokenType.NUMBER); //Ternary operator to check if returned string is an Error
-                      tokens.add(toAdd);
-                    }
-                    case '1','2','3','4','5','6','7','8','9','0' -> {
-                      List<Object> cycled = cycleDigit(line, i);
+                    case '.', '1','2','3','4','5','6','7','8','9','0' -> {
+                      List<Object> cycled = cycleNumber(line, i);
                       String returned = (String) cycled.get(0);
                       i = (int) cycled.get(1);
-
-                      if (returned == "**ERROR**"){ // If its an error, just move on THIS MIGHT NEED TO BE CHANGED
-                        tokens.add(makeError(filename, lineNumber, line, i));
-                        continue;
-                      }
-
-                      if (line.charAt(i) == '.'){ // If its a number with decimal values
-                        List<Object> decimal = cycleDigit(line, i);
-                        i = (int) decimal.get(1);
-                        returned += (String) decimal.get(0);
-                      }
-
-                      if (!returned.contains("**ERROR**")){
-                        tokens.add(makeNewToken(filename, lineNumber, returned, TokenType.NUMBER));
-                      }else{
-                        tokens.add(makeError(filename, lineNumber, line, i));
-                      }
+                      tokens.add(makeNewToken(filename, lineNumber, returned, TokenType.NUMBER));
 
                     } // keep cycling for digit. if next token a ., cycle for more digits, then store as number. Else, store as number
                     case 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z' -> {} //Keep searching for letter or digit. Store as id/keyword
@@ -101,7 +81,11 @@ public class JottTokenizer {
       /**
        * Will need line number from here
        */
-		return null;
+    for(Token tok : tokens){
+      if (tok.getTokenType() == TokenType.ERROR)
+        return null;
+    }
+		return tokens;
 	}
 
   private static Token makeError(String filename, int lineNumber, String line, Integer i){
@@ -116,31 +100,49 @@ public class JottTokenizer {
   private static char checkEquals(char c){
     if (c != '=')
       return 'a';
-    else if (c == '=')
-      return 'r';
     else
-      return 'e';
+      return 'r';
   }
 
   private static boolean isDigit(char c){
-    return c <= 57 && c >= 48;
+    int checkASCII = (int) c;
+    boolean withinBounds = checkASCII <= 57 && checkASCII >= 48;
+    return withinBounds;
   }
 
-  private static List<Object> cycleDigit(String line, int i){ //This is probably broken. Check spaces maybe?
-    String returnedString;
-    if (isDigit(line.charAt(i+1))){
-      int count = 1;
-      String digitString = "";
-      while (isDigit(line.charAt(i+count))){
-        digitString += line.charAt(i+count);
-        count += 1;
+  /**
+   * Basically we want to keep checking the next token to see if it is a valid digit.
+   * In the event that it starts with a number, we want to accept a . as it will mean that it is a number with decimals, but not if the process started with a .
+   * Will need to update the i value as line is cycled through
+   * Lets just have it return the whole body to make it easier to add to tokens
+   * @param line
+   * @param i
+   * @return body of token to be added, updated i value (in list form)
+   */
+
+  private static List<Object> cycleNumber(String line, int i){
+    String returnedString = "";
+    // returnedString += line.charAt(i);
+    int count = 0;
+
+    while (true){
+      if (line.charAt(i+count) == '.'){
+        returnedString += ".";
+        count+=1;
       }
-      i+=count;
-      returnedString = digitString;
-    }else{
-      returnedString = "**ERROR**";
+      if(count >= line.length()-i)
+        break;
+      if(isDigit(line.charAt(i+count))){
+        while (isDigit(line.charAt(i+count))){
+          returnedString += line.charAt(i+count);
+          count += 1;
+        }
+      }else{
+        break;
+      }
     }
-    return Arrays.asList(returnedString, i);
+
+    return Arrays.asList(returnedString, i+count);
   }
 
   /**
@@ -160,7 +162,7 @@ public class JottTokenizer {
     /**
      * Need to have the filename assigned
      */
-    tokenize("phase1_tester/tokenizerTestCases/mathOpsTest.jott");
+    tokenize("phase1_tester/tokenizerTestCases/phase1ErrorExample.jott");
   }
 
 }
