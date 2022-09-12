@@ -111,16 +111,6 @@ public class JottTokenizer {
                             tokens.add(makeNewToken(filename, lineNumber, "!", TokenType.ERROR));
                         }
                     }
-                    case '\"' -> {} //Cycle until next " and assign string. if no closing before new line, error
-                    default -> {tokens.add(makeError(filename, lineNumber, line, i));}
-=======
-                      if((i + 1 < line.length()) && line.charAt(i+1) == '='){
-                        tokens.add(makeNewToken(filename, lineNumber, "!=", TokenType.NOT_EQUALS));
-                        i+=1;
-                      }else{
-                        tokens.add(makeError(filename, lineNumber, line, i));
-                      }
-                    } //If next token =, TokenType.NOT_EQUALS. Else error
                     case '\"' -> {
                       List<Object> cycled = cycleString(line, i);
                       String returned = (String) cycled.get(0);
@@ -135,7 +125,6 @@ public class JottTokenizer {
                       if (line.charAt(i) != ' ')
                         tokens.add(makeError(filename, lineNumber, line, i));
                     }
->>>>>>> 6d777ac9844605091dbcd356460726fcd81dd818
                 }
               }
               lineNumber++;
