@@ -99,7 +99,6 @@ public class JottTokenizer {
                     } //Keep searching for letter or digit. Store as id/keyword
                     case ':' -> tokens.add(makeNewToken(filename, lineNumber, ":", TokenType.COLON));
                     case '!' -> {
-<<<<<<< HEAD
                         if (i+1 < line.length()) {
                             if (checkEquals(line.charAt(i + 1)) == 'r') {
                                 tokens.add(makeNewToken(filename, lineNumber, "!=", TokenType.REL_OP));
