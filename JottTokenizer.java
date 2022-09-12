@@ -32,10 +32,12 @@ public class JottTokenizer {
               for (int i=0; i<line.length(); i++) {
                 
                 switch (line.charAt(i)) {
-                    case '#' -> {continue;}
+                    case '#' -> {
+                      i += (line.length() - i);
+                      continue;}
                     case ',' -> tokens.add(makeNewToken(filename, lineNumber, ",", TokenType.COMMA));
-                    case ']' -> tokens.add(makeNewToken(filename, lineNumber, "[", TokenType.R_BRACKET));
-                    case '[' -> tokens.add(makeNewToken(filename, lineNumber, "[", TokenType.L_BRACKET));
+                    case ']' -> tokens.add(makeNewToken(filename, lineNumber, "[", TokenType.L_BRACKET));
+                    case '[' -> tokens.add(makeNewToken(filename, lineNumber, "]", TokenType.R_BRACKET));
                     case '}' -> tokens.add(makeNewToken(filename, lineNumber, "}", TokenType.R_BRACE));
                     case '{' -> tokens.add(makeNewToken(filename, lineNumber, "{", TokenType.L_BRACE));
                     case '=' -> {
@@ -83,11 +85,21 @@ public class JottTokenizer {
                       List<Object> cycled = cycleNumber(line, i);
                       String returned = (String) cycled.get(0);
                       i = (int) cycled.get(1);
-                      tokens.add(makeNewToken(filename, lineNumber, returned, TokenType.NUMBER));
+                      if(returned == ".")
+                        tokens.add(makeError(filename, lineNumber, line, i));
+                      else
+                        tokens.add(makeNewToken(filename, lineNumber, returned, TokenType.NUMBER));
                     } // keep cycling for digit. if next token a ., cycle for more digits, then store as number. Else, store as number
-                    case 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z' -> {} //Keep searching for letter or digit. Store as id/keyword
+                    case 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z' -> {
+                      List<Object> cycled = cycleIDKeyword(line, i);
+                      String returned = (String) cycled.get(0);
+                      i = (int) cycled.get(1);
+                      tokens.add(makeNewToken(filename, lineNumber, returned, TokenType.ID_KEYWORD));
+
+                    } //Keep searching for letter or digit. Store as id/keyword
                     case ':' -> tokens.add(makeNewToken(filename, lineNumber, ":", TokenType.COLON));
                     case '!' -> {
+<<<<<<< HEAD
                         if (i+1 < line.length()) {
                             if (checkEquals(line.charAt(i + 1)) == 'r') {
                                 tokens.add(makeNewToken(filename, lineNumber, "!=", TokenType.REL_OP));
@@ -101,11 +113,36 @@ public class JottTokenizer {
                     }
                     case '\"' -> {} //Cycle until next " and assign string. if no closing before new line, error
                     default -> {tokens.add(makeError(filename, lineNumber, line, i));}
+=======
+                      if((i + 1 < line.length()) && line.charAt(i+1) == '='){
+                        tokens.add(makeNewToken(filename, lineNumber, "!=", TokenType.NOT_EQUALS));
+                        i+=1;
+                      }else{
+                        tokens.add(makeError(filename, lineNumber, line, i));
+                      }
+                    } //If next token =, TokenType.NOT_EQUALS. Else error
+                    case '\"' -> {
+                      List<Object> cycled = cycleString(line, i);
+                      String returned = (String) cycled.get(0);
+                      i = (int) cycled.get(1);
+                      if(returned == "*ERROR*")
+                        tokens.add(makeError(filename, lineNumber, line, i));
+                      else
+                        tokens.add(makeNewToken(filename, lineNumber, returned, TokenType.NUMBER));
+
+                    } //Cycle until next " and assign string. if no closing before new line, error
+                    default -> {
+                      if (line.charAt(i) != ' ')
+                        tokens.add(makeError(filename, lineNumber, line, i));
+                    }
+>>>>>>> 6d777ac9844605091dbcd356460726fcd81dd818
                 }
               }
               lineNumber++;
           }
-          System.out.println(tokens);
+
+          // for(Token tok : tokens)
+            // System.out.println("Token - " + tok.toString());
           scanner.close();
       } catch (FileNotFoundException e) {
           e.printStackTrace();
@@ -119,6 +156,24 @@ public class JottTokenizer {
     }
 		return tokens;
 	}
+
+  private static List<Object> cycleString(String line, int i) {
+    String returnedString = "";
+    int count = 1;
+
+    while (count <= line.length() - i){
+      if(line.charAt(i+count) == '\"'){
+        count += 1;
+        return Arrays.asList(returnedString, i+count);
+      }
+
+      returnedString += line.charAt(i+count);
+      count+=1;
+    }
+
+    return Arrays.asList("*ERROR*", i+count);
+
+  }
 
   private static Token makeError(String filename, int lineNumber, String line, Integer i){
     return makeNewToken(filename, lineNumber, String.valueOf(line.charAt(i)), TokenType.ERROR);
@@ -136,6 +191,31 @@ public class JottTokenizer {
       return 'r';
   }
 
+  
+  private static boolean isAlpha(char c){
+    int checkASCII = (int) c;
+    boolean isUpper = checkASCII <= 90 && checkASCII >= 65;
+    boolean isLower = checkASCII <= 122 && checkASCII >= 97;
+    return isUpper || isLower;
+  }
+  
+  private static List<Object> cycleIDKeyword(String line, int i) {
+    String returnedString = "";
+    int count = 0;
+    while (true){
+      if(count >= line.length()-i)
+        break;
+      if (isAlpha(line.charAt(i+count)) || isDigit(line.charAt(i+count))){
+        returnedString += line.charAt(i+count);
+        count += 1;
+      } else {
+        break;
+      }
+    }
+
+    return Arrays.asList(returnedString, i+count);
+  }
+  
   private static boolean isDigit(char c){
     int checkASCII = (int) c;
     boolean withinBounds = checkASCII <= 57 && checkASCII >= 48;
@@ -143,10 +223,7 @@ public class JottTokenizer {
   }
 
   /**
-   * Basically we want to keep checking the next token to see if it is a valid digit.
-   * In the event that it starts with a number, we want to accept a . as it will mean that it is a number with decimals, but not if the process started with a .
-   * Will need to update the i value as line is cycled through
-   * Lets just have it return the whole body to make it easier to add to tokens
+   * Cycle through line to determine the value of a number
    * @param line
    * @param i
    * @return body of token to be added, updated i value (in list form)
@@ -194,7 +271,7 @@ public class JottTokenizer {
     /**
      * Need to have the filename assigned
      */
-    tokenize("phase1_tester/tokenizerTestCases/phase1ErrorExample.jott");
+    tokenize("phase1_tester/tokenizerTestCases/stringMissingClosing.jott");
   }
 
 }
