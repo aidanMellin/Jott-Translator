@@ -34,10 +34,11 @@ public class JottTokenizer {
                 switch (line.charAt(i)) {
                     case '#' -> {
                       i += (line.length() - i);
-                      continue;}
+                      continue;
+                    }
                     case ',' -> tokens.add(makeNewToken(filename, lineNumber, ",", TokenType.COMMA));
-                    case ']' -> tokens.add(makeNewToken(filename, lineNumber, "[", TokenType.L_BRACKET));
-                    case '[' -> tokens.add(makeNewToken(filename, lineNumber, "]", TokenType.R_BRACKET));
+                    case '[' -> tokens.add(makeNewToken(filename, lineNumber, "[", TokenType.L_BRACKET));
+                    case ']' -> tokens.add(makeNewToken(filename, lineNumber, "]", TokenType.R_BRACKET));
                     case '}' -> tokens.add(makeNewToken(filename, lineNumber, "}", TokenType.R_BRACE));
                     case '{' -> tokens.add(makeNewToken(filename, lineNumber, "{", TokenType.L_BRACE));
                     case '=' -> {
@@ -85,7 +86,7 @@ public class JottTokenizer {
                       List<Object> cycled = cycleNumber(line, i);
                       String returned = (String) cycled.get(0);
                       i = (int) cycled.get(1);
-                      if(returned == ".")
+                      if(returned.equals("."))
                         tokens.add(makeError(filename, lineNumber, line, i));
                       else
                         tokens.add(makeNewToken(filename, lineNumber, returned, TokenType.NUMBER));
@@ -114,11 +115,10 @@ public class JottTokenizer {
                       List<Object> cycled = cycleString(line, i);
                       String returned = (String) cycled.get(0);
                       i = (int) cycled.get(1);
-                      if(returned == "*ERROR*")
+                      if(returned.equals("*ERROR*"))
                         tokens.add(makeError(filename, lineNumber, line, i));
                       else
-                        tokens.add(makeNewToken(filename, lineNumber, returned, TokenType.NUMBER));
-
+                        tokens.add(makeNewToken(filename, lineNumber, returned, TokenType.STRING));
                     } //Cycle until next " and assign string. if no closing before new line, error
                     default -> {
                       if (line.charAt(i) != ' ')
@@ -128,8 +128,7 @@ public class JottTokenizer {
               }
               lineNumber++;
           }
-
-          // for(Token tok : tokens)
+            // for(Token tok : tokens)
             // System.out.println("Token - " + tok.toString());
           scanner.close();
       } catch (FileNotFoundException e) {
@@ -170,7 +169,7 @@ public class JottTokenizer {
   /**
    * 
    * @param c The char following an = in the tokenizer
-   * @return char indicating if next token means that it will be accept, relOp, or an Error
+   * @return char indicating if next token means that it will be accepting, relOp, or an Error
    */
   private static char checkEquals(char c){
     if (c != '=')
