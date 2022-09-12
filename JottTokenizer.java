@@ -53,8 +53,30 @@ public class JottTokenizer {
 
                       }
                     } 
-                    case '<' -> tokens.add(makeNewToken(filename, lineNumber, "<", TokenType.REL_OP));
-                    case '>' -> tokens.add(makeNewToken(filename, lineNumber, ">", TokenType.REL_OP));
+                    case '<' -> {
+                        if (i+1 < line.length()) {
+                            if (checkEquals(line.charAt(i + 1)) == 'r') {
+                                tokens.add(makeNewToken(filename, lineNumber, "<=", TokenType.REL_OP));
+                                i++;
+                            } else {
+                                tokens.add(makeNewToken(filename, lineNumber, "<", TokenType.REL_OP));
+                            }
+                        } else {
+                            tokens.add(makeNewToken(filename, lineNumber, "<", TokenType.REL_OP));
+                        }
+                    }
+                    case '>' -> {
+                        if (i+1 < line.length()) {
+                            if (checkEquals(line.charAt(i + 1)) == 'r') {
+                                tokens.add(makeNewToken(filename, lineNumber, ">=", TokenType.REL_OP));
+                                i++;
+                            } else {
+                                tokens.add(makeNewToken(filename, lineNumber, ">", TokenType.REL_OP));
+                            }
+                        } else {
+                            tokens.add(makeNewToken(filename, lineNumber, ">", TokenType.REL_OP));
+                        }
+                    }
                     case '+','-','*','/' -> tokens.add(makeNewToken(filename, lineNumber, String.valueOf(line.charAt(i)), TokenType.MATH_OP));
                     case ';' -> tokens.add(makeNewToken(filename, lineNumber, ";", TokenType.SEMICOLON));
                     case '.', '1','2','3','4','5','6','7','8','9','0' -> {
@@ -62,11 +84,21 @@ public class JottTokenizer {
                       String returned = (String) cycled.get(0);
                       i = (int) cycled.get(1);
                       tokens.add(makeNewToken(filename, lineNumber, returned, TokenType.NUMBER));
-
                     } // keep cycling for digit. if next token a ., cycle for more digits, then store as number. Else, store as number
                     case 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z' -> {} //Keep searching for letter or digit. Store as id/keyword
                     case ':' -> tokens.add(makeNewToken(filename, lineNumber, ":", TokenType.COLON));
-                    case '!' -> {} //If next token =, TokenType.NOT_EQUALS. Else error
+                    case '!' -> {
+                        if (i+1 < line.length()) {
+                            if (checkEquals(line.charAt(i + 1)) == 'r') {
+                                tokens.add(makeNewToken(filename, lineNumber, "!=", TokenType.REL_OP));
+                                i++;
+                            } else {
+                                tokens.add(makeNewToken(filename, lineNumber, "!", TokenType.ERROR));
+                            }
+                        } else {
+                            tokens.add(makeNewToken(filename, lineNumber, "!", TokenType.ERROR));
+                        }
+                    }
                     case '\"' -> {} //Cycle until next " and assign string. if no closing before new line, error
                     default -> {tokens.add(makeError(filename, lineNumber, line, i));}
                 }
