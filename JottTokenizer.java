@@ -86,7 +86,7 @@ public class JottTokenizer {
                             String returned = (String) cycled.get(0);
                             i = (int) cycled.get(1)-1;
                             if(returned.equals("."))
-                                tokens.add(makeError(filename, lineNumber, line, i));
+                                tokens.add(makeError(filename, lineNumber, line, i, TokenType.UNEXPECTED_PERIOD_ERROR));
                             else
                                 tokens.add(makeNewToken(filename, lineNumber, returned, TokenType.NUMBER));
                         } // keep cycling for digit. if next token a ., cycle for more digits, then store as number. Else, store as number
@@ -103,64 +103,69 @@ public class JottTokenizer {
                                     tokens.add(makeNewToken(filename, lineNumber, "!=", TokenType.REL_OP));
                                     i++;
                                 } else {
-                                    tokens.add(makeNewToken(filename, lineNumber, "!", TokenType.ERROR));
+                                    tokens.add(makeNewToken(filename, lineNumber, "!", TokenType.UNEXPECTED_CHARACTER_ERROR));
                                 }
                             } else {
-                                tokens.add(makeNewToken(filename, lineNumber, "!", TokenType.ERROR));
+                                tokens.add(makeNewToken(filename, lineNumber, "!", TokenType.PREMATURE_END_OF_LINE_ERROR));
                             }
                         }
                         case '\"' -> {
                             List<Object> cycled = cycleString(line, i);
                             String returned = (String) cycled.get(0);
                             i = (int) cycled.get(1)-1;
-                            if(returned.equals("*ERROR*"))
-                                tokens.add(makeError(filename, lineNumber, line, i));
+                            if(returned.equals("*CHAR_ERROR*"))
+                                tokens.add(makeError(filename, lineNumber, line, i, TokenType.UNEXPECTED_CHARACTER_ERROR));
+                            else if (returned.equals("*QUOTE_ERROR*"))
+                                tokens.add(makeError(filename, lineNumber, line, i, TokenType.UNCLOSED_STRING_ERROR));
                             else
                                 tokens.add(makeNewToken(filename, lineNumber, "\""+returned+"\"", TokenType.STRING));
                         } //Cycle until next " and assign string. if no closing before new line, error
                         default -> {
                             if (line.charAt(i) != ' ')
-                                tokens.add(makeError(filename, lineNumber, line, i));
+                                tokens.add(makeError(filename, lineNumber, line, i, TokenType.UNEXPECTED_CHARACTER_ERROR));
                         }
                     }
                 }
                 lineNumber++;
             }
-            for(Token tok : tokens)
-                System.out.println("Token - " + tok.toString());
+            //for(Token tok : tokens)
+              //  System.out.println("Token - " + tok.toString());
             scanner.close();
         } catch (FileNotFoundException e) {
           e.printStackTrace();
         }
     for(Token tok : tokens){
-        if (tok.getTokenType() == TokenType.ERROR)
+        if (tok.getTokenType() == TokenType.PREMATURE_END_OF_LINE_ERROR ||
+            tok.getTokenType() == TokenType.UNCLOSED_STRING_ERROR ||
+            tok.getTokenType() == TokenType.UNEXPECTED_CHARACTER_ERROR ||
+            tok.getTokenType() == TokenType.UNEXPECTED_PERIOD_ERROR)
             return null;
     }
         return tokens;
     }
 
     private static List<Object> cycleString(String line, int i) {
-    String returnedString = "";
-    int count = 1;
+        String returnedString = "";
+        int count = 1;
 
-    while (count + 1 <= line.length() - i){
-      if(line.charAt(i+count) == '\"'){
-        count += 1;
-        return Arrays.asList(returnedString, i+count);
-      }
-      if (String.valueOf(line.charAt(i+count)).matches("^[a-zA-Z\\d\\s]*")) {
-          returnedString += line.charAt(i + count);
-          count += 1;
-      } else {
-          return Arrays.asList("*ERROR*", i+count+1);
-      }
-    }
-    return Arrays.asList("*ERROR*", i+count);
+        while (count + 1 <= line.length() - i){
+          if(line.charAt(i+count) == '\"'){
+            count += 1;
+            return Arrays.asList(returnedString, i+count);
+          }
+          if (String.valueOf(line.charAt(i+count)).matches("^[a-zA-Z\\d\\s]*")) {
+              returnedString += line.charAt(i + count);
+              count += 1;
+          } else {
+              return Arrays.asList("*CHAR_ERROR*", i+count+1);
+          }
+        }
+        return Arrays.asList("*QUOTE_ERROR*", i+count);
     }
 
-    private static Token makeError(String filename, int lineNumber, String line, Integer i){
+    private static Token makeError(String filename, int lineNumber, String line, Integer i, TokenType tokenType){
       noError = false;
-      return makeNewToken(filename, lineNumber, String.valueOf(line.charAt(i)), TokenType.ERROR);
+      return makeNewToken(filename, lineNumber, String.valueOf(line.charAt(i)), tokenType);
     }
 
     /**

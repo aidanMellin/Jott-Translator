@@ -14,7 +14,9 @@ public enum TokenType {
     NUMBER,
     ID_KEYWORD,
     COLON,
-    NOT_EQUALS,
     STRING,
-    ERROR; // catch all error handling for now
+    UNEXPECTED_PERIOD_ERROR,
+    UNEXPECTED_CHARACTER_ERROR,
+    PREMATURE_END_OF_LINE_ERROR,
+    UNCLOSED_STRING_ERROR;
 }
