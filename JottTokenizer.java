@@ -138,8 +138,10 @@ public class JottTokenizer {
         if (tok.getTokenType() == TokenType.PREMATURE_END_OF_LINE_ERROR ||
             tok.getTokenType() == TokenType.UNCLOSED_STRING_ERROR ||
             tok.getTokenType() == TokenType.UNEXPECTED_CHARACTER_ERROR ||
-            tok.getTokenType() == TokenType.UNEXPECTED_PERIOD_ERROR)
+            tok.getTokenType() == TokenType.UNEXPECTED_PERIOD_ERROR) {
+            System.err.println("Syntax Error:\n" + tok.getTokenType().toString() + "\n" + tok.getFilename() + ":" + tok.getLineNum());
             return null;
+        }
     }
         return tokens;
     }
@@ -252,9 +254,6 @@ public class JottTokenizer {
     }
 
     public static void main(String[] args) {
-    /**
-     * Need to have the filename assigned
-     */
     tokenize("phase1_tester/tokenizerTestCases/strings.jott");
     }
 }
