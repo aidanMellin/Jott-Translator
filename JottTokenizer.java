@@ -5,6 +5,7 @@
  **/
 
 // import javax.sound.midi.SysexMessage;
+import javax.management.relation.RelationException;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -86,7 +87,7 @@ public class JottTokenizer {
                             String returned = (String) cycled.get(0);
                             i = (int) cycled.get(1)-1;
                             if(returned.equals("."))
-                                tokens.add(makeError(filename, lineNumber, line, i, TokenType.UNEXPECTED_PERIOD_ERROR));
+                                throw new Exception("Syntax Error:\n"+"Invalid use of symbol: '.'\n"+filename+":"+lineNumber);
                             else
                                 tokens.add(makeNewToken(filename, lineNumber, returned, TokenType.NUMBER));
                         } // keep cycling for digit. if next token a ., cycle for more digits, then store as number. Else, store as number
@@ -103,10 +104,10 @@ public class JottTokenizer {
                                     tokens.add(makeNewToken(filename, lineNumber, "!=", TokenType.REL_OP));
                                     i++;
                                 } else {
-                                    tokens.add(makeNewToken(filename, lineNumber, "!", TokenType.UNEXPECTED_CHARACTER_ERROR));
+                                    throw new Exception("Syntax Error:\n"+"Invalid use of symbol: '!'\n"+filename+":"+lineNumber);
                                 }
                             } else {
-                                tokens.add(makeNewToken(filename, lineNumber, "!", TokenType.PREMATURE_END_OF_LINE_ERROR));
+                                throw new Exception("Syntax Error:\n"+"Invalid end of line: '!'\n"+filename+":"+lineNumber);
                             }
                         }
                         case '\"' -> {
@@ -114,15 +115,16 @@ public class JottTokenizer {
                             String returned = (String) cycled.get(0);
                             i = (int) cycled.get(1)-1;
                             if(returned.equals("*CHAR_ERROR*"))
-                                tokens.add(makeError(filename, lineNumber, line, i, TokenType.UNEXPECTED_CHARACTER_ERROR));
+                                throw new Exception("Syntax Error:\n"+"Unknown character in String: '"+line.charAt(i)+"'\n"+filename+":"+lineNumber);
                             else if (returned.equals("*QUOTE_ERROR*"))
-                                tokens.add(makeError(filename, lineNumber, line, i, TokenType.UNCLOSED_STRING_ERROR));
+                                throw new Exception("Syntax Error:\n"+"Unclosed String literal\n"+filename+":"+lineNumber);
                             else
                                 tokens.add(makeNewToken(filename, lineNumber, "\""+returned+"\"", TokenType.STRING));
                         } //Cycle until next " and assign string. if no closing before new line, error
                         default -> {
                             if (line.charAt(i) != ' ')
-                                tokens.add(makeError(filename, lineNumber, line, i, TokenType.UNEXPECTED_CHARACTER_ERROR));
+                                throw new Exception("Syntax Error:\n"+"Unknown character: '"+line.charAt(i)+"'\n"+filename+":"+lineNumber);
+
                         }
                     }
                 }
@@ -131,18 +133,10 @@ public class JottTokenizer {
             //for(Token tok : tokens)
               //  System.out.println("Token - " + tok.toString());
             scanner.close();
-        } catch (FileNotFoundException e) {
-          e.printStackTrace();
+        } catch (Exception e) {
+          System.err.println(e.getMessage());
+          return null;
         }
-    for(Token tok : tokens){
-        if (tok.getTokenType() == TokenType.PREMATURE_END_OF_LINE_ERROR ||
-            tok.getTokenType() == TokenType.UNCLOSED_STRING_ERROR ||
-            tok.getTokenType() == TokenType.UNEXPECTED_CHARACTER_ERROR ||
-            tok.getTokenType() == TokenType.UNEXPECTED_PERIOD_ERROR) {
-            System.err.println("Syntax Error:\n" + tok.getTokenType().toString() + "\n" + tok.getFilename() + ":" + tok.getLineNum());
-            return null;
-        }
-    }
         return tokens;
     }
 
