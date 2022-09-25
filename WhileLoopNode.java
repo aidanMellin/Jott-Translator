@@ -1,9 +1,14 @@
-public class BooleanNode implements JottTree {
+public class WhileLoopNode implements JottTree{
 
-    private final boolean TRUE = true;
-    private final boolean FALSE = false;
+    private final String LBRACKET_CHAR = "[";
+    private final String RBRACKET_CHAR = "]";
+    private final String LBRACE_CHAR = "{";
+    private final String RBRACE_CHAR = "}";
+    private final String JOTT_WHILE = "while";
+    private BoolExprNode b_expr;
+    private BodyNode body;
 
-    public BooleanNode() {
+    public WhileLoopNode() {
 
     }
 

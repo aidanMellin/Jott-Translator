@@ -1,15 +1,19 @@
 import java.util.ArrayList;
 
-public class FunctionListNode implements JottTree {
+public class AssignmentNode implements JottTree {
 
-    private JottTree function_def;
-    private JottTree function_list;
-    
+    private final String JOTT_DOUBLE = "Double";
+    private final String JOTT_INTEGER = "Integer";
+    private final String JOTT_STRING = "String";
+    private final String JOTT_BOOLEAN = "Boolean";
+    private final String EQ_CHAR = "=";
+    private ArrayList<JottTree> subnodes;
 
-    public FunctionListNode(){
+    public AssignmentNode() {
 
     }
-     /**
+
+    /**
      * Will output a string of this tree in Jott
      * @return a string representing the Jott code of this tree
      */
@@ -47,7 +51,7 @@ public class FunctionListNode implements JottTree {
 
     /**
      * This will validate that the tree follows the semantic rules of Jott
-	 * Errors validating will be reported to System.err
+     * Errors validating will be reported to System.err
      * @return true if valid Jott code; false otherwise
      */
     public boolean validateTree()

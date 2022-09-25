@@ -1,10 +1,8 @@
-import java.util.ArrayList;
+public class FunctionReturnNode implements JottTree{
 
-public class AssignmentNode implements JottTree {
+    private JottTree subnode;
 
-    private final String EQ_CHAR = "=";
-
-    public AssignmentNode() {
+    public FunctionReturnNode() {
 
     }
 
