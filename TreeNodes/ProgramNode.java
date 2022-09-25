@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-public class ProgramNode extends JottTree {
+public class ProgramNode implements JottTree {
 
     private JottTree function_list;
     

@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-public class CharNode extends JottTree {
+public class CharNode implements JottTree {
 
 public enum char_type{
     l_char,

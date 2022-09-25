@@ -1,4 +1,4 @@
-public class StrExprNode StrExprNode implements JottTree {
+public class StrExprNode implements JottTree {
 
     private JottTree subnode;
 

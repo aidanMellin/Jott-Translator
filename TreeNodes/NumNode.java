@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-public class NumNode extends JottTree {
+public class NumNode implements JottTree {
 
     public enum num_type{
         INT,

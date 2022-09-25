@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-public class IdNode extends JottTree {
+public class IdNode implements JottTree {
 
     private Token idToken;
     private ArrayList<JottTree> subnodes;
