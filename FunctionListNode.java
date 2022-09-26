@@ -5,7 +5,7 @@ public class FunctionListNode implements JottTree {
     private JottTree function_def;
     private JottTree function_list;
 
-    public FunctionListNode(){
+    public FunctionListNode(ArrayList<Token> tokens){
 
     }
      /**

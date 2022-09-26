@@ -3,10 +3,11 @@ import java.util.ArrayList;
 public class ProgramNode implements JottTree {
 
     private JottTree function_list;
-    
 
-    public ProgramNode(){
 
+    public ProgramNode(ArrayList<Token> tokens){
+        function_list = new FunctionListNode(tokens);
+        // also add EOF symbol??
     }
      /**
      * Will output a string of this tree in Jott
@@ -14,7 +15,7 @@ public class ProgramNode implements JottTree {
      */
     public String convertToJott()
     {
-        return("");
+        return(function_list.convertToJott());
     }
 
     /**
