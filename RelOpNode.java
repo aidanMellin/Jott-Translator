@@ -1,14 +1,8 @@
 public class RelOpNode implements JottTree {
 
-    private final String GREATER_THAN_CHAR = ">";
-    private final String LESS_THAN_CHAR = "<";
-    private final String GREATER_THAN_EQ_STR = ">=";
-    private final String LESS_THAN_EQ_STR = "<=";
-    private final String EQUAL_STR = "==";
-    private final String NOT_EQUAL_STR = "!=";
-
-    public RelOpNode() {
-
+    private Token token;
+    public RelOpNode(Token token) {
+        this.token = token;
     }
 
     /**
@@ -17,7 +11,7 @@ public class RelOpNode implements JottTree {
      */
     public String convertToJott()
     {
-        return("");
+        return(token.token);
     }
 
     /**
