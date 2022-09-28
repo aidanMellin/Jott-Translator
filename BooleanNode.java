@@ -1,10 +1,15 @@
+import java.lang.reflect.Array;
+import java.util.Objects;
+
 public class BooleanNode implements JottTree {
 
+    private final String ERROR_MSG = "Token was not true or false";
     private final String JOTT_TRUE = "True";
     private final String JOTT_FALSE = "False";
+    private final Token token;
 
-    public BooleanNode() {
-
+    public BooleanNode(Token token) {
+        this.token = token;
     }
 
     /**
@@ -13,7 +18,9 @@ public class BooleanNode implements JottTree {
      */
     public String convertToJott()
     {
-        return("");
+        if (Objects.equals(this.token.getToken(), JOTT_TRUE)) return JOTT_TRUE;
+        else if (Objects.equals(this.token.getToken(), JOTT_FALSE)) return JOTT_FALSE;
+        else return ERROR_MSG;
     }
 
     /**

@@ -16,7 +16,7 @@ public class IntNode implements JottTree {
             assert tokens.get(1).getToken().matches("[0-9]+");
             subnodes.add(new OpNode(tokens.get(0)));
             for (int i=1; i<tokens.get(1).getToken().length(); i++)
-                subnodes.add(new CharNode(tokens.get(0).getToken().charAt(i)));
+                subnodes.add(new CharNode(tokens.get(1).getToken().charAt(i)));
         }
     }
 

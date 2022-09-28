@@ -3,10 +3,25 @@ import java.util.ArrayList;
 public class DoubleNode implements JottTree {
 
     private final String PERIOD_CHAR = ".";
+    private int PERIOD_PLACE;
     private ArrayList<JottTree> subnodes;
+    private final ArrayList<Token> tokens;
 
-    public DoubleNode() {
-
+    public DoubleNode(ArrayList<Token> tokens) {
+        this.tokens = tokens;
+        if (this.tokens.size() == 1) {
+            assert tokens.get(0).getToken().matches("[0-9]*[.][0-9]+");
+            for (int i=0; i<tokens.get(0).getToken().length(); i++)
+                if (tokens.get(0).getToken().charAt(i) == '.')  PERIOD_PLACE = i;
+                else subnodes.add(new CharNode(tokens.get(0).getToken().charAt(i)));
+        } else if (this.tokens.size() == 2) {
+            assert tokens.get(0).getToken().matches("[-+]?");
+            assert tokens.get(1).getToken().matches("[0-9]*[.][0-9]+");
+            subnodes.add(new OpNode(tokens.get(0)));
+            for (int i=1; i<tokens.get(1).getToken().length(); i++)
+                if (tokens.get(1).getToken().charAt(i) == '.')  PERIOD_PLACE = i;
+                else subnodes.add(new CharNode(tokens.get(1).getToken().charAt(i)));
+        }
     }
 
     /**
@@ -15,7 +30,12 @@ public class DoubleNode implements JottTree {
      */
     public String convertToJott()
     {
-        return("");
+        StringBuilder jott_integer = new StringBuilder();
+        for(int i=0; i<subnodes.size(); i++) {
+            if (i == PERIOD_PLACE) jott_integer.append(PERIOD_CHAR);
+            jott_integer.append(subnodes.get(i).convertToJott());
+        }
+        return jott_integer.toString();
     }
 
     /**
