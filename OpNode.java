@@ -12,7 +12,7 @@ public class OpNode implements JottTree {
      */
     public String convertToJott()
     {
-        return(token.token);
+        return(token.getToken());
     }
 
     /**

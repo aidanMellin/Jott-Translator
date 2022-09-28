@@ -11,7 +11,7 @@ public class RelOpNode implements JottTree {
      */
     public String convertToJott()
     {
-        return(token.token);
+        return(token.getToken());
     }
 
     /**

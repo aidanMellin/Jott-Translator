@@ -13,7 +13,8 @@ public class SignNode implements JottTree {
      */
     public String convertToJott()
     {
-        token == null ? return EMPTY_STRING : return token.token;
+        if (token == null) return EMPTY_STRING;
+        else return token.getToken();
     }
 
     /**

@@ -2,10 +2,22 @@ import java.util.ArrayList;
 
 public class IntNode implements JottTree {
 
-    private ArrayList<JottTree> subnodes;
+    private final ArrayList<JottTree> subnodes = new ArrayList<>();
+    private final ArrayList<Token> tokens;
 
-    public IntNode() {
-
+    public IntNode(ArrayList<Token> tokens) {
+        this.tokens = tokens;
+        if (this.tokens.size() == 1) {
+            assert tokens.get(0).getToken().matches("[0-9]+");
+            for (int i=0; i<tokens.get(0).getToken().length(); i++)
+                subnodes.add(new CharNode(tokens.get(0).getToken().charAt(i)));
+        } else if (this.tokens.size() == 2) {
+            assert tokens.get(0).getToken().matches("[-+]?");
+            assert tokens.get(1).getToken().matches("[0-9]+");
+            subnodes.add(new OpNode(tokens.get(0)));
+            for (int i=1; i<tokens.get(1).getToken().length(); i++)
+                subnodes.add(new CharNode(tokens.get(0).getToken().charAt(i)));
+        }
     }
 
     /**
@@ -14,7 +26,9 @@ public class IntNode implements JottTree {
      */
     public String convertToJott()
     {
-        return("");
+        StringBuilder jott_integer = new StringBuilder();
+        for(JottTree node : subnodes) jott_integer.append(node.convertToJott());
+        return jott_integer.toString();
     }
 
     /**
