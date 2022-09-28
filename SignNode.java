@@ -1,11 +1,10 @@
 public class SignNode implements JottTree {
 
-    private final String POSITIVE_CHAR = "+";
-    private final String NEGATIVE_CHAR = "-";
     private final String EMPTY_STRING = "";
+    private Token token;
 
-    public SignNode() {
-
+    public SignNode(Token token) {
+        this.token = token;
     }
 
     /**
@@ -14,7 +13,7 @@ public class SignNode implements JottTree {
      */
     public String convertToJott()
     {
-        return("");
+        token == null ? return EMPTY_STRING : return token.token;
     }
 
     /**

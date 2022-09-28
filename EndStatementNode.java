@@ -1,9 +1,10 @@
 public class EndStatementNode implements JottTree {
 
     private final String JOTT_END = ";";
+    private Token token;
 
-    public EndStatementNode() {
-
+    public EndStatementNode(Token token) {
+        this.token = token;
     }
 
     /**
@@ -12,7 +13,7 @@ public class EndStatementNode implements JottTree {
      */
     public String convertToJott()
     {
-        return("");
+        return(JOTT_END);
     }
 
     /**

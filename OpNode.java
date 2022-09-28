@@ -1,12 +1,9 @@
 public class OpNode implements JottTree {
 
-    private final String ADD_OP_CHAR = "+";
-    private final String SUB_OP_CHAR = "-";
-    private final String MULT_OP_CHAR = "*";
-    private final String DIV_OP_CHAR = "/";
+    private Token token;
 
-    public OpNode() {
-
+    public OpNode(Token token) {
+        this.token = token;
     }
 
     /**
@@ -15,7 +12,7 @@ public class OpNode implements JottTree {
      */
     public String convertToJott()
     {
-        return("");
+        return(token.token);
     }
 
     /**
