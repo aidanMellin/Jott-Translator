@@ -6,8 +6,12 @@ public class IdNode implements JottTree {
     private ArrayList<JottTree> subnodes;
     private String idStored;
 
-    public IdNode(){
-
+    public IdNode(Token token){
+        this.idToken = token;
+        this.idStored = idToken.getToken();
+        assert idStored != null;
+        assert idStored.matches("[a-z][a-zA-z0-9]*");
+        for (int i=0; i<idStored.length(); i++) subnodes.add(new CharNode(idStored.charAt(i)));
     }
      /**
      * Will output a string of this tree in Jott
@@ -15,7 +19,9 @@ public class IdNode implements JottTree {
      */
     public String convertToJott()
     {
-        return("");
+        StringBuilder jott_id = new StringBuilder();
+        for (JottTree node : subnodes) jott_id.append(node.convertToJott());
+        return jott_id.toString();
     }
 
     /**

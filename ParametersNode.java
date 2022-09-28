@@ -5,7 +5,7 @@ public class ParametersNode implements JottTree{
     private final String EMPTY_STRING = "";
     private ArrayList<JottTree> subnodes;
 
-    public ParametersNode() {
+    public ParametersNode(ArrayList<Token> tokens) {
 
     }
 

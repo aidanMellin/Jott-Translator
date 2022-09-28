@@ -1,11 +1,21 @@
+import java.util.ArrayList;
+
 public class FunctionCallNode implements JottTree{
 
     private final String RBRACKET_STRING = "]";
     private final String LBRACKET_STRING = "[";
-    private JottTree subnode;
+    private final ArrayList<JottTree> subnodes = new ArrayList<>();
+    private final ArrayList<Token> tokens;
 
-    public FunctionCallNode() {
-
+    public FunctionCallNode(ArrayList<Token> tokens) {
+        this.tokens = tokens;
+        assert this.tokens != null;
+        assert this.tokens.get(0).getToken().matches("[a-z][a-zA-z0-9]*");
+        subnodes.add(new IdNode(this.tokens.get(0)));
+        ArrayList<Token> paramsTokens = new ArrayList<>();
+        paramsTokens.addAll(2, tokens);
+        paramsTokens.remove(paramsTokens.size()-1);
+        subnodes.add(new ParametersNode(paramsTokens));
     }
 
     /**
@@ -14,7 +24,12 @@ public class FunctionCallNode implements JottTree{
      */
     public String convertToJott()
     {
-        return("");
+        StringBuilder jott_func_call = new StringBuilder();
+        jott_func_call.append(subnodes.get(0).convertToJott());
+        jott_func_call.append(LBRACKET_STRING);
+        jott_func_call.append(subnodes.get(1).convertToJott());
+        jott_func_call.append(RBRACKET_STRING);
+        return jott_func_call.toString();
     }
 
     /**
