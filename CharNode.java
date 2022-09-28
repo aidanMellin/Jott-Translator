@@ -10,10 +10,10 @@ public enum char_type{
 
 private char_type type;
 
-    private String charStored;
+    private final String charStored;
 
-    public CharNode(){
-
+    public CharNode(char character){
+        charStored = String.valueOf(character);
     }
      /**
      * Will output a string of this tree in Jott
@@ -21,7 +21,7 @@ private char_type type;
      */
     public String convertToJott()
     {
-        return("");
+        return(charStored);
     }
 
     /**

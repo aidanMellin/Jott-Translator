@@ -1,12 +1,19 @@
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class StrNode implements JottTree {
 
-    private ArrayList<JottTree> subnodes;
+    private final ArrayList<JottTree> subnodes = new ArrayList<>();
     private final String EMPTY_STR = "";
+    private final String tokenString;
 
-    public StrNode() {
-
+    public StrNode(String tokenString) {
+        this.tokenString = tokenString;
+        if (!Objects.equals(tokenString, EMPTY_STR)) {
+            subnodes.add(new CharNode(tokenString.charAt(0)));
+            if (tokenString.length() > 1) subnodes.add(new StrNode(tokenString.substring(1)));
+            else subnodes.add(new StrNode(EMPTY_STR));
+        }
     }
 
     /**
@@ -15,7 +22,10 @@ public class StrNode implements JottTree {
      */
     public String convertToJott()
     {
-        return("");
+        StringBuilder jott_string = new StringBuilder();
+        if (Objects.equals(tokenString, EMPTY_STR)) return jott_string.toString();
+        for (JottTree node : subnodes) jott_string.append(node.convertToJott());
+        return jott_string.toString();
     }
 
     /**

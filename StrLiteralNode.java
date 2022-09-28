@@ -1,10 +1,15 @@
+import java.util.ArrayList;
+
 public class StrLiteralNode implements JottTree {
 
     private JottTree subnode;
     private final String QUOTE_CHAR = "\"";
+    private Token token;
 
-    public StrLiteralNode() {
-
+    public StrLiteralNode(Token token) {
+        this.token = token;
+        assert token.getTokenType() == TokenType.STRING;
+        subnode = new StrNode(token.getToken());
     }
 
     /**
@@ -13,7 +18,7 @@ public class StrLiteralNode implements JottTree {
      */
     public String convertToJott()
     {
-        return("");
+        return(QUOTE_CHAR + subnode.convertToJott() + QUOTE_CHAR);
     }
 
     /**
