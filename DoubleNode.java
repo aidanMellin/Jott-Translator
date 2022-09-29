@@ -10,6 +10,7 @@ public class DoubleNode implements JottTree {
     public DoubleNode(ArrayList<Token> tokens) {
         this.tokens = tokens;
         if (this.tokens.size() == 1) {
+            subnodes.add(new SignNode(null));
             assert tokens.get(0).getToken().matches("[0-9]*[.][0-9]+");
             for (int i=0; i<tokens.get(0).getToken().length(); i++)
                 if (tokens.get(0).getToken().charAt(i) == '.')  PERIOD_PLACE = i;
@@ -17,7 +18,7 @@ public class DoubleNode implements JottTree {
         } else if (this.tokens.size() == 2) {
             assert tokens.get(0).getToken().matches("[-+]?");
             assert tokens.get(1).getToken().matches("[0-9]*[.][0-9]+");
-            subnodes.add(new OpNode(tokens.get(0)));
+            subnodes.add(new SignNode(tokens.get(0)));
             for (int i=1; i<tokens.get(1).getToken().length(); i++)
                 if (tokens.get(1).getToken().charAt(i) == '.')  PERIOD_PLACE = i;
                 else subnodes.add(new CharNode(tokens.get(1).getToken().charAt(i)));

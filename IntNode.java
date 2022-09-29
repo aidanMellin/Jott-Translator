@@ -8,13 +8,14 @@ public class IntNode implements JottTree {
     public IntNode(ArrayList<Token> tokens) {
         this.tokens = tokens;
         if (this.tokens.size() == 1) {
+            subnodes.add(new SignNode(null));
             assert tokens.get(0).getToken().matches("[0-9]+");
             for (int i=0; i<tokens.get(0).getToken().length(); i++)
                 subnodes.add(new CharNode(tokens.get(0).getToken().charAt(i)));
         } else if (this.tokens.size() == 2) {
             assert tokens.get(0).getToken().matches("[-+]?");
             assert tokens.get(1).getToken().matches("[0-9]+");
-            subnodes.add(new OpNode(tokens.get(0)));
+            subnodes.add(new SignNode(tokens.get(0)));
             for (int i=1; i<tokens.get(1).getToken().length(); i++)
                 subnodes.add(new CharNode(tokens.get(1).getToken().charAt(i)));
         }
