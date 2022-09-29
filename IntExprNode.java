@@ -4,7 +4,7 @@ public class IntExprNode implements JottTree {
     
     private ArrayList<JottTree> subnodes;
     
-    public IntExprNode() {
+    public IntExprNode(ArrayList<Token> tokens) {
         
     }
 

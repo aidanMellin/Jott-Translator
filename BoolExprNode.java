@@ -4,7 +4,7 @@ public class BoolExprNode implements JottTree {
 
     private ArrayList<JottTree> subnodes;
 
-    public BoolExprNode() {
+    public BoolExprNode(ArrayList<Token> tokens) {
 
     }
 

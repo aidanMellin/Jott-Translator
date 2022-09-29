@@ -4,7 +4,7 @@ public class DoubleExprNode implements JottTree {
 
     private ArrayList<JottTree> subnodes;
 
-    public DoubleExprNode() {
+    public DoubleExprNode(ArrayList<Token> tokens) {
 
     }
 

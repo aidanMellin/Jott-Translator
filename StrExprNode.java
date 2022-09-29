@@ -1,9 +1,22 @@
+import java.util.ArrayList;
+
 public class StrExprNode implements JottTree {
 
     private JottTree subnode;
+    private Token token;
+    private ArrayList<Token> tokens;
 
-    public StrExprNode() {
+    public StrExprNode(Token token) {
+        this.token = token;
+        assert this.token != null;
+        if (this.token.getTokenType() == TokenType.STRING) subnode = new StrLiteralNode(this.token);
+        else if (this.token.getTokenType() == TokenType.ID_KEYWORD) subnode = new IdNode(this.token);
+    }
 
+    public StrExprNode(ArrayList<Token> tokens) {
+        this.tokens = tokens;
+        assert this.tokens != null;
+        subnode = new FunctionCallNode(this.tokens);
     }
 
     /**
@@ -12,7 +25,7 @@ public class StrExprNode implements JottTree {
      */
     public String convertToJott()
     {
-        return("");
+        return subnode.convertToJott();
     }
 
     /**
