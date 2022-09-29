@@ -1,7 +1,16 @@
+import java.util.Objects;
+
 public class TypeNode implements JottTree{
 
-    public TypeNode() {
-
+    private final Token token;
+    private final String JOTT_INTEGER = "Integer";
+    private final String JOTT_DOUBLE = "Double";
+    private final String JOTT_STRING = "String";
+    private final String JOTT_BOOLEAN = "Boolean";
+    public TypeNode(Token token) {
+        this.token = token;
+        assert this.token != null;
+        assert this.token.getTokenType() == TokenType.ID_KEYWORD;
     }
 
     /**
@@ -10,7 +19,11 @@ public class TypeNode implements JottTree{
      */
     public String convertToJott()
     {
-        return("");
+        if (Objects.equals(token.getToken(), JOTT_BOOLEAN)) return JOTT_BOOLEAN;
+        else if (Objects.equals(token.getToken(), JOTT_DOUBLE)) return JOTT_DOUBLE;
+        else if (Objects.equals(token.getToken(), JOTT_INTEGER)) return JOTT_INTEGER;
+        else if (Objects.equals(token.getToken(), JOTT_STRING)) return JOTT_STRING;
+        else return null;
     }
 
     /**

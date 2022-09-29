@@ -2,10 +2,15 @@ import java.util.ArrayList;
 
 public class VariableDeclarationNode implements JottTree{
 
-    private ArrayList<JottTree> subnodes;
+    private ArrayList<JottTree> subnodes = new ArrayList<>();
+    private final ArrayList<Token> tokens;
     
-    public VariableDeclarationNode() {
-
+    public VariableDeclarationNode(ArrayList<Token> tokens) {
+        this.tokens = tokens;
+        assert this.tokens.size() == 3;
+        subnodes.add(new TypeNode(this.tokens.get(0)));
+        subnodes.add(new IdNode(this.tokens.get(1)));
+        subnodes.add(new EndStatementNode(this.tokens.get(2)));
     }
 
     /**
@@ -14,7 +19,9 @@ public class VariableDeclarationNode implements JottTree{
      */
     public String convertToJott()
     {
-        return("");
+        StringBuilder jott_var_dec = new StringBuilder();
+        for (JottTree node : subnodes) jott_var_dec.append(node.convertToJott());
+        return jott_var_dec.toString();
     }
 
     /**

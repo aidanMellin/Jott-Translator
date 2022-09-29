@@ -5,7 +5,7 @@ public class BodyNode implements JottTree {
     private ArrayList<JottTree> subnodes;
     private final String EMPTY_STRING = "";
 
-    public BodyNode() {
+    public BodyNode(ArrayList<Token> tokens) {
 
     }
 

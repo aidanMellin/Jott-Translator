@@ -1,9 +1,16 @@
+import java.util.Objects;
+
 public class FunctionReturnNode implements JottTree{
 
-    private JottTree subnode;
+    private final JottTree subnode;
+    private final String JOTT_VOID = "Void";
+    private final Token token;
 
-    public FunctionReturnNode() {
-
+    public FunctionReturnNode(Token token) {
+        this.token = token;
+        assert this.token != null;
+        if (Objects.equals(this.token.getToken(), JOTT_VOID)) subnode = null;
+        else subnode = new TypeNode(this.token);
     }
 
     /**
@@ -12,7 +19,8 @@ public class FunctionReturnNode implements JottTree{
      */
     public String convertToJott()
     {
-        return("");
+        if (subnode == null) return JOTT_VOID;
+        else return subnode.convertToJott();
     }
 
     /**
