@@ -3,10 +3,25 @@ import java.util.ArrayList;
 public class ParametersNode implements JottTree{
 
     private final String EMPTY_STRING = "";
-    private ArrayList<JottTree> subnodes;
+    private ArrayList<JottTree> subnodes = new ArrayList<>();
+    private final ArrayList<Token> tokens;
 
     public ParametersNode(ArrayList<Token> tokens) {
+        this.tokens = tokens;
+        if (this.tokens == null) subnodes = null;
+        else {
+            ArrayList<Token> expr = new ArrayList<>();
+            int b_count = 0;
+            while ((b_count != 0 || this.tokens.get(0).getTokenType() != TokenType.COMMA) && this.tokens.size() != 0) {
+                expr.add(this.tokens.get(0));
+                this.tokens.remove(0);
+                if (this.tokens.get(0).getTokenType() == TokenType.L_BRACKET) b_count++;
+                else if (this.tokens.get(0).getTokenType() == TokenType.R_BRACKET) b_count++;
 
+            }
+            subnodes.add(new ExpressionNode(expr));
+            subnodes.add(new ParametersTNode(this.tokens));
+        }
     }
 
     /**
@@ -15,7 +30,10 @@ public class ParametersNode implements JottTree{
      */
     public String convertToJott()
     {
-        return("");
+        if (subnodes == null) return EMPTY_STRING;
+        StringBuilder jott_params = new StringBuilder();
+        for (JottTree node : subnodes) jott_params.append(node.convertToJott());
+        return jott_params.toString();
     }
 
     /**

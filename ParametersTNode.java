@@ -5,9 +5,26 @@ public class ParametersTNode implements JottTree{
     private final String COMMA_CHAR = ",";
     private final String EMPTY_STRING = "";
     private ArrayList<JottTree> subnodes;
+    private ArrayList<Token> tokens;
 
-    public ParametersTNode() {
+    public ParametersTNode(ArrayList<Token> tokens) {
+        this.tokens = tokens;
+        if (tokens == null) subnodes = null;
+        else {
+            assert this.tokens.get(0).getTokenType() != TokenType.COMMA;
+            this.tokens.remove(0);
+            ArrayList<Token> expr = new ArrayList<>();
+            int b_count = 0;
+            while ((b_count != 0 || this.tokens.get(0).getTokenType() != TokenType.COMMA) && this.tokens.size() != 0) {
+                expr.add(this.tokens.get(0));
+                this.tokens.remove(0);
+                if (this.tokens.get(0).getTokenType() == TokenType.L_BRACKET) b_count++;
+                else if (this.tokens.get(0).getTokenType() == TokenType.R_BRACKET) b_count++;
 
+            }
+            subnodes.add(new ExpressionNode(expr));
+            subnodes.add(new ParametersTNode(this.tokens));
+        }
     }
 
     /**
@@ -16,7 +33,11 @@ public class ParametersTNode implements JottTree{
      */
     public String convertToJott()
     {
-        return("");
+        if (subnodes == null) return EMPTY_STRING;
+        StringBuilder jott_params = new StringBuilder();
+        jott_params.append(COMMA_CHAR);
+        for (JottTree node : subnodes) jott_params.append(node.convertToJott());
+        return jott_params.toString();
     }
 
     /**

@@ -3,11 +3,22 @@ import java.util.ArrayList;
 public class FunctionDefinitionParametersNode implements JottTree {
 
     private final String COLON_CHAR = ":";
-    private ArrayList<JottTree> subnodes;
+    private ArrayList<JottTree> subnodes = new ArrayList<>();
     private final String EMPTY_STRING = "";
+    private final ArrayList<Token> tokens;
 
-    public FunctionDefinitionParametersNode() {
-
+    public FunctionDefinitionParametersNode(ArrayList<Token> tokens) {
+        this.tokens = tokens;
+        if (this.tokens.size() == 0) subnodes = null;
+        else {
+            assert this.tokens.get(0).getTokenType() == TokenType.ID_KEYWORD;
+            subnodes.add(new IdNode(this.tokens.remove(0)));
+            assert this.tokens.get(0).getTokenType() == TokenType.COLON;
+            this.tokens.remove(0);
+            assert this.tokens.get(0).getTokenType() == TokenType.ID_KEYWORD;
+            subnodes.add(new TypeNode(this.tokens.remove(0)));
+            subnodes.add(new FunctionDefinitionParametersTNode(this.tokens));
+        }
     }
 
     /**
@@ -16,7 +27,11 @@ public class FunctionDefinitionParametersNode implements JottTree {
      */
     public String convertToJott()
     {
-        return("");
+        if (subnodes == null) return EMPTY_STRING;
+        return subnodes.get(0).convertToJott() +
+                COLON_CHAR +
+                subnodes.get(1).convertToJott() +
+                subnodes.get(2).convertToJott();
     }
 
     /**

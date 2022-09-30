@@ -1,8 +1,11 @@
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
 public class ExpressionNode implements JottTree{
 
     private JottTree subnode;
 
-    public ExpressionNode() {
+    public ExpressionNode(ArrayList<Token> tokens) {
 
     }
 

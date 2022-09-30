@@ -2,10 +2,13 @@ import java.util.ArrayList;
 
 public class StatementNode implements JottTree{
 
-    private ArrayList<JottTree> subnodes;
+    private ArrayList<JottTree> subnodes = new ArrayList<>();
+    private ArrayList<Token> tokens;
 
-    public StatementNode() {
-
+    public StatementNode(ArrayList<Token> tokens) {
+        this.tokens = tokens;
+        assert this.tokens != null;
+        if (this.tokens.size() == 3) subnodes.add(new VariableDeclarationNode(this.tokens));
     }
 
     /**
@@ -14,7 +17,9 @@ public class StatementNode implements JottTree{
      */
     public String convertToJott()
     {
-        return("");
+        StringBuilder jott_stmt = new StringBuilder();
+        for (JottTree node : subnodes) jott_stmt.append(node.convertToJott());
+        return jott_stmt.toString();
     }
 
     /**
