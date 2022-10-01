@@ -12,9 +12,11 @@ public class ElseIfListNode implements JottTree{
     private final String LBRACE_CHAR = "{";
     private final String RBRACE_CHAR = "}";
     private final String EMPTY_STRING = "";
-    private ArrayList<JottTree> subnodes;
 
-    public ElseIfListNode() {
+    private ArrayList<JottTree> subnodes;
+    private ArrayList<Token> tokens;
+
+    public ElseIfListNode(ArrayList<Token> tokens) {
 
     }
 
