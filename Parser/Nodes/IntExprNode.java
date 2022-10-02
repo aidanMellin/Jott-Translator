@@ -11,10 +11,25 @@ public class IntExprNode implements JottTree {
     //Currently missing information needed for handling another IntExprNode & a func_call
     public IntExprNode(ArrayList<Token> tokens) {
         Tokens = tokens;
+        subnodes = new ArrayList<>();
         for (int i = 0; i < Tokens.size(); i++) {
             Token temp_token = Tokens.get(i);
             if (temp_token.getTokenType() == TokenType.ID_KEYWORD) {
-                subnodes.add(new IdNode(temp_token));
+                if(i < tokens.size() - 1 && Tokens.get(i+1).getTokenType() == TokenType.L_BRACKET){
+                    int count = 1;
+                    ArrayList<Token> tokens_to_send = new ArrayList<>();
+                    Token current_token = temp_token;
+                    tokens_to_send.add(current_token);
+                    while (count < Tokens.size() && current_token.getTokenType() != TokenType.R_BRACKET){
+                        current_token = Tokens.get(count);
+                        tokens_to_send.add(current_token);
+                        count++;
+                    }
+                    subnodes.add(new FunctionCallNode(tokens_to_send));
+                    i += count;
+                } else {
+                    subnodes.add(new IdNode(temp_token));
+                }
             } else if (temp_token.getTokenType() == TokenType.NUMBER) {
                 ArrayList<Token> temp_token_list = new ArrayList<>();
                 temp_token_list.add(temp_token);
@@ -36,10 +51,13 @@ public class IntExprNode implements JottTree {
                     } else{
                         subnodes.add(new OpNode(temp_token));
                     }
+                } else {
+                    subnodes.add(new OpNode(temp_token));
+                    }
                 }
             }
         }
-    }
+
 
     /**
      * Will output a string of this tree in Jott
