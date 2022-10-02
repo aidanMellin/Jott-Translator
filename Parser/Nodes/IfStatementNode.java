@@ -21,22 +21,40 @@ public class IfStatementNode implements JottTree{
         this.tokens = tokens;
         if(this.tokens.size() == 0) subnodes = null;
         else {
+            // if
             assert this.tokens.get(0).getTokenType() == TokenType.ID_KEYWORD;
             assert this.tokens.get(0).getToken() == JOTT_IF;
             this.tokens.remove(0);
+            // [
             assert this.tokens.get(0).getTokenType() == TokenType.L_BRACKET;
             this.tokens.remove(0);
-            // TODO: b_expr
+            // b_expr
+            ArrayList<Token> b_exprTokens = null;
+            while(this.tokens.get(0).getTokenType() != TokenType.R_BRACKET) {
+                b_exprTokens.add(this.tokens.get(0));
+                this.tokens.remove(0);
+            }
+            // ]
+            subnodes.add(new BoolExprNode(b_exprTokens));
             assert this.tokens.get(0).getTokenType() == TokenType.R_BRACKET;
             this.tokens.remove(0);
+            // {
             assert this.tokens.get(0).getTokenType() == TokenType.L_BRACE;
             this.tokens.remove(0);
-            // TODO: body
+            // body
+            ArrayList<Token> bodyTokens = null;
+            while(this.tokens.get(0).getTokenType() != TokenType.R_BRACE) {
+                bodyTokens.add(this.tokens.get(0));
+                this.tokens.remove(0);
+            }
+            // }
             assert this.tokens.get(0).getTokenType() == TokenType.R_BRACE;
             this.tokens.remove(0);
+            // else
             if(this.tokens.get(0).getTokenType() == TokenType.ID_KEYWORD && this.tokens.get(0).getToken() == ELSE_STRING) {
                 subnodes.add(new ElseNode(this.tokens));
             }
+            // elseif
             else if(this.tokens.get(0).getTokenType() == TokenType.ID_KEYWORD && this.tokens.get(1).getToken() == ELSEIF_STRING) {
                 subnodes.add(new ElseIfListNode(this.tokens));
             }
