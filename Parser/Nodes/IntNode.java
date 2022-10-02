@@ -14,11 +14,14 @@ public class IntNode implements JottTree {
         if (this.tokens.size() == 1) {
             subnodes.add(new SignNode(null));
             assert tokens.get(0).getToken().matches("[0-9]+");
+            assert tokens.get(0).getTokenType() == TokenType.NUMBER;
             for (int i=0; i<tokens.get(0).getToken().length(); i++)
                 subnodes.add(new CharNode(tokens.get(0).getToken().charAt(i)));
         } else if (this.tokens.size() == 2) {
             assert tokens.get(0).getToken().matches("[-+]?");
+            assert tokens.get(0).getTokenType() == TokenType.MATH_OP;
             assert tokens.get(1).getToken().matches("[0-9]+");
+            assert tokens.get(1).getTokenType() == TokenType.NUMBER;
             subnodes.add(new SignNode(tokens.get(0)));
             for (int i=1; i<tokens.get(1).getToken().length(); i++)
                 subnodes.add(new CharNode(tokens.get(1).getToken().charAt(i)));
