@@ -1,15 +1,16 @@
 package Parser.Nodes;
 import Tokenizer.*;
 import Parser.*;
-
 import java.util.ArrayList;
 
-public class BodyStatementNode implements JottTree {
+public class ReturnNode implements JottTree {
 
-    private ArrayList<JottTree> subnodes;
     private ArrayList<Token> tokens;
+    private JottTree exprSubNode;
 
-    public BodyStatementNode(ArrayList<Token> tokens) {
+    private final String RETURN_STR = "return";
+
+    public ReturnNode(ArrayList<Token> tokens) {
 
     }
 
@@ -19,7 +20,6 @@ public class BodyStatementNode implements JottTree {
      */
     public String convertToJott()
     {
-        this.tokens = tokens;
         return("");
     }
 

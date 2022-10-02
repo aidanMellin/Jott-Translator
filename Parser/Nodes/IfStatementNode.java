@@ -51,11 +51,13 @@ public class IfStatementNode implements JottTree{
             assert this.tokens.get(0).getTokenType() == TokenType.R_BRACE;
             this.tokens.remove(0);
             // else
-            if(this.tokens.get(0).getTokenType() == TokenType.ID_KEYWORD && this.tokens.get(0).getToken() == ELSE_STRING) {
+            if((this.tokens.get(0).getTokenType() == TokenType.ID_KEYWORD) &&
+                    (this.tokens.get(0).getToken() == ELSE_STRING)) {
                 subnodes.add(new ElseNode(this.tokens));
             }
             // elseif
-            else if(this.tokens.get(0).getTokenType() == TokenType.ID_KEYWORD && this.tokens.get(1).getToken() == ELSEIF_STRING) {
+            else if((this.tokens.get(0).getTokenType() == TokenType.ID_KEYWORD) &&
+                    (this.tokens.get(1).getToken() == ELSEIF_STRING)) {
                 subnodes.add(new ElseIfListNode(this.tokens));
             }
         }
@@ -68,10 +70,12 @@ public class IfStatementNode implements JottTree{
     public String convertToJott()
     {
         if(tokens.size() == 2) {
-            return(JOTT_IF + LBRACKET_CHAR + "b_expr" + RBRACKET_CHAR + LBRACE_CHAR + "Body" + RBRACE_CHAR);
+            return(JOTT_IF + LBRACKET_CHAR + subnodes.get(0).convertToJott() +
+                    RBRACKET_CHAR + LBRACE_CHAR + subnodes.get(1).convertToJott() + RBRACE_CHAR);
         }
         else {
-            return(JOTT_IF + LBRACKET_CHAR + "b_expr" + RBRACKET_CHAR + LBRACE_CHAR + "Body" + RBRACE_CHAR + subnodes.get(2).convertToJott());
+            return(JOTT_IF + LBRACKET_CHAR + subnodes.get(0).convertToJott() + RBRACKET_CHAR +
+                    LBRACE_CHAR + subnodes.get(1).convertToJott() + RBRACE_CHAR + subnodes.get(2).convertToJott());
         }
     }
 

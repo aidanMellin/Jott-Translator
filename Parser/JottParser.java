@@ -31,7 +31,7 @@ public class JottParser {
     }
 
     public static void main(String[] args) {
-        ArrayList<Token> tokens = JottTokenizer.tokenize("phase1_tester/tokenizerTestCases/strings.jott");
+        ArrayList<Token> tokens = JottTokenizer.tokenize("Parser/phase2Tester/parserTestCases/providedExample2.jott");
         JottTree jottTree = parse(tokens);
         String output = (jottTree != null) ? jottTree.convertToJott() : "error resulting in null";
         System.out.println(output);
