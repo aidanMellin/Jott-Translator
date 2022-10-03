@@ -1,16 +1,27 @@
 package Parser.Nodes;
 import Tokenizer.*;
 import Parser.*;
-
 import java.util.ArrayList;
+import java.util.Objects;
 
-public class ReturnStatementNode implements JottTree { //TODO
+public class ReturnStatementNode implements JottTree {
+
+    private ArrayList<Token> tokens;
+    private ArrayList<JottTree> subnodes = new ArrayList<>();
 
     private final String JOTT_RETURN = "return";
-    private ArrayList<JottTree> subnodes;
 
-    public ReturnStatementNode() {
-
+    public ReturnStatementNode(ArrayList<Token> tokens) {
+        this.tokens = tokens;
+        assert tokens != null;
+        if (!Objects.equals(this.tokens.get(0).getToken(), JOTT_RETURN)) CreateSyntaxError("Unexpected Token - Expected 'return'", this.tokens.get(0));
+        if (this.tokens.size() == 1) CreateSyntaxError("Invalid Return Statement - No Line Ending", this.tokens.get(0));
+        this.tokens.remove(0);
+        ArrayList<Token> expr = new ArrayList<>();
+        while (this.tokens.get(0).getTokenType() != TokenType.SEMICOLON && this.tokens.size() != 1) expr.add(this.tokens.remove(0));
+        if (this.tokens.size() != 1 && this.tokens.get(0).getTokenType() != TokenType.SEMICOLON) CreateSyntaxError("Unexpected Token - Expected ';'", this.tokens.get(0));
+        subnodes.add(new ExpressionNode(expr));
+        subnodes.add(new EndStatementNode(this.tokens.get(0)));
     }
 
     /**
@@ -19,7 +30,9 @@ public class ReturnStatementNode implements JottTree { //TODO
      */
     public String convertToJott()
     {
-        return("");
+        return JOTT_RETURN + " " +
+                subnodes.get(0).convertToJott() +
+                subnodes.get(1).convertToJott();
     }
 
     /**
@@ -57,5 +70,10 @@ public class ReturnStatementNode implements JottTree { //TODO
     public boolean validateTree()
     {
         return(false);
+    }
+
+    public void CreateSyntaxError(String msg, Token token) {
+        System.err.println("Syntax Error:\n" + msg + "\n" + token.getFilename() + ":" + token.getLineNum());
+        System.exit(0);
     }
 }

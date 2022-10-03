@@ -21,7 +21,6 @@ public class ParametersNode implements JottTree{
                 this.tokens.remove(0);
                 if (this.tokens.get(0).getTokenType() == TokenType.L_BRACKET) b_count++;
                 else if (this.tokens.get(0).getTokenType() == TokenType.R_BRACKET) b_count++;
-
             }
             subnodes.add(new ExpressionNode(expr));
             subnodes.add(new ParametersTNode(this.tokens));
@@ -75,5 +74,10 @@ public class ParametersNode implements JottTree{
     public boolean validateTree()
     {
         return(false);
+    }
+
+    public void CreateSyntaxError(String msg, Token token) {
+        System.err.println("Syntax Error:\n" + msg + "\n" + token.getFilename() + ":" + token.getLineNum());
+        System.exit(0);
     }
 }

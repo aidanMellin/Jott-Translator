@@ -4,9 +4,11 @@ import Parser.*;
 
 public class RelOpNode implements JottTree {
 
-    private Token token;
+    private final Token token;
     public RelOpNode(Token token) {
         this.token = token;
+        assert this.token != null;
+        if (this.token.getTokenType() != TokenType.REL_OP) CreateSyntaxError("Unexpected Token - Expected Rel_Op", this.token);
     }
 
     /**
@@ -53,5 +55,10 @@ public class RelOpNode implements JottTree {
     public boolean validateTree()
     {
         return(false);
+    }
+
+    public void CreateSyntaxError(String msg, Token token) {
+        System.err.println("Syntax Error:\n" + msg + "\n" + token.getFilename() + ":" + token.getLineNum());
+        System.exit(0);
     }
 }
