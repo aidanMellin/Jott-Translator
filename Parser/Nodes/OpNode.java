@@ -2,7 +2,7 @@ package Parser.Nodes;
 import Tokenizer.*;
 import Parser.*;
 
-public class OpNode implements JottTree {
+public class OpNode implements JottTree { //TODO
 
     private Token token;
 

@@ -5,7 +5,7 @@ import Parser.*;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-public class ExpressionNode implements JottTree{
+public class ExpressionNode implements JottTree{ //TODO
 
     private JottTree subnode;
 

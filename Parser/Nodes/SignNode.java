@@ -2,7 +2,7 @@ package Parser.Nodes;
 import Tokenizer.*;
 import Parser.*;
 
-public class SignNode implements JottTree {
+public class SignNode implements JottTree { //TODO
 
     private final String EMPTY_STRING = "";
     private Token token;

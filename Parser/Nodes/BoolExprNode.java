@@ -4,7 +4,7 @@ import Parser.*;
 
 import java.util.ArrayList;
 
-public class BoolExprNode implements JottTree {
+public class BoolExprNode implements JottTree { //TODO
 
     private ArrayList<JottTree> subnodes;
 

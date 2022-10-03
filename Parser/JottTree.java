@@ -6,6 +6,8 @@
 
 package Parser;
 
+import Tokenizer.Token;
+
 public interface JottTree {
 
     /**
@@ -38,4 +40,6 @@ public interface JottTree {
      * @return true if valid Jott code; false otherwise
      */
     public boolean validateTree();
+
+    public void CreateSyntaxError(String msg, Token token);
 }

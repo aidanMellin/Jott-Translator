@@ -2,7 +2,7 @@ package Parser.Nodes;
 import Tokenizer.*;
 import Parser.*;
 
-public class EndStatementNode implements JottTree {
+public class EndStatementNode implements JottTree { //TODO
 
     private final String JOTT_END = ";";
     private Token token;

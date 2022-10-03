@@ -2,7 +2,7 @@ package Parser.Nodes;
 import Tokenizer.*;
 import Parser.*;
 
-public class WhileLoopNode implements JottTree{
+public class WhileLoopNode implements JottTree{ //TODO
 
     private final String LBRACKET_CHAR = "[";
     private final String RBRACKET_CHAR = "]";
