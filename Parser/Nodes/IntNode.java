@@ -13,15 +13,15 @@ public class IntNode implements JottTree {
         this.tokens = tokens;
         if (this.tokens.size() == 1) {
             subnodes.add(new SignNode(null));
-            assert tokens.get(0).getToken().matches("[0-9]+");
+            if (!tokens.get(0).getToken().matches("[0-9]+")) CreateSyntaxError("Unexpected Character", this.tokens.get(0));
             assert tokens.get(0).getTokenType() == TokenType.NUMBER;
             for (int i=0; i<tokens.get(0).getToken().length(); i++)
                 subnodes.add(new CharNode(tokens.get(0).getToken().charAt(i)));
         } else if (this.tokens.size() == 2) {
-            assert tokens.get(0).getToken().matches("[-+]?");
-            assert tokens.get(0).getTokenType() == TokenType.MATH_OP;
-            assert tokens.get(1).getToken().matches("[0-9]+");
-            assert tokens.get(1).getTokenType() == TokenType.NUMBER;
+            if (!tokens.get(0).getToken().matches("[-+]?")) CreateSyntaxError("Unexpected Character - Expected '-' or '+'", this.tokens.get(0));;
+            if (tokens.get(0).getTokenType() != TokenType.MATH_OP) CreateSyntaxError("Unexpected Token - Expected MathOp", this.tokens.get(0));
+            if (!tokens.get(1).getToken().matches("[0-9]+")) CreateSyntaxError("Unexpected Character", this.tokens.get(1));;
+            if (tokens.get(1).getTokenType() != TokenType.NUMBER) CreateSyntaxError("Unexpected Token - Expected Number", this.tokens.get(0));
             subnodes.add(new SignNode(tokens.get(0)));
             for (int i=1; i<tokens.get(1).getToken().length(); i++)
                 subnodes.add(new CharNode(tokens.get(1).getToken().charAt(i)));
@@ -74,5 +74,10 @@ public class IntNode implements JottTree {
     public boolean validateTree()
     {
         return(false);
+    }
+
+    public void CreateSyntaxError(String msg, Token token) {
+        System.err.println("Syntax Error:\n" + msg + "\n" + token.getFilename() + ":" + token.getLineNum());
+        System.exit(0);
     }
 }

@@ -17,7 +17,7 @@ public class BodyNode implements JottTree {
     public BodyNode(ArrayList<Token> tokens) {
         this.tokens = tokens;
         if(this.tokens.get(0).getTokenType() == TokenType.ID_KEYWORD && this.tokens.get(0).getToken() == RETURN_STR) {
-            subnodes.add(new ReturnNode(this.tokens));
+            subnodes.add(new ReturnStatementNode(this.tokens));
         }
         else if(this.tokens.get(0).getToken() == EMPTY_STR){
 

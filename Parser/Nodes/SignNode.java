@@ -9,6 +9,8 @@ public class SignNode implements JottTree { //TODO
 
     public SignNode(Token token) {
         this.token = token;
+        assert this.token != null;
+        if (this.token.getTokenType() != TokenType.MATH_OP) CreateSyntaxError("Unexpected Token - Expected Math_Op", this.token);
     }
 
     /**
@@ -56,5 +58,10 @@ public class SignNode implements JottTree { //TODO
     public boolean validateTree()
     {
         return(false);
+    }
+
+    public void CreateSyntaxError(String msg, Token token) {
+        System.err.println("Syntax Error:\n" + msg + "\n" + token.getFilename() + ":" + token.getLineNum());
+        System.exit(0);
     }
 }

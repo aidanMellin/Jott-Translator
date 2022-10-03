@@ -15,7 +15,7 @@ public class ParametersTNode implements JottTree{
         this.tokens = tokens;
         if (tokens == null) subnodes = null;
         else {
-            assert this.tokens.get(0).getTokenType() != TokenType.COMMA;
+            if (this.tokens.get(0).getTokenType() != TokenType.COMMA) CreateSyntaxError("Unexpected Token - Expected ','", this.tokens.get(0));
             this.tokens.remove(0);
             ArrayList<Token> expr = new ArrayList<>();
             int b_count = 0;
@@ -80,4 +80,10 @@ public class ParametersTNode implements JottTree{
     {
         return(false);
     }
+
+    public void CreateSyntaxError(String msg, Token token) {
+        System.err.println("Syntax Error:\n" + msg + "\n" + token.getFilename() + ":" + token.getLineNum());
+        System.exit(0);
+    }
+
 }

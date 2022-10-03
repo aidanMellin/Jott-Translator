@@ -14,7 +14,12 @@ public class TypeNode implements JottTree{
     public TypeNode(Token token) {
         this.token = token;
         assert this.token != null;
-        assert this.token.getTokenType() == TokenType.ID_KEYWORD;
+        if (this.token.getTokenType() != TokenType.ID_KEYWORD) CreateSyntaxError("Unexpected Token - Expected ID", this.token);
+        if (!Objects.equals(this.token.getToken(), JOTT_DOUBLE)
+                && !Objects.equals(this.token.getToken(), JOTT_BOOLEAN)
+                && !Objects.equals(this.token.getToken(), JOTT_INTEGER)
+                && !Objects.equals(this.token.getToken(), JOTT_STRING))
+            CreateSyntaxError("Unexpected Token - Expected Double, Integer, String, or Boolean", this.token);
     }
 
     /**
@@ -26,8 +31,7 @@ public class TypeNode implements JottTree{
         if (Objects.equals(token.getToken(), JOTT_BOOLEAN)) return JOTT_BOOLEAN;
         else if (Objects.equals(token.getToken(), JOTT_DOUBLE)) return JOTT_DOUBLE;
         else if (Objects.equals(token.getToken(), JOTT_INTEGER)) return JOTT_INTEGER;
-        else if (Objects.equals(token.getToken(), JOTT_STRING)) return JOTT_STRING;
-        else return null;
+        else return JOTT_STRING;
     }
 
     /**
@@ -66,4 +70,10 @@ public class TypeNode implements JottTree{
     {
         return(false);
     }
+
+    public void CreateSyntaxError(String msg, Token token) {
+        System.err.println("Syntax Error:\n" + msg + "\n" + token.getFilename() + ":" + token.getLineNum());
+        System.exit(0);
+    }
+
 }

@@ -11,7 +11,8 @@ public class VariableDeclarationNode implements JottTree{
     
     public VariableDeclarationNode(ArrayList<Token> tokens) {
         this.tokens = tokens;
-        assert this.tokens.size() == 3;
+        assert this.tokens != null;
+        if (this.tokens.size() != 3) CreateSyntaxError("Invalid Variable Declaration", this.tokens.get(0));
         subnodes.add(new TypeNode(this.tokens.get(0)));
         subnodes.add(new IdNode(this.tokens.get(1)));
         subnodes.add(new EndStatementNode(this.tokens.get(2)));
@@ -63,6 +64,11 @@ public class VariableDeclarationNode implements JottTree{
     public boolean validateTree()
     {
         return(false);
+    }
+
+    public void CreateSyntaxError(String msg, Token token) {
+        System.err.println("Syntax Error:\n" + msg + "\n" + token.getFilename() + ":" + token.getLineNum());
+        System.exit(0);
     }
 
 }
