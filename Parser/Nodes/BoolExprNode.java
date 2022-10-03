@@ -118,7 +118,7 @@ public class BoolExprNode implements JottTree { //TODO
             }
 
         }
-
+        subnodes.addAll(temp_subnodes);
     }
 
     /**
