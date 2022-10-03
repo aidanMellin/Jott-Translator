@@ -18,6 +18,7 @@ public class DoubleExprNode implements JottTree {
         int op_count = 0;
 
         for (int i = 0; i < Tokens.size(); i++) {
+            boolean add_token = true;
             Token temp_token = Tokens.get(i);
             if (temp_token.getTokenType() == TokenType.ID_KEYWORD) {
                 if(i < tokens.size() - 1 && Tokens.get(i+1).getTokenType() == TokenType.L_BRACKET){
@@ -67,10 +68,14 @@ public class DoubleExprNode implements JottTree {
                     subnodes.add(temp_subnodes.get(temp_subnodes.size()-1));
                     temp_subnodes = new ArrayList<>();
                     op_count = 0;
+                    add_token = false;
+                    tokens_used = new ArrayList<>();
                 }
             }
 
-            tokens_used.add(temp_token);
+            if(add_token) {
+                tokens_used.add(temp_token);
+            }
         }
         subnodes.addAll(temp_subnodes);
     }
@@ -124,5 +129,10 @@ public class DoubleExprNode implements JottTree {
     public boolean validateTree()
     {
         return(false);
+    }
+
+    @Override
+    public void CreateSyntaxError(String msg, Token token) {
+
     }
 }
