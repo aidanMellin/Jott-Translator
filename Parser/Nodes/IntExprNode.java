@@ -8,10 +8,15 @@ public class IntExprNode implements JottTree {
     
     private ArrayList<JottTree> subnodes;
     private ArrayList<Token> Tokens;
-    //Currently missing information needed for handling another IntExprNode & a func_call
+
     public IntExprNode(ArrayList<Token> tokens) {
         Tokens = tokens;
         subnodes = new ArrayList<>();
+
+        ArrayList<JottTree> temp_subnodes = new ArrayList<>();
+        ArrayList<Token> tokens_used = new ArrayList<>();
+        int op_count = 0;
+
         for (int i = 0; i < Tokens.size(); i++) {
             Token temp_token = Tokens.get(i);
             if (temp_token.getTokenType() == TokenType.ID_KEYWORD) {
@@ -25,15 +30,15 @@ public class IntExprNode implements JottTree {
                         tokens_to_send.add(current_token);
                         count++;
                     }
-                    subnodes.add(new FunctionCallNode(tokens_to_send));
+                    temp_subnodes.add(new FunctionCallNode(tokens_to_send));
                     i += count;
                 } else {
-                    subnodes.add(new IdNode(temp_token));
+                    temp_subnodes.add(new IdNode(temp_token));
                 }
             } else if (temp_token.getTokenType() == TokenType.NUMBER) {
                 ArrayList<Token> temp_token_list = new ArrayList<>();
                 temp_token_list.add(temp_token);
-                subnodes.add(new IntNode(temp_token_list));
+                temp_subnodes.add(new IntNode(temp_token_list));
 
             } else if (temp_token.getTokenType() == TokenType.MATH_OP) {
                 if (temp_token.getToken().equals("-")) {
@@ -45,17 +50,29 @@ public class IntExprNode implements JottTree {
                             return;
                         } else {
                             temp_token_list.add(Tokens.get(i + 1));
-                            subnodes.add(new IntNode(temp_token_list));
+                            temp_subnodes.add(new IntNode(temp_token_list));
                             i++;
                         }
                     } else{
-                        subnodes.add(new OpNode(temp_token));
+                        temp_subnodes.add(new OpNode(temp_token));
+                        op_count++;
                     }
                 } else {
-                    subnodes.add(new OpNode(temp_token));
+                    temp_subnodes.add(new OpNode(temp_token));
+                    op_count++;
                     }
+                if(op_count > 1){   //once a second math op has happened, the program takes the tokens used so far and makes them into a seperate node
+                    IntExprNode temp_condense = new IntExprNode(tokens_used);
+                    subnodes.add(temp_condense);
+                    subnodes.add(temp_subnodes.get(temp_subnodes.size()-1));
+                    temp_subnodes = new ArrayList<>();
+                    op_count = 0;
                 }
+                }
+
+            tokens_used.add(temp_token);
             }
+            subnodes.addAll(temp_subnodes);
         }
 
 
