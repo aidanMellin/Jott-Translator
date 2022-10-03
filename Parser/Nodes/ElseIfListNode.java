@@ -65,4 +65,9 @@ public class ElseIfListNode implements JottTree{ //TODO
     {
         return(false);
     }
+
+    public void CreateSyntaxError(String msg, Token token) {
+        System.err.println("Syntax Error:\n" + msg + "\n" + token.getFilename() + ":" + token.getLineNum());
+        System.exit(0);
+    }
 }

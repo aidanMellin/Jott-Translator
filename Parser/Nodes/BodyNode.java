@@ -10,23 +10,24 @@ public class BodyNode implements JottTree {
     private ArrayList<Token> tokens;
 
     private final String EMPTY_STR = "";
-    private  final String RETURN_STR = "return";
+    private final String RETURN_STR = "return";
     private final String IF_STR = "if";
     private final String WHILE_STR = "while";
 
     public BodyNode(ArrayList<Token> tokens) {
         this.tokens = tokens;
-        if(this.tokens.get(0).getTokenType() == TokenType.ID_KEYWORD && this.tokens.get(0).getToken() == RETURN_STR) {
+        subnodes = new ArrayList<>();
+        if(this.tokens.get(0).getTokenType().equals(TokenType.ID_KEYWORD)  && this.tokens.get(0).getToken().equals(RETURN_STR)) {
             subnodes.add(new ReturnStatementNode(this.tokens));
         }
-        else if(this.tokens.get(0).getToken() == EMPTY_STR){
-
+        else if(this.tokens.get(0).getToken().equals(EMPTY_STR)){
+            // Empty Body
         }
         else {
-            ArrayList<Token> bodyStmtTokens = null;
-            if((this.tokens.get(0).getToken() == IF_STR) || (this.tokens.get(0).getToken() == WHILE_STR)){
+            ArrayList<Token> bodyStmtTokens = new ArrayList<>();
+            if((this.tokens.get(0).getToken().equals(IF_STR)) || (this.tokens.get(0).getToken().equals(WHILE_STR))){
                 int leftBraceCount = 0;
-                while((this.tokens.get(0).getTokenType() != TokenType.R_BRACE) && (leftBraceCount != 0)) {
+                while(this.tokens.get(0).getTokenType() != TokenType.R_BRACE || leftBraceCount != 0) {
                     if(this.tokens.get(0).getTokenType() == TokenType.L_BRACE) {
                         leftBraceCount++;
                     }
@@ -35,6 +36,10 @@ public class BodyNode implements JottTree {
                     }
                     bodyStmtTokens.add(this.tokens.get(0));
                     this.tokens.remove(0);
+
+                    if(tokens.size() == 0){
+                        // ERROR
+                    }
                 }
             }
             else {
@@ -102,4 +107,11 @@ public class BodyNode implements JottTree {
     {
         return(false);
     }
+
+    public void CreateSyntaxError(String msg, Token token) {
+        System.err.println("Syntax Error:\n" + msg + "\n" + token.getFilename() + ":" + token.getLineNum());
+        System.exit(0);
+    }
 }
+
+

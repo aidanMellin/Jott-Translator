@@ -115,4 +115,9 @@ public class IfStatementNode implements JottTree{
     {
         return(false);
     }
+
+    public void CreateSyntaxError(String msg, Token token) {
+        System.err.println("Syntax Error:\n" + msg + "\n" + token.getFilename() + ":" + token.getLineNum());
+        System.exit(0);
+    }
 }
