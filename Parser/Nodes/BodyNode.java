@@ -16,6 +16,7 @@ public class BodyNode implements JottTree {
 
     public BodyNode(ArrayList<Token> tokens) {
         this.tokens = tokens;
+        assert this.tokens != null;
         subnodes = new ArrayList<>();
         if(this.tokens.get(0).getTokenType().equals(TokenType.ID_KEYWORD)  && this.tokens.get(0).getToken().equals(RETURN_STR)) {
             subnodes.add(new ReturnStatementNode(this.tokens));
@@ -37,8 +38,8 @@ public class BodyNode implements JottTree {
                     bodyStmtTokens.add(this.tokens.get(0));
                     this.tokens.remove(0);
 
-                    if(tokens.size() == 0){
-                        // ERROR
+                    if((tokens.size() == 1) && (this.tokens.get(0).getTokenType() != TokenType.R_BRACE)){
+                        CreateSyntaxError("Unexpected Token - Expected '}'", this.tokens.get(0));
                     }
                 }
             }
@@ -46,6 +47,10 @@ public class BodyNode implements JottTree {
                 while(this.tokens.get(0).getTokenType() != TokenType.SEMICOLON) {
                     bodyStmtTokens.add(this.tokens.get(0));
                     this.tokens.remove(0);
+
+                    if((tokens.size() == 1) && (this.tokens.get(0).getTokenType() != TokenType.SEMICOLON)){
+                        CreateSyntaxError("Unexpected Token - Expected ';'", this.tokens.get(0));
+                    }
                 }
             }
             subnodes.add(new BodyStatementNode(bodyStmtTokens));

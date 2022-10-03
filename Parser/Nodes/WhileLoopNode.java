@@ -2,6 +2,8 @@ package Parser.Nodes;
 import Tokenizer.*;
 import Parser.*;
 
+import java.util.ArrayList;
+
 public class WhileLoopNode implements JottTree{ //TODO
 
     private final String LBRACKET_CHAR = "[";
@@ -12,7 +14,7 @@ public class WhileLoopNode implements JottTree{ //TODO
     private BoolExprNode b_expr;
     private BodyNode body;
 
-    public WhileLoopNode() {
+    public WhileLoopNode(ArrayList<Token> tokens) {
 
     }
 
@@ -60,5 +62,10 @@ public class WhileLoopNode implements JottTree{ //TODO
     public boolean validateTree()
     {
         return(false);
+    }
+
+    public void CreateSyntaxError(String msg, Token token) {
+        System.err.println("Syntax Error:\n" + msg + "\n" + token.getFilename() + ":" + token.getLineNum());
+        System.exit(0);
     }
 }

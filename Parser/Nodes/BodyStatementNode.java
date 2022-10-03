@@ -4,13 +4,27 @@ import Parser.*;
 
 import java.util.ArrayList;
 
-public class BodyStatementNode implements JottTree { //TODO
+public class BodyStatementNode implements JottTree {
 
     private ArrayList<JottTree> subnodes;
     private ArrayList<Token> tokens;
 
     public BodyStatementNode(ArrayList<Token> tokens) {
-
+        this.tokens = tokens;
+        assert this.tokens != null;
+        subnodes = new ArrayList<>();
+        if(this.tokens.get(0).getToken().equals("if")) {
+            subnodes.add(new IfStatementNode(this.tokens));
+        }
+        else if(this.tokens.get(0).getToken().equals("while")) {
+            subnodes.add(new WhileLoopNode(this.tokens));
+        }
+        else if(this.tokens.get(0).getTokenType().equals(TokenType.ID_KEYWORD)) {
+            subnodes.add(new StatementNode(this.tokens));
+        }
+        else {
+            CreateSyntaxError("Unexpected Token - Expected 'Body Statement'", this.tokens.get(0));
+        }
     }
 
     /**
@@ -19,8 +33,7 @@ public class BodyStatementNode implements JottTree { //TODO
      */
     public String convertToJott()
     {
-        this.tokens = tokens;
-        return("");
+        return(subnodes.get(0).convertToJott());
     }
 
     /**
