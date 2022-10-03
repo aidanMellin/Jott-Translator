@@ -20,10 +20,10 @@ public class ElseNode implements JottTree{
         this.tokens = tokens;
         if (this.tokens == null) body = null;
         else {
-            assert this.tokens.size() >= 3;
-            assert this.tokens.get(0).getTokenType() == TokenType.ID_KEYWORD;
-            assert this.tokens.get(1).getTokenType() == TokenType.L_BRACE;
-            assert this.tokens.get(this.tokens.size()-1).getTokenType() == TokenType.R_BRACE;
+            if (!(this.tokens.size() >= 3)) CreateSyntaxError("Invalid Token List", this.tokens.get(0));
+            if (this.tokens.get(0).getTokenType() != TokenType.ID_KEYWORD) CreateSyntaxError("Unexpected Token - Expected ID", this.tokens.get(0));
+            if (this.tokens.get(1).getTokenType() != TokenType.L_BRACE) CreateSyntaxError("Unexpected Token - Expected '{'", this.tokens.get(1));
+            if (this.tokens.get(this.tokens.size()-1).getTokenType() != TokenType.R_BRACE) CreateSyntaxError("Unexpected Token - Expected '}'", this.tokens.get(this.tokens.size()-1));
             ArrayList<Token> bodyTokens = this.tokens;
             bodyTokens.remove(0);
             bodyTokens.remove(0);
@@ -77,5 +77,10 @@ public class ElseNode implements JottTree{
     public boolean validateTree()
     {
         return(false);
+    }
+
+    public void CreateSyntaxError(String msg, Token token) {
+        System.err.println("Syntax Error:\n" + msg + "\n" + token.getFilename() + ":" + token.getLineNum());
+        System.exit(0);
     }
 }

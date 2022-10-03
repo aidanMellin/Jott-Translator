@@ -15,11 +15,11 @@ public class FunctionDefinitionParametersNode implements JottTree {
         this.tokens = tokens;
         if (this.tokens.size() == 0) subnodes = null;
         else {
-            assert this.tokens.get(0).getTokenType() == TokenType.ID_KEYWORD;
+            if (this.tokens.get(0).getTokenType() != TokenType.ID_KEYWORD) CreateSyntaxError("Unexpected Token - Expected ID", this.tokens.get(0));
             subnodes.add(new IdNode(this.tokens.remove(0)));
-            assert this.tokens.get(0).getTokenType() == TokenType.COLON;
+            if (this.tokens.get(0).getTokenType() != TokenType.COLON) CreateSyntaxError("Unexpected Token - Expected ':'", this.tokens.get(0));
             this.tokens.remove(0);
-            assert this.tokens.get(0).getTokenType() == TokenType.ID_KEYWORD;
+            if (this.tokens.get(0).getTokenType() != TokenType.ID_KEYWORD) CreateSyntaxError("Unexpected Token - Expected ID", this.tokens.get(0));
             subnodes.add(new TypeNode(this.tokens.remove(0)));
             subnodes.add(new FunctionDefinitionParametersTNode(this.tokens));
         }
@@ -73,5 +73,10 @@ public class FunctionDefinitionParametersNode implements JottTree {
     public boolean validateTree()
     {
         return(false);
+    }
+
+    public void CreateSyntaxError(String msg, Token token) {
+        System.err.println("Syntax Error:\n" + msg + "\n" + token.getFilename() + ":" + token.getLineNum());
+        System.exit(0);
     }
 }

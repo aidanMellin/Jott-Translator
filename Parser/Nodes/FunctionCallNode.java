@@ -14,7 +14,7 @@ public class FunctionCallNode implements JottTree{
     public FunctionCallNode(ArrayList<Token> tokens) {
         this.tokens = tokens;
         assert this.tokens != null;
-        assert this.tokens.get(0).getToken().matches("[a-z][a-zA-z0-9]*");
+        if (!this.tokens.get(0).getToken().matches("[a-z][a-zA-z0-9]*")) CreateSyntaxError("Invalid Function Name", this.tokens.get(0));
         subnodes.add(new IdNode(this.tokens.get(0)));
         ArrayList<Token> paramsTokens = new ArrayList<>();
         paramsTokens.addAll(2, tokens);
@@ -71,5 +71,10 @@ public class FunctionCallNode implements JottTree{
     public boolean validateTree()
     {
         return(false);
+    }
+
+    public void CreateSyntaxError(String msg, Token token) {
+        System.err.println("Syntax Error:\n" + msg + "\n" + token.getFilename() + ":" + token.getLineNum());
+        System.exit(0);
     }
 }

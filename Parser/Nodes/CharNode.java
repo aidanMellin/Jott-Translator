@@ -64,4 +64,8 @@ private char_type type;
     {
         return(false);
     }
+
+    public void CreateSyntaxError(String msg, Token token) {
+        System.exit(0);
+    }
 }
