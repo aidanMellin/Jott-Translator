@@ -11,11 +11,12 @@ public class FunctionDefinitionNode implements JottTree {
     private final String RBRACE_CHAR = "}";
     private final String LBRACE_CHAR = "{";
     private final String COLON_CHAR = ":";
-    private final ArrayList<JottTree> subnodes = new ArrayList<>();
+    private ArrayList<JottTree> subnodes;
     private final ArrayList<Token> tokens;
 
     public FunctionDefinitionNode(ArrayList<Token> tokens) {
         this.tokens = tokens;
+        subnodes = new ArrayList<>();
         if (this.tokens.get(0).getTokenType() != TokenType.ID_KEYWORD) CreateSyntaxError("Unexpected Token - Expected ID", this.tokens.get(0));
         subnodes.add(new IdNode(this.tokens.remove(0)));
         if (this.tokens.get(0).getTokenType() != TokenType.L_BRACKET) CreateSyntaxError("Unexpected Token - Expected '['", this.tokens.get(0));

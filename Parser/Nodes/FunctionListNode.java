@@ -6,10 +6,30 @@ import java.util.ArrayList;
 
 public class FunctionListNode implements JottTree { //TODO
 
+    private ArrayList<Token> tokens;
     private JottTree function_def;
     private JottTree function_list;
 
     public FunctionListNode(ArrayList<Token> tokens){
+        this.tokens = tokens;
+        if(!(this.tokens.size() == 0)){
+            // functionDefNode
+            ArrayList<Token> fDefTokens = new ArrayList<>();
+            while(!this.tokens.get(0).getTokenType().equals(TokenType.R_BRACE)) {
+                fDefTokens.add(this.tokens.get(0));
+                this.tokens.remove(0);
+                if(this.tokens.size() == 1 && !this.tokens.get(0).getTokenType().equals(TokenType.R_BRACE)) {
+                    CreateSyntaxError("Unexpected Token - Expected '}'", this.tokens.get(0));
+                }
+            }
+            function_def = new FunctionDefinitionNode(fDefTokens);
+
+            // functionList
+            assert this.tokens != null;
+            function_list = new FunctionListNode(this.tokens);
+        }
+
+
 
     }
      /**
@@ -18,7 +38,12 @@ public class FunctionListNode implements JottTree { //TODO
      */
     public String convertToJott()
     {
-        return("");
+        if(function_def == null) {
+            return("");
+        }
+        else {
+            return(function_def.convertToJott() + function_list.convertToJott());
+        }
     }
 
     /**

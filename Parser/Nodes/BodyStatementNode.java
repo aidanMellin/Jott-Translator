@@ -9,14 +9,17 @@ public class BodyStatementNode implements JottTree {
     private ArrayList<JottTree> subnodes;
     private ArrayList<Token> tokens;
 
+    private final String IF_STR = "if";
+    private final String WHILE_STR = "while";
+
     public BodyStatementNode(ArrayList<Token> tokens) {
         this.tokens = tokens;
         assert this.tokens != null;
         subnodes = new ArrayList<>();
-        if(this.tokens.get(0).getToken().equals("if")) {
+        if(this.tokens.get(0).getToken().equals(IF_STR)) {
             subnodes.add(new IfStatementNode(this.tokens));
         }
-        else if(this.tokens.get(0).getToken().equals("while")) {
+        else if(this.tokens.get(0).getToken().equals(WHILE_STR)) {
             subnodes.add(new WhileLoopNode(this.tokens));
         }
         else if(this.tokens.get(0).getTokenType().equals(TokenType.ID_KEYWORD)) {
