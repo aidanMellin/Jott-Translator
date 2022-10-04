@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class BodyStatementNode implements JottTree {
 
-    private ArrayList<JottTree> subnodes;
+    private ArrayList<JottTree> subnodes = new ArrayList<>();;
     private ArrayList<Token> tokens;
 
     private final String IF_STR = "if";
@@ -15,7 +15,6 @@ public class BodyStatementNode implements JottTree {
     public BodyStatementNode(ArrayList<Token> tokens) {
         this.tokens = tokens;
         assert this.tokens != null;
-        subnodes = new ArrayList<>();
         if(this.tokens.get(0).getToken().equals(IF_STR)) {
             subnodes.add(new IfStatementNode(this.tokens));
         }
