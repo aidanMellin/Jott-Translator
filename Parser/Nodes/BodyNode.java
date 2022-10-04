@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class BodyNode implements JottTree {
 
-    private ArrayList<JottTree> subnodes;
+    private ArrayList<JottTree> subnodes = new ArrayList<>();
     private ArrayList<Token> tokens;
 
     private final String EMPTY_STR = "";
@@ -17,7 +17,6 @@ public class BodyNode implements JottTree {
     public BodyNode(ArrayList<Token> tokens) {
         this.tokens = tokens;
         assert this.tokens != null;
-        subnodes = new ArrayList<>();
         if(this.tokens.get(0).getTokenType().equals(TokenType.ID_KEYWORD)  && this.tokens.get(0).getToken().equals(RETURN_STR)) {
             subnodes.add(new ReturnStatementNode(this.tokens));
         }
@@ -45,17 +44,20 @@ public class BodyNode implements JottTree {
             }
             else {
                 while(this.tokens.get(0).getTokenType() != TokenType.SEMICOLON) {
-                    bodyStmtTokens.add(this.tokens.get(0));
-                    this.tokens.remove(0);
+                    bodyStmtTokens.add(this.tokens.remove(0));
 
-                    if((tokens.size() == 1) && (this.tokens.get(0).getTokenType() != TokenType.SEMICOLON)){
+                    if((this.tokens.size() == 1) && (this.tokens.get(0).getTokenType() != TokenType.SEMICOLON)){
                         CreateSyntaxError("Unexpected Token - Expected ';'", this.tokens.get(0));
+                    }
+                    else if (this.tokens.get(0).getTokenType() == TokenType.SEMICOLON) {
+                        bodyStmtTokens.add(this.tokens.remove(0));
+                        break;
                     }
                 }
                 if (this.tokens.get(0).getTokenType() == TokenType.SEMICOLON) bodyStmtTokens.add(this.tokens.remove(0));
             }
             subnodes.add(new BodyStatementNode(bodyStmtTokens));
-            subnodes.add(new BodyStatementNode(this.tokens));
+            subnodes.add(new BodyNode(this.tokens));
         }
 
     }
