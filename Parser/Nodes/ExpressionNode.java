@@ -8,6 +8,7 @@ import java.util.ArrayList;
 public class ExpressionNode implements JottTree{ //TODO
 
     private JottTree subnode;
+    private ArrayList<Token> tokens;
 
     public ExpressionNode(ArrayList<Token> tokens) {
 

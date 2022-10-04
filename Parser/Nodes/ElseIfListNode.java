@@ -13,7 +13,7 @@ public class ElseIfListNode implements JottTree{ //TODO
     private final String RBRACE_CHAR = "}";
     private final String EMPTY_STRING = "";
 
-    private ArrayList<JottTree> subnodes;
+    private ArrayList<JottTree> subnodes = new ArrayList<>();
     private ArrayList<Token> tokens;
 
     public ElseIfListNode(ArrayList<Token> tokens) {

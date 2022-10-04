@@ -2,15 +2,15 @@ package Parser.Nodes;
 import Tokenizer.*;
 import Parser.*;
 
-public class SignNode implements JottTree { //TODO
+public class SignNode implements JottTree {
 
     private final String EMPTY_STRING = "";
     private Token token;
 
     public SignNode(Token token) {
         this.token = token;
-        assert this.token != null;
-        if (this.token.getTokenType() != TokenType.MATH_OP) CreateSyntaxError("Unexpected Token - Expected Math_Op", this.token);
+        if (this.token == null) return;
+        else if (this.token.getTokenType() != TokenType.MATH_OP) CreateSyntaxError("Unexpected Token - Expected Math_Op", this.token);
     }
 
     /**

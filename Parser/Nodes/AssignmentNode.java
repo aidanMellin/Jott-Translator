@@ -5,7 +5,7 @@ import Parser.*;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class AssignmentNode implements JottTree {
+public class AssignmentNode implements JottTree { //TODO
 
     private final String JOTT_DOUBLE = "Double";
     private final String JOTT_INTEGER = "Integer";
