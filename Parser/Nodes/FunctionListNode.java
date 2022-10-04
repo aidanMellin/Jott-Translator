@@ -20,7 +20,7 @@ public class FunctionListNode implements JottTree { //TODO
                 this.tokens.remove(0);
                 if(this.tokens.size() == 1 && !this.tokens.get(0).getTokenType().equals(TokenType.R_BRACE)) {
                     CreateSyntaxError("Unexpected Token - Expected '}'", this.tokens.get(0));
-                }
+                } else if (this.tokens.size() == 1 && this.tokens.get(0).getTokenType() == TokenType.R_BRACE) fDefTokens.add(this.tokens.get(0));
             }
             function_def = new FunctionDefinitionNode(fDefTokens);
 

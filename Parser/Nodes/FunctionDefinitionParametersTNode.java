@@ -9,7 +9,7 @@ public class FunctionDefinitionParametersTNode implements JottTree {
     private final String COMMA_CHAR = ",";
     private final String COLON_CHAR = ":";
     private final String EMPTY_STRING = "";
-    private ArrayList<JottTree> subnodes;
+    private ArrayList<JottTree> subnodes = new ArrayList<>();
     private final ArrayList<Token> tokens;
 
     public FunctionDefinitionParametersTNode(ArrayList<Token> tokens) {

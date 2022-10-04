@@ -11,12 +11,11 @@ public class FunctionDefinitionNode implements JottTree {
     private final String RBRACE_CHAR = "}";
     private final String LBRACE_CHAR = "{";
     private final String COLON_CHAR = ":";
-    private ArrayList<JottTree> subnodes;
+    private ArrayList<JottTree> subnodes = new ArrayList<>();
     private final ArrayList<Token> tokens;
 
     public FunctionDefinitionNode(ArrayList<Token> tokens) {
         this.tokens = tokens;
-        subnodes = new ArrayList<>();
         if (this.tokens.get(0).getTokenType() != TokenType.ID_KEYWORD) CreateSyntaxError("Unexpected Token - Expected ID", this.tokens.get(0));
         subnodes.add(new IdNode(this.tokens.remove(0)));
         if (this.tokens.get(0).getTokenType() != TokenType.L_BRACKET) CreateSyntaxError("Unexpected Token - Expected '['", this.tokens.get(0));
@@ -34,12 +33,13 @@ public class FunctionDefinitionNode implements JottTree {
         if (this.tokens.get(0).getTokenType() != TokenType.ID_KEYWORD) CreateSyntaxError("Unexpected Token - Expected ID", this.tokens.get(0));
         subnodes.add(new FunctionReturnNode(this.tokens.remove(0)));
         if (this.tokens.get(0).getTokenType() != TokenType.L_BRACE) CreateSyntaxError("Unexpected Token - Expected '{'", this.tokens.get(0));
+        this.tokens.remove(0);
         ArrayList<Token> body = new ArrayList<>();
         int b_count = 1;
         while (b_count != 0) {
             if (this.tokens.get(0).getTokenType() == TokenType.L_BRACE) b_count++;
             body.add(this.tokens.remove(0));
-            assert this.tokens.size() != 0;
+            if (this.tokens.size() == 0) CreateSyntaxError("Error: empty token array", body.get(body.size()-1));
             if (this.tokens.get(0).getTokenType() == TokenType.R_BRACE) b_count--;
         }
         subnodes.add(new BodyNode(body));

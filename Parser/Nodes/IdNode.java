@@ -7,7 +7,7 @@ import java.util.ArrayList;
 public class IdNode implements JottTree {
 
     private Token idToken;
-    private ArrayList<JottTree> subnodes;
+    private ArrayList<JottTree> subnodes = new ArrayList<>();
     private String idStored;
 
     public IdNode(Token token){
