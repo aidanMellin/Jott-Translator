@@ -4,7 +4,7 @@ import Parser.*;
 
 import java.util.ArrayList;
 
-public class StatementNode implements JottTree{ //TODO
+public class StatementNode implements JottTree{
 
     private ArrayList<JottTree> subnodes = new ArrayList<>();
     private ArrayList<Token> tokens;
@@ -12,7 +12,15 @@ public class StatementNode implements JottTree{ //TODO
     public StatementNode(ArrayList<Token> tokens) {
         this.tokens = tokens;
         assert this.tokens != null;
-        if (this.tokens.size() == 3) subnodes.add(new VariableDeclarationNode(this.tokens));
+        if (this.tokens.get(1).getTokenType() == TokenType.L_BRACKET) {
+            Token end_stmt = this.tokens.remove(this.tokens.size()-1);
+            subnodes.add(new FunctionCallNode(this.tokens));
+            subnodes.add(new EndStatementNode(end_stmt));
+        } else if (this.tokens.size() == 3) {
+            subnodes.add(new VariableDeclarationNode(this.tokens));
+        } else {
+            subnodes.add(new AssignmentNode(this.tokens));
+        }
     }
 
     /**

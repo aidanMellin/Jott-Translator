@@ -18,10 +18,9 @@ public class FunctionCallNode implements JottTree{
         if (!this.tokens.get(0).getToken().matches("[a-z][a-zA-z0-9]*")) CreateSyntaxError("Invalid Function Name", this.tokens.get(0));
         subnodes.add(new IdNode(this.tokens.get(0)));
         ArrayList<Token> paramsTokens = new ArrayList<>();
-        if (this.tokens.get(1).getTokenType() != TokenType.R_BRACKET) CreateSyntaxError("Unexpected Token - Expected '['", this.tokens.get(1));
-        if (this.tokens.get(this.tokens.size()-1).getTokenType() != TokenType.L_BRACKET) CreateSyntaxError("Unexpected Token - Expected ']'", this.tokens.get(1));
-        paramsTokens.addAll(2, tokens);
-        paramsTokens.remove(paramsTokens.size()-1);
+        if (this.tokens.get(1).getTokenType() != TokenType.L_BRACKET) CreateSyntaxError("Unexpected Token - Expected '['", this.tokens.get(1));
+        if (this.tokens.get(this.tokens.size()-1).getTokenType() != TokenType.R_BRACKET) CreateSyntaxError("Unexpected Token - Expected ']'", this.tokens.get(1));
+        for (int i=2; i<this.tokens.size()-1; i++) paramsTokens.add(this.tokens.get(i));
         subnodes.add(new ParametersNode(paramsTokens));
     }
 
@@ -31,12 +30,10 @@ public class FunctionCallNode implements JottTree{
      */
     public String convertToJott()
     {
-        StringBuilder jott_func_call = new StringBuilder();
-        jott_func_call.append(subnodes.get(0).convertToJott());
-        jott_func_call.append(LBRACKET_STRING);
-        jott_func_call.append(subnodes.get(1).convertToJott());
-        jott_func_call.append(RBRACKET_STRING);
-        return jott_func_call.toString();
+        return subnodes.get(0).convertToJott() +
+                LBRACKET_STRING +
+                subnodes.get(1).convertToJott() +
+                RBRACKET_STRING;
     }
 
     /**
