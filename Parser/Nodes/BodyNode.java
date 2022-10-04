@@ -52,6 +52,7 @@ public class BodyNode implements JottTree {
                         CreateSyntaxError("Unexpected Token - Expected ';'", this.tokens.get(0));
                     }
                 }
+                if (this.tokens.get(0).getTokenType() == TokenType.SEMICOLON) bodyStmtTokens.add(this.tokens.remove(0));
             }
             subnodes.add(new BodyStatementNode(bodyStmtTokens));
             subnodes.add(new BodyStatementNode(this.tokens));
@@ -72,7 +73,7 @@ public class BodyNode implements JottTree {
             return(subnodes.get(0).convertToJott() + subnodes.get(1).convertToJott());
         }
         else {
-            return("");
+            return null;
         }
     }
 

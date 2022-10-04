@@ -12,6 +12,7 @@ public class FunctionListNode implements JottTree { //TODO
 
     public FunctionListNode(ArrayList<Token> tokens){
         this.tokens = tokens;
+        System.err.println(tokens);
         if(!(this.tokens.size() == 0)){
             // functionDefNode
             ArrayList<Token> fDefTokens = new ArrayList<>();
