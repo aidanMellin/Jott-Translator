@@ -12,7 +12,6 @@ public class FunctionListNode implements JottTree { //TODO
 
     public FunctionListNode(ArrayList<Token> tokens){
         this.tokens = tokens;
-        System.err.println(tokens);
         if(!(this.tokens.size() == 0)){
             // functionDefNode
             ArrayList<Token> fDefTokens = new ArrayList<>();
@@ -21,7 +20,10 @@ public class FunctionListNode implements JottTree { //TODO
                 this.tokens.remove(0);
                 if(this.tokens.size() == 1 && !this.tokens.get(0).getTokenType().equals(TokenType.R_BRACE)) {
                     CreateSyntaxError("Unexpected Token - Expected '}'", this.tokens.get(0));
-                } else if (this.tokens.size() == 1 && this.tokens.get(0).getTokenType() == TokenType.R_BRACE) fDefTokens.add(this.tokens.get(0));
+                } else if (this.tokens.size() == 1 && this.tokens.get(0).getTokenType() == TokenType.R_BRACE) {
+                    fDefTokens.add(this.tokens.remove(0));
+                    break;
+                }
             }
             function_def = new FunctionDefinitionNode(fDefTokens);
 
@@ -29,9 +31,6 @@ public class FunctionListNode implements JottTree { //TODO
             assert this.tokens != null;
             function_list = new FunctionListNode(this.tokens);
         }
-
-
-
     }
      /**
      * Will output a string of this tree in Jott

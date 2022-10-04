@@ -16,12 +16,11 @@ public class BodyNode implements JottTree {
 
     public BodyNode(ArrayList<Token> tokens) {
         this.tokens = tokens;
-        assert this.tokens != null;
-        if(this.tokens.get(0).getTokenType().equals(TokenType.ID_KEYWORD)  && this.tokens.get(0).getToken().equals(RETURN_STR)) {
-            subnodes.add(new ReturnStatementNode(this.tokens));
+        if(this.tokens.size() == 0) {
+            return;
         }
-        else if(this.tokens.get(0).getToken().equals(EMPTY_STR)){
-            // Empty Body
+        else if(this.tokens.get(0).getTokenType().equals(TokenType.ID_KEYWORD)  && this.tokens.get(0).getToken().equals(RETURN_STR)) {
+            subnodes.add(new ReturnStatementNode(this.tokens));
         }
         else {
             ArrayList<Token> bodyStmtTokens = new ArrayList<>();
@@ -54,12 +53,10 @@ public class BodyNode implements JottTree {
                         break;
                     }
                 }
-                if (this.tokens.get(0).getTokenType() == TokenType.SEMICOLON) bodyStmtTokens.add(this.tokens.remove(0));
             }
             subnodes.add(new BodyStatementNode(bodyStmtTokens));
             subnodes.add(new BodyNode(this.tokens));
         }
-
     }
 
     /**
