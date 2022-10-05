@@ -72,7 +72,7 @@ public class BodyNode implements JottTree {
             return(subnodes.get(0).convertToJott() + subnodes.get(1).convertToJott());
         }
         else {
-            return null;
+            return "";
         }
     }
 

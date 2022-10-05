@@ -24,7 +24,12 @@ public class StrExprNode implements JottTree {
     public StrExprNode(ArrayList<Token> tokens) {
         this.tokens = tokens;
         assert this.tokens != null;
-        subnode = new FunctionCallNode(this.tokens);
+        if (this.tokens.size() == 1) {
+            if (this.tokens.get(0).getTokenType() == TokenType.STRING) subnode = new StrLiteralNode(this.tokens.get(0));
+            else if (this.tokens.get(0).getTokenType() == TokenType.ID_KEYWORD) subnode = new IdNode(this.tokens.get(0));
+        } else {
+            subnode = new FunctionCallNode(this.tokens);
+        }
     }
 
     /**

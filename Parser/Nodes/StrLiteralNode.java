@@ -16,8 +16,8 @@ public class StrLiteralNode implements JottTree {
             assert this.token != null;
             if (token.getTokenType() != TokenType.STRING)
                 CreateSyntaxError("Unexpected Token - Expected String", this.token);
-            if (!token.getToken().matches("[a-z][A-Z][0-9]*")) CreateSyntaxError("Unrecognized Character", this.token);
-            subnode = new StrNode(token.getToken());
+            if (!token.getToken().matches("\"[a-zA-Z0-9\s]*\"")) CreateSyntaxError("Unrecognized Character", this.token);
+            subnode = new StrNode(token.getToken().substring(1, token.getToken().length()-1));
         } catch (Exception e) {
             throw new RuntimeException();
         }
