@@ -6,12 +6,16 @@ import java.util.ArrayList;
 
 public class ProgramNode implements JottTree { //TODO
 
-    private JottTree function_list;
+    private final JottTree function_list;
 
 
     public ProgramNode(ArrayList<Token> tokens){
-        function_list = new FunctionListNode(tokens);
-        // also add EOF symbol??
+        try {
+            function_list = new FunctionListNode(tokens);
+            // also add EOF symbol??
+        } catch (Exception e) {
+            throw new RuntimeException();
+        }
     }
      /**
      * Will output a string of this tree in Jott
@@ -59,8 +63,8 @@ public class ProgramNode implements JottTree { //TODO
         return(false);
     }
 
-    public void CreateSyntaxError(String msg, Token token) {
+    public void CreateSyntaxError(String msg, Token token) throws Exception{
         System.err.println("Syntax Error:\n" + msg + "\n" + token.getFilename() + ":" + token.getLineNum());
-        System.exit(0);
+        throw new Exception();
     }
 }

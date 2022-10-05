@@ -11,10 +11,14 @@ public class FunctionReturnNode implements JottTree{
     private final Token token;
 
     public FunctionReturnNode(Token token) {
-        this.token = token;
-        assert this.token != null;
-        if (Objects.equals(this.token.getToken(), JOTT_VOID)) subnode = null;
-        else subnode = new TypeNode(this.token);
+        try {
+            this.token = token;
+            assert this.token != null;
+            if (Objects.equals(this.token.getToken(), JOTT_VOID)) subnode = null;
+            else subnode = new TypeNode(this.token);
+        } catch (Exception e) {
+            throw new RuntimeException();
+        }
     }
 
     /**
@@ -64,8 +68,8 @@ public class FunctionReturnNode implements JottTree{
         return(false);
     }
 
-    public void CreateSyntaxError(String msg, Token token) {
+    public void CreateSyntaxError(String msg, Token token) throws Exception{
         System.err.println("Syntax Error:\n" + msg + "\n" + token.getFilename() + ":" + token.getLineNum());
-        System.exit(0);
+        throw new Exception();
     }
 }

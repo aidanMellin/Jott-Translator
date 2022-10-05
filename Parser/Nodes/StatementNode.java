@@ -10,16 +10,20 @@ public class StatementNode implements JottTree{
     private ArrayList<Token> tokens;
 
     public StatementNode(ArrayList<Token> tokens) {
-        this.tokens = tokens;
-        assert this.tokens != null;
-        if (this.tokens.get(1).getTokenType() == TokenType.L_BRACKET) {
-            Token end_stmt = this.tokens.remove(this.tokens.size()-1);
-            subnodes.add(new FunctionCallNode(this.tokens));
-            subnodes.add(new EndStatementNode(end_stmt));
-        } else if (this.tokens.size() == 3) {
-            subnodes.add(new VariableDeclarationNode(this.tokens));
-        } else {
-            subnodes.add(new AssignmentNode(this.tokens));
+        try {
+            this.tokens = tokens;
+            assert this.tokens != null;
+            if (this.tokens.get(1).getTokenType() == TokenType.L_BRACKET) {
+                Token end_stmt = this.tokens.remove(this.tokens.size() - 1);
+                subnodes.add(new FunctionCallNode(this.tokens));
+                subnodes.add(new EndStatementNode(end_stmt));
+            } else if (this.tokens.size() == 3) {
+                subnodes.add(new VariableDeclarationNode(this.tokens));
+            } else {
+                subnodes.add(new AssignmentNode(this.tokens));
+            }
+        } catch (Exception e) {
+            throw new RuntimeException();
         }
     }
 
@@ -71,8 +75,8 @@ public class StatementNode implements JottTree{
         return(false);
     }
 
-    public void CreateSyntaxError(String msg, Token token) {
+    public void CreateSyntaxError(String msg, Token token) throws Exception{
         System.err.println("Syntax Error:\n" + msg + "\n" + token.getFilename() + ":" + token.getLineNum());
-        System.exit(0);
+        throw new Exception();
     }
 }

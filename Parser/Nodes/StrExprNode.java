@@ -11,10 +11,14 @@ public class StrExprNode implements JottTree {
     private ArrayList<Token> tokens;
 
     public StrExprNode(Token token) {
-        this.token = token;
-        assert this.token != null;
-        if (this.token.getTokenType() == TokenType.STRING) subnode = new StrLiteralNode(this.token);
-        else if (this.token.getTokenType() == TokenType.ID_KEYWORD) subnode = new IdNode(this.token);
+        try {
+            this.token = token;
+            assert this.token != null;
+            if (this.token.getTokenType() == TokenType.STRING) subnode = new StrLiteralNode(this.token);
+            else if (this.token.getTokenType() == TokenType.ID_KEYWORD) subnode = new IdNode(this.token);
+        } catch (Exception e) {
+            throw new RuntimeException();
+        }
     }
 
     public StrExprNode(ArrayList<Token> tokens) {
@@ -69,8 +73,8 @@ public class StrExprNode implements JottTree {
         return(false);
     }
 
-    public void CreateSyntaxError(String msg, Token token) {
+    public void CreateSyntaxError(String msg, Token token) throws Exception{
         System.err.println("Syntax Error:\n" + msg + "\n" + token.getFilename() + ":" + token.getLineNum());
-        System.exit(0);
+        throw new Exception();
     }
 }

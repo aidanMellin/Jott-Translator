@@ -11,25 +11,29 @@ public class FunctionListNode implements JottTree { //TODO
     private JottTree function_list;
 
     public FunctionListNode(ArrayList<Token> tokens){
-        this.tokens = tokens;
-        if(!(this.tokens.size() == 0)){
-            // functionDefNode
-            ArrayList<Token> fDefTokens = new ArrayList<>();
-            while(!this.tokens.get(0).getTokenType().equals(TokenType.R_BRACE)) {
-                fDefTokens.add(this.tokens.get(0));
-                this.tokens.remove(0);
-                if(this.tokens.size() == 1 && !this.tokens.get(0).getTokenType().equals(TokenType.R_BRACE)) {
-                    CreateSyntaxError("Unexpected Token - Expected '}'", this.tokens.get(0));
-                } else if (this.tokens.size() == 1 && this.tokens.get(0).getTokenType() == TokenType.R_BRACE) {
-                    fDefTokens.add(this.tokens.remove(0));
-                    break;
+        try {
+            this.tokens = tokens;
+            if (!(this.tokens.size() == 0)) {
+                // functionDefNode
+                ArrayList<Token> fDefTokens = new ArrayList<>();
+                while (!this.tokens.get(0).getTokenType().equals(TokenType.R_BRACE)) {
+                    fDefTokens.add(this.tokens.get(0));
+                    this.tokens.remove(0);
+                    if (this.tokens.size() == 1 && !this.tokens.get(0).getTokenType().equals(TokenType.R_BRACE)) {
+                        CreateSyntaxError("Unexpected Token - Expected '}'", this.tokens.get(0));
+                    } else if (this.tokens.size() == 1 && this.tokens.get(0).getTokenType() == TokenType.R_BRACE) {
+                        fDefTokens.add(this.tokens.remove(0));
+                        break;
+                    }
                 }
-            }
-            function_def = new FunctionDefinitionNode(fDefTokens);
+                function_def = new FunctionDefinitionNode(fDefTokens);
 
-            // functionList
-            assert this.tokens != null;
-            function_list = new FunctionListNode(this.tokens);
+                // functionList
+                assert this.tokens != null;
+                function_list = new FunctionListNode(this.tokens);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException();
         }
     }
      /**
@@ -83,8 +87,8 @@ public class FunctionListNode implements JottTree { //TODO
         return(false);
     }
 
-    public void CreateSyntaxError(String msg, Token token) {
+    public void CreateSyntaxError(String msg, Token token) throws Exception{
         System.err.println("Syntax Error:\n" + msg + "\n" + token.getFilename() + ":" + token.getLineNum());
-        System.exit(0);
+        throw new Exception();
     }
 }

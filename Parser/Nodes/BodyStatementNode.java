@@ -13,20 +13,22 @@ public class BodyStatementNode implements JottTree {
     private final String WHILE_STR = "while";
 
     public BodyStatementNode(ArrayList<Token> tokens) {
-        this.tokens = tokens;
-        assert this.tokens != null;
-        if(this.tokens.get(0).getToken().equals(IF_STR)) {
-            subnodes.add(new IfStatementNode(this.tokens));
+        try {
+            this.tokens = tokens;
+            assert this.tokens != null;
+            if (this.tokens.get(0).getToken().equals(IF_STR)) {
+                subnodes.add(new IfStatementNode(this.tokens));
+            } else if (this.tokens.get(0).getToken().equals(WHILE_STR)) {
+                subnodes.add(new WhileLoopNode(this.tokens));
+            } else if (this.tokens.get(0).getTokenType().equals(TokenType.ID_KEYWORD)) {
+                subnodes.add(new StatementNode(this.tokens));
+            } else {
+                CreateSyntaxError("Unexpected Token - Expected 'Body Statement'", this.tokens.get(0));
+            }
+        } catch (Exception e) {
+            throw new RuntimeException();
         }
-        else if(this.tokens.get(0).getToken().equals(WHILE_STR)) {
-            subnodes.add(new WhileLoopNode(this.tokens));
-        }
-        else if(this.tokens.get(0).getTokenType().equals(TokenType.ID_KEYWORD)) {
-            subnodes.add(new StatementNode(this.tokens));
-        }
-        else {
-            CreateSyntaxError("Unexpected Token - Expected 'Body Statement'", this.tokens.get(0));
-        }
+
     }
 
     /**
@@ -75,8 +77,8 @@ public class BodyStatementNode implements JottTree {
         return(false);
     }
 
-    public void CreateSyntaxError(String msg, Token token) {
+    public void CreateSyntaxError(String msg, Token token) throws Exception{
         System.err.println("Syntax Error:\n" + msg + "\n" + token.getFilename() + ":" + token.getLineNum());
-        System.exit(0);
+        throw new Exception();
     }
 }

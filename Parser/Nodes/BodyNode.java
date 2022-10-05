@@ -15,47 +15,47 @@ public class BodyNode implements JottTree {
     private final String WHILE_STR = "while";
 
     public BodyNode(ArrayList<Token> tokens) {
-        this.tokens = tokens;
-        if(this.tokens.size() == 0) {
-            return;
-        }
-        else if(this.tokens.get(0).getTokenType().equals(TokenType.ID_KEYWORD)  && this.tokens.get(0).getToken().equals(RETURN_STR)) {
-            subnodes.add(new ReturnStatementNode(this.tokens));
-        }
-        else {
-            ArrayList<Token> bodyStmtTokens = new ArrayList<>();
-            if((this.tokens.get(0).getToken().equals(IF_STR)) || (this.tokens.get(0).getToken().equals(WHILE_STR))){
-                int leftBraceCount = 0;
-                while(this.tokens.get(0).getTokenType() != TokenType.R_BRACE || leftBraceCount != 0) {
-                    if(this.tokens.get(0).getTokenType() == TokenType.L_BRACE) {
-                        leftBraceCount++;
-                    }
-                    if(this.tokens.get(0).getTokenType() == TokenType.R_BRACE) {
-                        leftBraceCount--;
-                    }
-                    bodyStmtTokens.add(this.tokens.get(0));
-                    this.tokens.remove(0);
+        try {
+            this.tokens = tokens;
+            if (this.tokens.size() == 0) {
+                return;
+            } else if (this.tokens.get(0).getTokenType().equals(TokenType.ID_KEYWORD) && this.tokens.get(0).getToken().equals(RETURN_STR)) {
+                subnodes.add(new ReturnStatementNode(this.tokens));
+            } else {
+                ArrayList<Token> bodyStmtTokens = new ArrayList<>();
+                if ((this.tokens.get(0).getToken().equals(IF_STR)) || (this.tokens.get(0).getToken().equals(WHILE_STR))) {
+                    int leftBraceCount = 0;
+                    while (this.tokens.get(0).getTokenType() != TokenType.R_BRACE || leftBraceCount != 0) {
+                        if (this.tokens.get(0).getTokenType() == TokenType.L_BRACE) {
+                            leftBraceCount++;
+                        }
+                        if (this.tokens.get(0).getTokenType() == TokenType.R_BRACE) {
+                            leftBraceCount--;
+                        }
+                        bodyStmtTokens.add(this.tokens.get(0));
+                        this.tokens.remove(0);
 
-                    if((tokens.size() == 1) && (this.tokens.get(0).getTokenType() != TokenType.R_BRACE)){
-                        CreateSyntaxError("Unexpected Token - Expected '}'", this.tokens.get(0));
+                        if ((tokens.size() == 1) && (this.tokens.get(0).getTokenType() != TokenType.R_BRACE)) {
+                            CreateSyntaxError("Unexpected Token - Expected '}'", this.tokens.get(0));
+                        }
                     }
-                }
-            }
-            else {
-                while(this.tokens.get(0).getTokenType() != TokenType.SEMICOLON) {
-                    bodyStmtTokens.add(this.tokens.remove(0));
-
-                    if((this.tokens.size() == 1) && (this.tokens.get(0).getTokenType() != TokenType.SEMICOLON)){
-                        CreateSyntaxError("Unexpected Token - Expected ';'", this.tokens.get(0));
-                    }
-                    else if (this.tokens.get(0).getTokenType() == TokenType.SEMICOLON) {
+                } else {
+                    while (this.tokens.get(0).getTokenType() != TokenType.SEMICOLON) {
                         bodyStmtTokens.add(this.tokens.remove(0));
-                        break;
+
+                        if ((this.tokens.size() == 1) && (this.tokens.get(0).getTokenType() != TokenType.SEMICOLON)) {
+                            CreateSyntaxError("Unexpected Token - Expected ';'", this.tokens.get(0));
+                        } else if (this.tokens.get(0).getTokenType() == TokenType.SEMICOLON) {
+                            bodyStmtTokens.add(this.tokens.remove(0));
+                            break;
+                        }
                     }
                 }
+                subnodes.add(new BodyStatementNode(bodyStmtTokens));
+                subnodes.add(new BodyNode(this.tokens));
             }
-            subnodes.add(new BodyStatementNode(bodyStmtTokens));
-            subnodes.add(new BodyNode(this.tokens));
+        } catch (Exception e) {
+            throw new RuntimeException();
         }
     }
 
@@ -113,9 +113,9 @@ public class BodyNode implements JottTree {
         return(false);
     }
 
-    public void CreateSyntaxError(String msg, Token token) {
+    public void CreateSyntaxError(String msg, Token token) throws Exception {
         System.err.println("Syntax Error:\n" + msg + "\n" + token.getFilename() + ":" + token.getLineNum());
-        System.exit(0);
+        throw new Exception();
     }
 }
 

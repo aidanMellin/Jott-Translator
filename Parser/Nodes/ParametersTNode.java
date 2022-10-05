@@ -12,22 +12,27 @@ public class ParametersTNode implements JottTree{
     private ArrayList<Token> tokens;
 
     public ParametersTNode(ArrayList<Token> tokens) {
-        this.tokens = tokens;
-        if (this.tokens.size() == 0) subnodes = null;
-        else {
-            if (this.tokens.get(0).getTokenType() != TokenType.COMMA) CreateSyntaxError("Unexpected Token - Expected ','", this.tokens.get(0));
-            this.tokens.remove(0);
-            ArrayList<Token> expr = new ArrayList<>();
-            int b_count = 0;
-            while ((b_count != 0 || this.tokens.get(0).getTokenType() != TokenType.COMMA) && this.tokens.size() != 0) {
-                expr.add(this.tokens.remove(0));
-                if (this.tokens.size() == 0) break;
-                if (this.tokens.get(0).getTokenType() == TokenType.L_BRACKET) b_count++;
-                else if (this.tokens.get(0).getTokenType() == TokenType.R_BRACKET) b_count++;
+        try {
+            this.tokens = tokens;
+            if (this.tokens.size() == 0) subnodes = null;
+            else {
+                if (this.tokens.get(0).getTokenType() != TokenType.COMMA)
+                    CreateSyntaxError("Unexpected Token - Expected ','", this.tokens.get(0));
+                this.tokens.remove(0);
+                ArrayList<Token> expr = new ArrayList<>();
+                int b_count = 0;
+                while ((b_count != 0 || this.tokens.get(0).getTokenType() != TokenType.COMMA) && this.tokens.size() != 0) {
+                    expr.add(this.tokens.remove(0));
+                    if (this.tokens.size() == 0) break;
+                    if (this.tokens.get(0).getTokenType() == TokenType.L_BRACKET) b_count++;
+                    else if (this.tokens.get(0).getTokenType() == TokenType.R_BRACKET) b_count++;
 
+                }
+                subnodes.add(new ExpressionNode(expr));
+                subnodes.add(new ParametersTNode(this.tokens));
             }
-            subnodes.add(new ExpressionNode(expr));
-            subnodes.add(new ParametersTNode(this.tokens));
+        } catch (Exception e) {
+            throw new RuntimeException();
         }
     }
 
@@ -81,9 +86,8 @@ public class ParametersTNode implements JottTree{
         return(false);
     }
 
-    public void CreateSyntaxError(String msg, Token token) {
+    public void CreateSyntaxError(String msg, Token token) throws Exception{
         System.err.println("Syntax Error:\n" + msg + "\n" + token.getFilename() + ":" + token.getLineNum());
-        System.exit(0);
+        throw new Exception();
     }
-
 }

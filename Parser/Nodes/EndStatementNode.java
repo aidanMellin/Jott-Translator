@@ -8,8 +8,13 @@ public class EndStatementNode implements JottTree {
     private Token token;
 
     public EndStatementNode(Token token) {
-        this.token = token;
-        if (this.token.getTokenType() != TokenType.SEMICOLON) CreateSyntaxError("Unexpected Token - Expected ';'", this.token);
+        try {
+            this.token = token;
+            if (this.token.getTokenType() != TokenType.SEMICOLON)
+                CreateSyntaxError("Unexpected Token - Expected ';'", this.token);
+        } catch (Exception e) {
+            throw new RuntimeException();
+        }
     }
 
     /**
@@ -58,8 +63,8 @@ public class EndStatementNode implements JottTree {
         return(false);
     }
 
-    public void CreateSyntaxError(String msg, Token token) {
+    public void CreateSyntaxError(String msg, Token token) throws Exception{
         System.err.println("Syntax Error:\n" + msg + "\n" + token.getFilename() + ":" + token.getLineNum());
-        System.exit(0);
+        throw new Exception();
     }
 }

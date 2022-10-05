@@ -13,9 +13,14 @@ public class BooleanNode implements JottTree {
     private final Token token;
 
     public BooleanNode(Token token) {
-        this.token = token;
-        assert this.token != null;
-        if (!Objects.equals(this.token.getToken(), JOTT_TRUE) && !Objects.equals(this.token.getToken(), JOTT_FALSE)) CreateSyntaxError(ERROR_MSG, this.token);
+        try {
+            this.token = token;
+            assert this.token != null;
+            if (!Objects.equals(this.token.getToken(), JOTT_TRUE) && !Objects.equals(this.token.getToken(), JOTT_FALSE))
+                CreateSyntaxError(ERROR_MSG, this.token);
+        } catch (Exception e) {
+            throw new RuntimeException();
+        }
     }
 
     /**
@@ -65,8 +70,8 @@ public class BooleanNode implements JottTree {
         return(false);
     }
 
-    public void CreateSyntaxError(String msg, Token token) {
+    public void CreateSyntaxError(String msg, Token token) throws Exception{
         System.err.println("Syntax Error:\n" + msg + "\n" + token.getFilename() + ":" + token.getLineNum());
-        System.exit(0);
+        throw new Exception();
     }
 }

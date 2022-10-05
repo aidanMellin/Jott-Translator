@@ -11,11 +11,15 @@ public class IdNode implements JottTree {
     private String idStored;
 
     public IdNode(Token token){
-        this.idToken = token;
-        assert idToken != null;
-        this.idStored = idToken.getToken();
-        if (!idStored.matches("[a-z][a-zA-z0-9]*")) CreateSyntaxError("Unexpected Character", idToken);
-        for (int i=0; i<idStored.length(); i++) subnodes.add(new CharNode(idStored.charAt(i)));
+        try {
+            this.idToken = token;
+            assert idToken != null;
+            this.idStored = idToken.getToken();
+            if (!idStored.matches("[a-z][a-zA-z0-9]*")) CreateSyntaxError("Unexpected Character", idToken);
+            for (int i = 0; i < idStored.length(); i++) subnodes.add(new CharNode(idStored.charAt(i)));
+        } catch (Exception e) {
+            throw new RuntimeException();
+        }
     }
      /**
      * Will output a string of this tree in Jott
@@ -65,9 +69,9 @@ public class IdNode implements JottTree {
         return(false);
     }
 
-    public void CreateSyntaxError(String msg, Token token) {
+    public void CreateSyntaxError(String msg, Token token) throws Exception{
         System.err.println("Syntax Error:\n" + msg + "\n" + token.getFilename() + ":" + token.getLineNum());
-        System.exit(0);
+        throw new Exception();
     }
 
 }

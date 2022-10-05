@@ -7,9 +7,14 @@ public class OpNode implements JottTree { //TODO
     private final Token token;
 
     public OpNode(Token token) {
-        this.token = token;
-        assert this.token != null;
-        if (this.token.getTokenType() != TokenType.MATH_OP) CreateSyntaxError("Unexpected Token - Expected MathOp", this.token);
+        try {
+            this.token = token;
+            assert this.token != null;
+            if (this.token.getTokenType() != TokenType.MATH_OP)
+                CreateSyntaxError("Unexpected Token - Expected MathOp", this.token);
+        } catch (Exception e) {
+            throw new RuntimeException();
+        }
     }
 
     /**
@@ -58,8 +63,8 @@ public class OpNode implements JottTree { //TODO
         return(false);
     }
 
-    public void CreateSyntaxError(String msg, Token token) {
+    public void CreateSyntaxError(String msg, Token token) throws Exception{
         System.err.println("Syntax Error:\n" + msg + "\n" + token.getFilename() + ":" + token.getLineNum());
-        System.exit(0);
+        throw new Exception();
     }
 }

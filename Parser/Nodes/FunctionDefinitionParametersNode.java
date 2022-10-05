@@ -12,16 +12,23 @@ public class FunctionDefinitionParametersNode implements JottTree {
     private final ArrayList<Token> tokens;
 
     public FunctionDefinitionParametersNode(ArrayList<Token> tokens) {
-        this.tokens = tokens;
-        if (this.tokens.size() == 0) subnodes = null;
-        else {
-            if (this.tokens.get(0).getTokenType() != TokenType.ID_KEYWORD) CreateSyntaxError("Unexpected Token - Expected ID", this.tokens.get(0));
-            subnodes.add(new IdNode(this.tokens.remove(0)));
-            if (this.tokens.get(0).getTokenType() != TokenType.COLON) CreateSyntaxError("Unexpected Token - Expected ':'", this.tokens.get(0));
-            this.tokens.remove(0);
-            if (this.tokens.get(0).getTokenType() != TokenType.ID_KEYWORD) CreateSyntaxError("Unexpected Token - Expected ID", this.tokens.get(0));
-            subnodes.add(new TypeNode(this.tokens.remove(0)));
-            subnodes.add(new FunctionDefinitionParametersTNode(this.tokens));
+        try {
+            this.tokens = tokens;
+            if (this.tokens.size() == 0) subnodes = null;
+            else {
+                if (this.tokens.get(0).getTokenType() != TokenType.ID_KEYWORD)
+                    CreateSyntaxError("Unexpected Token - Expected ID", this.tokens.get(0));
+                subnodes.add(new IdNode(this.tokens.remove(0)));
+                if (this.tokens.get(0).getTokenType() != TokenType.COLON)
+                    CreateSyntaxError("Unexpected Token - Expected ':'", this.tokens.get(0));
+                this.tokens.remove(0);
+                if (this.tokens.get(0).getTokenType() != TokenType.ID_KEYWORD)
+                    CreateSyntaxError("Unexpected Token - Expected ID", this.tokens.get(0));
+                subnodes.add(new TypeNode(this.tokens.remove(0)));
+                subnodes.add(new FunctionDefinitionParametersTNode(this.tokens));
+            }
+        } catch (Exception e) {
+            throw new RuntimeException();
         }
     }
 
@@ -75,8 +82,8 @@ public class FunctionDefinitionParametersNode implements JottTree {
         return(false);
     }
 
-    public void CreateSyntaxError(String msg, Token token) {
+    public void CreateSyntaxError(String msg, Token token) throws Exception{
         System.err.println("Syntax Error:\n" + msg + "\n" + token.getFilename() + ":" + token.getLineNum());
-        System.exit(0);
+        throw new Exception();
     }
 }

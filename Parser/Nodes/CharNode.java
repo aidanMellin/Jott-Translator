@@ -65,7 +65,8 @@ private char_type type;
         return(false);
     }
 
-    public void CreateSyntaxError(String msg, Token token) {
-        System.exit(0);
+    public void CreateSyntaxError(String msg, Token token) throws Exception{
+        System.err.println("Syntax Error:\n" + msg + "\n" + token.getFilename() + ":" + token.getLineNum());
+        throw new Exception();
     }
 }

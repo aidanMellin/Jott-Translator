@@ -11,11 +11,16 @@ public class StrLiteralNode implements JottTree {
     private Token token;
 
     public StrLiteralNode(Token token) {
-        this.token = token;
-        assert this.token != null;
-        if (token.getTokenType() != TokenType.STRING) CreateSyntaxError("Unexpected Token - Expected String", this.token);
-        if (!token.getToken().matches("[a-z][A-Z][0-9]*")) CreateSyntaxError( "Unrecognized Character", this.token);
-        subnode = new StrNode(token.getToken());
+        try {
+            this.token = token;
+            assert this.token != null;
+            if (token.getTokenType() != TokenType.STRING)
+                CreateSyntaxError("Unexpected Token - Expected String", this.token);
+            if (!token.getToken().matches("[a-z][A-Z][0-9]*")) CreateSyntaxError("Unrecognized Character", this.token);
+            subnode = new StrNode(token.getToken());
+        } catch (Exception e) {
+            throw new RuntimeException();
+        }
     }
 
     /**
@@ -64,8 +69,8 @@ public class StrLiteralNode implements JottTree {
         return(false);
     }
 
-    public void CreateSyntaxError(String msg, Token token) {
+    public void CreateSyntaxError(String msg, Token token) throws Exception{
         System.err.println("Syntax Error:\n" + msg + "\n" + token.getFilename() + ":" + token.getLineNum());
-        System.exit(0);
+        throw new Exception();
     }
 }

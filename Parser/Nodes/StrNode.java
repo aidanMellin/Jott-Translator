@@ -12,11 +12,15 @@ public class StrNode implements JottTree {
     private final String tokenString;
 
     public StrNode(String tokenString) {
-        this.tokenString = tokenString;
-        if (!Objects.equals(tokenString, EMPTY_STR)) {
-            subnodes.add(new CharNode(tokenString.charAt(0)));
-            if (tokenString.length() > 1) subnodes.add(new StrNode(tokenString.substring(1)));
-            else subnodes.add(new StrNode(EMPTY_STR));
+        try {
+            this.tokenString = tokenString;
+            if (!Objects.equals(tokenString, EMPTY_STR)) {
+                subnodes.add(new CharNode(tokenString.charAt(0)));
+                if (tokenString.length() > 1) subnodes.add(new StrNode(tokenString.substring(1)));
+                else subnodes.add(new StrNode(EMPTY_STR));
+            }
+        } catch (Exception e) {
+            throw new RuntimeException();
         }
     }
 
@@ -69,8 +73,8 @@ public class StrNode implements JottTree {
         return(false);
     }
 
-    public void CreateSyntaxError(String msg, Token token) {
+    public void CreateSyntaxError(String msg, Token token) throws Exception{
         System.err.println("Syntax Error:\n" + msg + "\n" + token.getFilename() + ":" + token.getLineNum());
-        System.exit(0);
+        throw new Exception();
     }
 }

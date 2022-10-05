@@ -12,22 +12,29 @@ public class DoubleNode implements JottTree {
     private final ArrayList<Token> tokens;
 
     public DoubleNode(ArrayList<Token> tokens) {
-        this.tokens = tokens;
-        assert this.tokens != null;
-        if (this.tokens.size() == 1) {
-            subnodes.add(new SignNode(null));
-            if (!tokens.get(0).getToken().matches("[0-9]*[.][0-9]+")) CreateSyntaxError("Not a Valid Double Number", this.tokens.get(0));
-            for (int i=0; i<tokens.get(0).getToken().length(); i++)
-                if (tokens.get(0).getToken().charAt(i) == '.')  PERIOD_PLACE = i;
-                else subnodes.add(new CharNode(tokens.get(0).getToken().charAt(i)));
-        } else if (this.tokens.size() == 2) {
-            if (!tokens.get(0).getToken().matches("[-+]?")) CreateSyntaxError("Unexpected Token - Expected '+' or '-'", this.tokens.get(0));
-            if (!tokens.get(1).getToken().matches("[0-9]*[.][0-9]+")) CreateSyntaxError("Not a Valid Double Number", this.tokens.get(1));
-            subnodes.add(new SignNode(tokens.get(0)));
-            for (int i=1; i<tokens.get(1).getToken().length(); i++)
-                if (tokens.get(1).getToken().charAt(i) == '.')  PERIOD_PLACE = i;
-                else subnodes.add(new CharNode(tokens.get(1).getToken().charAt(i)));
-        } else CreateSyntaxError("Unexpected Token", this.tokens.get(3));
+        try {
+            this.tokens = tokens;
+            assert this.tokens != null;
+            if (this.tokens.size() == 1) {
+                subnodes.add(new SignNode(null));
+                if (!tokens.get(0).getToken().matches("[0-9]*[.][0-9]+"))
+                    CreateSyntaxError("Not a Valid Double Number", this.tokens.get(0));
+                for (int i = 0; i < tokens.get(0).getToken().length(); i++)
+                    if (tokens.get(0).getToken().charAt(i) == '.') PERIOD_PLACE = i;
+                    else subnodes.add(new CharNode(tokens.get(0).getToken().charAt(i)));
+            } else if (this.tokens.size() == 2) {
+                if (!tokens.get(0).getToken().matches("[-+]?"))
+                    CreateSyntaxError("Unexpected Token - Expected '+' or '-'", this.tokens.get(0));
+                if (!tokens.get(1).getToken().matches("[0-9]*[.][0-9]+"))
+                    CreateSyntaxError("Not a Valid Double Number", this.tokens.get(1));
+                subnodes.add(new SignNode(tokens.get(0)));
+                for (int i = 1; i < tokens.get(1).getToken().length(); i++)
+                    if (tokens.get(1).getToken().charAt(i) == '.') PERIOD_PLACE = i;
+                    else subnodes.add(new CharNode(tokens.get(1).getToken().charAt(i)));
+            } else CreateSyntaxError("Unexpected Token", this.tokens.get(3));
+        } catch (Exception e) {
+            throw new RuntimeException();
+        }
     }
 
     /**
@@ -81,8 +88,8 @@ public class DoubleNode implements JottTree {
         return(false);
     }
 
-    public void CreateSyntaxError(String msg, Token token) {
+    public void CreateSyntaxError(String msg, Token token) throws Exception{
         System.err.println("Syntax Error:\n" + msg + "\n" + token.getFilename() + ":" + token.getLineNum());
-        System.exit(0);
+        throw new Exception();
     }
 }

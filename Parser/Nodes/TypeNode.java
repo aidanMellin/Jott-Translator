@@ -12,14 +12,19 @@ public class TypeNode implements JottTree{
     private final String JOTT_STRING = "String";
     private final String JOTT_BOOLEAN = "Boolean";
     public TypeNode(Token token) {
-        this.token = token;
-        assert this.token != null;
-        if (this.token.getTokenType() != TokenType.ID_KEYWORD) CreateSyntaxError("Unexpected Token - Expected ID", this.token);
-        if (!Objects.equals(this.token.getToken(), JOTT_DOUBLE)
-                && !Objects.equals(this.token.getToken(), JOTT_BOOLEAN)
-                && !Objects.equals(this.token.getToken(), JOTT_INTEGER)
-                && !Objects.equals(this.token.getToken(), JOTT_STRING))
-            CreateSyntaxError("Unexpected Token - Expected Double, Integer, String, or Boolean", this.token);
+        try {
+            this.token = token;
+            assert this.token != null;
+            if (this.token.getTokenType() != TokenType.ID_KEYWORD)
+                CreateSyntaxError("Unexpected Token - Expected ID", this.token);
+            if (!Objects.equals(this.token.getToken(), JOTT_DOUBLE)
+                    && !Objects.equals(this.token.getToken(), JOTT_BOOLEAN)
+                    && !Objects.equals(this.token.getToken(), JOTT_INTEGER)
+                    && !Objects.equals(this.token.getToken(), JOTT_STRING))
+                CreateSyntaxError("Unexpected Token - Expected Double, Integer, String, or Boolean", this.token);
+        } catch (Exception e) {
+            throw new RuntimeException();
+        }
     }
 
     /**
@@ -71,9 +76,8 @@ public class TypeNode implements JottTree{
         return(false);
     }
 
-    public void CreateSyntaxError(String msg, Token token) {
+    public void CreateSyntaxError(String msg, Token token) throws Exception{
         System.err.println("Syntax Error:\n" + msg + "\n" + token.getFilename() + ":" + token.getLineNum());
-        System.exit(0);
+        throw new Exception();
     }
-
 }

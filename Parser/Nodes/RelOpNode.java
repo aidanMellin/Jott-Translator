@@ -6,9 +6,14 @@ public class RelOpNode implements JottTree {
 
     private final Token token;
     public RelOpNode(Token token) {
-        this.token = token;
-        assert this.token != null;
-        if (this.token.getTokenType() != TokenType.REL_OP) CreateSyntaxError("Unexpected Token - Expected Rel_Op", this.token);
+        try {
+            this.token = token;
+            assert this.token != null;
+            if (this.token.getTokenType() != TokenType.REL_OP)
+                CreateSyntaxError("Unexpected Token - Expected Rel_Op", this.token);
+        } catch (Exception e) {
+            throw new RuntimeException();
+        }
     }
 
     /**
@@ -57,8 +62,8 @@ public class RelOpNode implements JottTree {
         return(false);
     }
 
-    public void CreateSyntaxError(String msg, Token token) {
+    public void CreateSyntaxError(String msg, Token token) throws Exception{
         System.err.println("Syntax Error:\n" + msg + "\n" + token.getFilename() + ":" + token.getLineNum());
-        System.exit(0);
+        throw new Exception();
     }
 }

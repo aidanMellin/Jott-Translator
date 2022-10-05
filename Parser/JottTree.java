@@ -41,5 +41,5 @@ public interface JottTree {
      */
     public boolean validateTree();
 
-    public void CreateSyntaxError(String msg, Token token);
+    public void CreateSyntaxError(String msg, Token token) throws Exception;
 }
