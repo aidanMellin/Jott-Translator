@@ -95,10 +95,79 @@ public class AssignmentNode implements JottTree { //TODO
             else { CreateSyntaxError("Unexpected Token - Expected ;", this.tokens.get(this.tokens.size()-1)); }
         }
         else if (Objects.equals(this.tokens.get(0).getTokenType(), TokenType.ID_KEYWORD)) {
+            subnodes.add( new IdNode(this.tokens.get(0))); // <id>
+            this.tokens.remove(0);
+            if(this.tokens.get(0).getToken().equals(EQ_CHAR)) {
+                this.tokens.remove(0); // =
+            } else { CreateSyntaxError("Unexpected Token - Expected =", this.tokens.get(0)); }
 
-            // TODO
+            // <b_expr>
+            boolean bExprBool = false;
+            for (int i = 0; i < this.tokens.size(); i++) {
+                if (this.tokens.get(i).getTokenType().equals(TokenType.REL_OP)) {
+                    bExprBool = true;
+                    ArrayList<Token> b_expr = this.tokens;
+                    b_expr.remove(b_expr.size()-1);
+                    subnodes.add( new BoolExprNode(b_expr));
+                    break;
+                }
+            }
+
+            // <s_expr>
+            boolean sExprBool = false;
+            if(!bExprBool){
+
+                if(this.tokens.get(0).getTokenType().equals(TokenType.STRING)) {
+                    sExprBool = true;
+                    ArrayList<Token> s_expr = this.tokens;
+                    s_expr.remove(s_expr.size()-1);
+                    subnodes.add( new StrExprNode(s_expr));
+                }
+            }
+
+            boolean dExprBool = false;
+            boolean iExprBool = false;
+            if(!sExprBool && !bExprBool) {
+                for(int i = 0; i < this.tokens.size(); i++) {
+                    if(this.tokens.get(i).getTokenType().equals(TokenType.NUMBER)){
+                        if( this.tokens.get(i).getToken().contains(".")){
+                            dExprBool = true;
+                            ArrayList<Token> d_expr = this.tokens;
+                            d_expr.remove(d_expr.size()-1);
+                            subnodes.add( new DoubleExprNode(d_expr));
+                        }
+                        else {
+                            iExprBool = true;
+                            ArrayList<Token> i_expr = this.tokens;
+                            i_expr.remove(i_expr.size()-1);
+                            subnodes.add( new IntExprNode(i_expr));
+                        }
+                        break;
+                    }
+                }
+            }
+
+            // All other <id> and <func_call> = <id> = [params]
+            // s_expr, b_expr, d_expr, and i_expr all have <id> and <func_call>
+            // , for this phase <id> doesn't have any type. So I believe it's safe to simply throw them
+            // in s_expr for now, but in phase 3 this will have to change.
+            if(!bExprBool && !sExprBool && !iExprBool && !dExprBool) {
+                if(this.tokens.get(0).getTokenType().equals(TokenType.ID_KEYWORD)){
+                    ArrayList<Token> s_expr = this.tokens;
+                    s_expr.remove(s_expr.size()-1);
+                    subnodes.add( new BoolExprNode(s_expr));
+                }
+                else {
+                    CreateSyntaxError("Unexpected Token - Expected <Expression Type First>", this.tokens.get(0));
+                }
+            }
+
+            if(this.tokens.get(this.tokens.size()-1).getTokenType().equals(TokenType.SEMICOLON)){
+                subnodes.add(new EndStatementNode(this.tokens.get(this.tokens.size()-1)));
+            }
+            else { CreateSyntaxError("Unexpected Token - Expected ;", this.tokens.get(this.tokens.size()-1)); }
         }
-        else { CreateSyntaxError("Unexpected Token - Expected <asmt>", this.tokens.get(0)); }
+        else { CreateSyntaxError("Unexpected Token - Expected <assignment>", this.tokens.get(0)); }
     }
 
     /**
@@ -108,10 +177,10 @@ public class AssignmentNode implements JottTree { //TODO
     public String convertToJott()
     {
         StringBuilder jott_asmt = new StringBuilder();
-        if (tokens.get(0).getToken() == JOTT_DOUBLE) jott_asmt.append(JOTT_DOUBLE + " ");
-        else if (tokens.get(0).getToken() == JOTT_BOOLEAN) jott_asmt.append(JOTT_BOOLEAN + " ");
-        else if (tokens.get(0).getToken() == JOTT_INTEGER) jott_asmt.append(JOTT_INTEGER + " ");
-        else if (tokens.get(0).getToken() == JOTT_STRING) jott_asmt.append(JOTT_STRING + " ");
+        if (tokens.get(0).getToken().equals(JOTT_DOUBLE)) jott_asmt.append(JOTT_DOUBLE + " ");
+        else if (tokens.get(0).getToken().equals(JOTT_BOOLEAN)) jott_asmt.append(JOTT_BOOLEAN + " ");
+        else if (tokens.get(0).getToken().equals(JOTT_INTEGER)) jott_asmt.append(JOTT_INTEGER + " ");
+        else if (tokens.get(0).getToken().equals(JOTT_STRING)) jott_asmt.append(JOTT_STRING + " ");
         jott_asmt.append(subnodes.get(0).convertToJott() + " ");
         jott_asmt.append(EQ_CHAR + " ");
         jott_asmt.append(subnodes.get(1).convertToJott());
