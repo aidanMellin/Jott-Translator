@@ -31,7 +31,14 @@ public class ExpressionNode implements JottTree{
 
                 if (this.tokens.get(0).getTokenType().equals(TokenType.STRING)) {
                     sExprBool = true;
-                    subnode = new StrExprNode(this.tokens);
+                    if(this.tokens.size() == 1) {
+                        Token strToken = this.tokens.get(0);
+                        subnode = new StrExprNode(strToken);
+                    }
+                    else {
+                        subnode = new StrExprNode(this.tokens);
+                    }
+
                 }
             }
 
