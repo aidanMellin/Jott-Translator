@@ -1,4 +1,4 @@
-#this should pass parsing but fail sematic analysis (phase3)
+#this should pass parsing but fail semantic analysis (phase3)
 #return <id> is allowed
 
 main[]:Integer{

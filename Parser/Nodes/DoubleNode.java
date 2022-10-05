@@ -8,7 +8,7 @@ public class DoubleNode implements JottTree {
 
     private final String PERIOD_CHAR = ".";
     private int PERIOD_PLACE;
-    private ArrayList<JottTree> subnodes;
+    private ArrayList<JottTree> subnodes = new ArrayList<>();
     private final ArrayList<Token> tokens;
 
     public DoubleNode(ArrayList<Token> tokens) {
@@ -45,7 +45,7 @@ public class DoubleNode implements JottTree {
     {
         StringBuilder jott_integer = new StringBuilder();
         for(int i=0; i<subnodes.size(); i++) {
-            if (i == PERIOD_PLACE) jott_integer.append(PERIOD_CHAR);
+            if (i-1 == PERIOD_PLACE) jott_integer.append(PERIOD_CHAR);
             jott_integer.append(subnodes.get(i).convertToJott());
         }
         return jott_integer.toString();

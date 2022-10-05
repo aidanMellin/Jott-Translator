@@ -26,7 +26,8 @@ public class ReturnStatementNode implements JottTree {
             if (this.tokens.size() != 1 && this.tokens.get(0).getTokenType() != TokenType.SEMICOLON)
                 CreateSyntaxError("Unexpected Token - Expected ';'", this.tokens.get(0));
             subnodes.add(new ExpressionNode(expr));
-            subnodes.add(new EndStatementNode(this.tokens.get(0)));
+            subnodes.add(new EndStatementNode(this.tokens.remove(0)));
+            if (this.tokens.size() != 0) CreateSyntaxError("Expected } got <id>", this.tokens.get(0));
         } catch (Exception e) {
             throw new RuntimeException();
         }
