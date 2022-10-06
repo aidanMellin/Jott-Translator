@@ -18,6 +18,10 @@ public class BoolExprNode implements JottTree { //TODO
             ArrayList<Token> tokens_used = new ArrayList<>();
             int op_count = 0;
 
+            if (this.tokens.size() == 1 && (this.tokens.get(0).getToken() == "True" || this.tokens.get(0).getToken() == "False")){
+                subnodes.add(new BooleanNode(this.tokens.get(0)));
+                return;
+            }
             for (int i = 0; i < Tokens.size(); i++) {
                 Token temp_token = Tokens.get(i);
 
