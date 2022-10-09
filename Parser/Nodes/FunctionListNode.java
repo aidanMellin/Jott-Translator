@@ -16,15 +16,21 @@ public class FunctionListNode implements JottTree { //TODO
             if (!(this.tokens.size() == 0)) {
                 // functionDefNode
                 ArrayList<Token> fDefTokens = new ArrayList<>();
-                while (!this.tokens.get(0).getTokenType().equals(TokenType.R_BRACE)) {
+
+                int b_count = 0;
+                while (!this.tokens.get(0).getTokenType().equals(TokenType.R_BRACE) || b_count != 0) {
+                    if (this.tokens.get(0).getTokenType() == TokenType.L_BRACE) b_count++;
+
                     fDefTokens.add(this.tokens.get(0));
                     this.tokens.remove(0);
+
                     if (this.tokens.size() == 1 && !this.tokens.get(0).getTokenType().equals(TokenType.R_BRACE)) {
                         CreateSyntaxError("Unexpected Token - Expected '}'", this.tokens.get(0));
                     } else if (this.tokens.size() == 1 && this.tokens.get(0).getTokenType() == TokenType.R_BRACE) {
                         fDefTokens.add(this.tokens.remove(0));
                         break;
                     }
+                    if (this.tokens.get(0).getTokenType() == TokenType.R_BRACE) b_count--;
                 }
                 if(this.tokens.size() != 0) {
                     fDefTokens.add(this.tokens.remove(0));

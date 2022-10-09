@@ -25,20 +25,18 @@ public class BodyNode implements JottTree {
                 ArrayList<Token> bodyStmtTokens = new ArrayList<>();
                 if ((this.tokens.get(0).getToken().equals(IF_STR)) || (this.tokens.get(0).getToken().equals(WHILE_STR))) {
                     int leftBraceCount = 0;
-                    while (this.tokens.get(0).getTokenType() != TokenType.R_BRACE || leftBraceCount != 0) {
-                        if (this.tokens.get(0).getTokenType() == TokenType.L_BRACE) {
-                            leftBraceCount++;
-                        }
-                        if (this.tokens.get(0).getTokenType() == TokenType.R_BRACE) {
-                            leftBraceCount--;
-                        }
+                    while (!this.tokens.get(0).getTokenType().equals(TokenType.R_BRACE) || leftBraceCount != 0) {
+                        if (this.tokens.get(0).getTokenType() == TokenType.L_BRACE) leftBraceCount++;
+
                         bodyStmtTokens.add(this.tokens.get(0));
                         this.tokens.remove(0);
 
                         if ((tokens.size() == 1) && (this.tokens.get(0).getTokenType() != TokenType.R_BRACE)) {
                             CreateSyntaxError("Unexpected Token - Expected '}'", this.tokens.get(0));
                         }
+                        if (this.tokens.get(0).getTokenType() == TokenType.R_BRACE) leftBraceCount--;
                     }
+                    bodyStmtTokens.add((this.tokens.remove(0)));
                 } else {
                     while (this.tokens.get(0).getTokenType() != TokenType.SEMICOLON) {
                         bodyStmtTokens.add(this.tokens.remove(0));
