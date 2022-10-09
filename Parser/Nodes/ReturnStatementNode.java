@@ -39,9 +39,10 @@ public class ReturnStatementNode implements JottTree {
      */
     public String convertToJott()
     {
-        return JOTT_RETURN + " " +
+        return  "\t" + JOTT_RETURN + " " +
                 subnodes.get(0).convertToJott() +
-                subnodes.get(1).convertToJott();
+                subnodes.get(1).convertToJott() +
+                "\n";
     }
 
     /**

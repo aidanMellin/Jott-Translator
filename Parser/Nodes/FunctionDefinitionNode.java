@@ -65,15 +65,17 @@ public class FunctionDefinitionNode implements JottTree {
      */
     public String convertToJott()
     {
-        return subnodes.get(0).convertToJott() +
+        return  subnodes.get(0).convertToJott() +
                 LBRACKET_CHAR +
                 subnodes.get(1).convertToJott() +
                 RBRACKET_CHAR +
                 COLON_CHAR +
                 subnodes.get(2).convertToJott() +
                 LBRACE_CHAR +
+                "\n" +
                 subnodes.get(3).convertToJott() +
-                RBRACE_CHAR;
+                RBRACE_CHAR +
+                "\n";
     }
 
     /**

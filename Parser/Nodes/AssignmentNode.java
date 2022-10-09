@@ -215,6 +215,7 @@ public class AssignmentNode implements JottTree { //TODO
         jott_asmt.append(EQ_CHAR + " ");
         jott_asmt.append(subnodes.get(1).convertToJott());
         jott_asmt.append(subnodes.get(2).convertToJott());
+        jott_asmt.append("\n");
         return jott_asmt.toString();
     }
 
