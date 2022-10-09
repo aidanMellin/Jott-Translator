@@ -7,11 +7,11 @@ import java.util.ArrayList;
 public class BoolExprNode implements JottTree { //TODO
 
     private ArrayList<JottTree> subnodes;
-    private ArrayList<Token> Tokens;
+    private ArrayList<Token> tokens;
 
     public BoolExprNode(ArrayList<Token> tokens) {
         try {
-            Tokens = tokens;
+            this.tokens = tokens;
             subnodes = new ArrayList<>();
 
             ArrayList<JottTree> temp_subnodes = new ArrayList<>();
@@ -22,8 +22,8 @@ public class BoolExprNode implements JottTree { //TODO
                 subnodes.add(new BooleanNode(this.tokens.get(0)));
                 return;
             }
-            for (int i = 0; i < Tokens.size(); i++) {
-                Token temp_token = Tokens.get(i);
+            for (int i = 0; i < tokens.size(); i++) {
+                Token temp_token = tokens.get(i);
 
                 if (temp_token.getTokenType() == TokenType.NUMBER) {
                     int count = i;
@@ -32,7 +32,7 @@ public class BoolExprNode implements JottTree { //TODO
                     while (temp_token.getTokenType() != TokenType.REL_OP) {
                         num_tokens.add(temp_token);
                         count++;
-                        temp_token = Tokens.get(count);
+                        temp_token = tokens.get(count);
                     }
                     if (is_double) {
                         temp_subnodes.add(new DoubleExprNode(num_tokens));
@@ -44,7 +44,7 @@ public class BoolExprNode implements JottTree { //TODO
                 } else if (temp_token.getTokenType() == TokenType.MATH_OP) {
                     Token prev_token = null;
                     if (i > 0) {
-                        prev_token = Tokens.get(Tokens.size() - 1);
+                        prev_token = tokens.get(tokens.size() - 1);
                     }
                     boolean is_double = true;
                     boolean use_prev = true;
@@ -53,14 +53,14 @@ public class BoolExprNode implements JottTree { //TODO
                             is_double = temp_token.getToken().contains(".");
                         } else if (prev_token.getTokenType() != TokenType.ID_KEYWORD) {
                             use_prev = false;
-                            Token next = Tokens.get(i + 1);
+                            Token next = tokens.get(i + 1);
                             if (next.getTokenType() == TokenType.NUMBER) {
                                 is_double = temp_token.getToken().contains(".");
                             }
                         }
                     } else {
                         use_prev = false;
-                        Token next = Tokens.get(i + 1);
+                        Token next = tokens.get(i + 1);
                         if (next.getTokenType() == TokenType.NUMBER) {
                             is_double = temp_token.getToken().contains(".");
                         }
@@ -70,7 +70,7 @@ public class BoolExprNode implements JottTree { //TODO
                     while (temp_token.getTokenType() != TokenType.REL_OP) {
                         num_tokens.add(temp_token);
                         count++;
-                        temp_token = Tokens.get(count);
+                        temp_token = tokens.get(count);
                     }
                     ArrayList<Token> temp = new ArrayList<>();
                     if (use_prev) {
@@ -103,13 +103,13 @@ public class BoolExprNode implements JottTree { //TODO
                     temp_subnodes.add(new StrExprNode(temp_token));
                     tokens_used.add(temp_token);
                 } else if (temp_token.getTokenType() == TokenType.ID_KEYWORD) {
-                    if (i < tokens.size() - 1 && Tokens.get(i + 1).getTokenType() == TokenType.L_BRACKET) {
+                    if (i < tokens.size() - 1 && tokens.get(i + 1).getTokenType() == TokenType.L_BRACKET) {
                         int count = 1;
                         ArrayList<Token> tokens_to_send = new ArrayList<>();
                         Token current_token = temp_token;
                         tokens_to_send.add(current_token);
-                        while (count < Tokens.size() && current_token.getTokenType() != TokenType.R_BRACKET) {
-                            current_token = Tokens.get(count);
+                        while (count < tokens.size() && current_token.getTokenType() != TokenType.R_BRACKET) {
+                            current_token = tokens.get(count);
                             tokens_to_send.add(current_token);
                             count++;
                         }

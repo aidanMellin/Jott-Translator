@@ -26,8 +26,10 @@ public class FunctionListNode implements JottTree { //TODO
                         break;
                     }
                 }
+                if(this.tokens.size() != 0) {
+                    fDefTokens.add(this.tokens.remove(0));
+                }
                 function_def = new FunctionDefinitionNode(fDefTokens);
-
                 // functionList
                 assert this.tokens != null;
                 function_list = new FunctionListNode(this.tokens);
