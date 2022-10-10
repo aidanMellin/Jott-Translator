@@ -115,7 +115,7 @@ public class BoolExprNode implements JottTree { //TODO
                             count++;
                         }
                         temp_subnodes.add(new FunctionCallNode(tokens_to_send));
-                        i += count;
+                        i += count-1;
                         tokens_used.addAll(tokens_to_send);
                     } else {
                         temp_subnodes.add(new IdNode(temp_token));
@@ -137,11 +137,11 @@ public class BoolExprNode implements JottTree { //TODO
      */
     public String convertToJott()
     {
-        String str = "";
-        for(int i = 0; i < subnodes.size(); i++){
-            str += subnodes.get(i).convertToJott();
+        StringBuilder str = new StringBuilder();
+        for (JottTree node : subnodes) {
+            str.append(node.convertToJott());
         }
-        return str;
+        return str.toString();
     }
 
     /**
