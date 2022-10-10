@@ -49,6 +49,7 @@ public class WhileLoopNode implements JottTree{
                 if (this.tokens.size() == 0) CreateSyntaxError("Error: empty token array", body.get(body.size() - 1));
                 if (this.tokens.get(0).getTokenType() == TokenType.R_BRACE) b_count--;
             }
+            subnodes.add(new BodyNode(body));
             if (this.tokens.get(0).getTokenType() != TokenType.R_BRACE)
                 CreateSyntaxError("Unexpected Token - Expected '}'", this.tokens.get(0));
             this.tokens.remove(0);
@@ -68,7 +69,7 @@ public class WhileLoopNode implements JottTree{
                 subnodes.get(0).convertToJott() +
                 RBRACKET_CHAR +
                 LBRACE_CHAR +
-                subnodes.get(0).convertToJott() +
+                subnodes.get(1).convertToJott() +
                 RBRACE_CHAR;
     }
 

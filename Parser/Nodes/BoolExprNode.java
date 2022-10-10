@@ -32,6 +32,7 @@ public class BoolExprNode implements JottTree { //TODO
                     while (temp_token.getTokenType() != TokenType.REL_OP) {
                         num_tokens.add(temp_token);
                         count++;
+                        if (count == tokens.size()) break;
                         temp_token = tokens.get(count);
                     }
                     if (is_double) {
@@ -125,6 +126,7 @@ public class BoolExprNode implements JottTree { //TODO
             }
             subnodes.addAll(temp_subnodes);
         } catch (Exception e) {
+            e.printStackTrace();
             throw new RuntimeException();
         }
     }

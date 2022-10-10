@@ -19,6 +19,8 @@ public class AssignmentNode implements JottTree { //TODO
         try {
             this.tokens = tokens;
             assert this.tokens != null;
+            Token last = this.tokens.get(this.tokens.size()-1);
+
             // Double <id> = <d_expr><end_statement>
             if (Objects.equals(this.tokens.get(0).getToken(), JOTT_DOUBLE)) {
                 if (this.tokens.get(1).getTokenType().equals(TokenType.ID_KEYWORD)) {
@@ -127,6 +129,7 @@ public class AssignmentNode implements JottTree { //TODO
                     CreateSyntaxError("Unexpected Token - Expected =", this.tokens.get(0));
                 }
 
+
                 // <b_expr>
                 boolean bExprBool = false;
                 for (int i = 0; i < this.tokens.size(); i++) {
@@ -186,8 +189,8 @@ public class AssignmentNode implements JottTree { //TODO
                     }
                 }
 
-                if (this.tokens.get(this.tokens.size() - 1).getTokenType().equals(TokenType.SEMICOLON)) {
-                    subnodes.add(new EndStatementNode(this.tokens.get(this.tokens.size() - 1)));
+                if (last.getTokenType().equals(TokenType.SEMICOLON)) {
+                    subnodes.add(new EndStatementNode(last));
                 } else {
                     CreateSyntaxError("Unexpected Token - Expected ;", this.tokens.get(this.tokens.size() - 1));
                 }
@@ -207,11 +210,13 @@ public class AssignmentNode implements JottTree { //TODO
     public String convertToJott()
     {
         StringBuilder jott_asmt = new StringBuilder();
-        if (tokens.get(0).getToken().equals(JOTT_DOUBLE)) jott_asmt.append(JOTT_DOUBLE + " ");
-        else if (tokens.get(0).getToken().equals(JOTT_BOOLEAN)) jott_asmt.append(JOTT_BOOLEAN + " ");
-        else if (tokens.get(0).getToken().equals(JOTT_INTEGER)) jott_asmt.append(JOTT_INTEGER + " ");
-        else if (tokens.get(0).getToken().equals(JOTT_STRING)) jott_asmt.append(JOTT_STRING + " ");
-        jott_asmt.append(subnodes.get(0).convertToJott() + " ");
+        switch (tokens.get(0).getToken()) {
+            case JOTT_DOUBLE -> jott_asmt.append(JOTT_DOUBLE + " ");
+            case JOTT_BOOLEAN -> jott_asmt.append(JOTT_BOOLEAN + " ");
+            case JOTT_INTEGER -> jott_asmt.append(JOTT_INTEGER + " ");
+            case JOTT_STRING -> jott_asmt.append(JOTT_STRING + " ");
+        }
+        jott_asmt.append(subnodes.get(0).convertToJott()).append(" ");
         jott_asmt.append(EQ_CHAR + " ");
         jott_asmt.append(subnodes.get(1).convertToJott());
         jott_asmt.append(subnodes.get(2).convertToJott());
