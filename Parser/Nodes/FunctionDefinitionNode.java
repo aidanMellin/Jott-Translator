@@ -75,7 +75,7 @@ public class FunctionDefinitionNode implements JottTree {
                 "\n" +
                 subnodes.get(3).convertToJott() +
                 RBRACE_CHAR +
-                "\n";
+                "\n" + "\n";
     }
 
     /**

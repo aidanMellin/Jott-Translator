@@ -64,13 +64,13 @@ public class WhileLoopNode implements JottTree{
      */
     public String convertToJott()
     {
-        return JOTT_WHILE +
+        return "\t" + JOTT_WHILE +
                 LBRACKET_CHAR +
                 subnodes.get(0).convertToJott() +
                 RBRACKET_CHAR +
-                LBRACE_CHAR +
+                LBRACE_CHAR + "\n" +
                 subnodes.get(1).convertToJott() +
-                RBRACE_CHAR;
+                RBRACE_CHAR + "\n";
     }
 
     /**
