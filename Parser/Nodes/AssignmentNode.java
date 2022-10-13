@@ -198,7 +198,6 @@ public class AssignmentNode implements JottTree { //TODO
                 CreateSyntaxError("Unexpected Token - Expected <assignment>", this.tokens.get(0));
             }
         } catch (Exception e) {
-            e.printStackTrace();
             throw new RuntimeException();
         }
     }
