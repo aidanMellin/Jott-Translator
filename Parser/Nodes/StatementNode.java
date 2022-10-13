@@ -36,9 +36,6 @@ public class StatementNode implements JottTree{
         StringBuilder jott_stmt = new StringBuilder();
         jott_stmt.append("\t");
         for (JottTree node : subnodes) jott_stmt.append(node.convertToJott());
-        if(subnodes.size() == 2){
-            jott_stmt.append("\n");
-        }
         return jott_stmt.toString();
     }
 

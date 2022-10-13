@@ -4,7 +4,7 @@ import Parser.*;
 
 public class EndStatementNode implements JottTree {
 
-    private final String JOTT_END = ";";
+    private final String JOTT_END = ";\n";
     private Token token;
 
     public EndStatementNode(Token token) {

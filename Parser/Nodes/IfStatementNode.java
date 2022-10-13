@@ -75,11 +75,11 @@ public class IfStatementNode implements JottTree{
     {
         if(tokens.size() == 2) {
             return(JOTT_IF + LBRACKET_CHAR + subnodes.get(0).convertToJott() +
-                    RBRACKET_CHAR + LBRACE_CHAR + subnodes.get(1).convertToJott() + RBRACE_CHAR);
+                    RBRACKET_CHAR + LBRACE_CHAR + "\n" + subnodes.get(1).convertToJott() + "\n" + RBRACE_CHAR + "\n");
         }
         else {
             return(JOTT_IF + LBRACKET_CHAR + subnodes.get(0).convertToJott() + RBRACKET_CHAR +
-                    LBRACE_CHAR + subnodes.get(1).convertToJott() + RBRACE_CHAR + subnodes.get(2).convertToJott());
+                    LBRACE_CHAR + "\n" + subnodes.get(1).convertToJott() + "\n" + RBRACE_CHAR + "\n" + subnodes.get(2).convertToJott()); //doesnt handle elseif
         }
     }
 

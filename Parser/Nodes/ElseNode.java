@@ -46,7 +46,9 @@ public class ElseNode implements JottTree{
     public String convertToJott()
     {
         if (body == null) return EMPTY_STRING;
-        else return JOTT_ELSE + LBRACE_CHAR + body.convertToJott() + RBRACE_CHAR;
+        else return JOTT_ELSE + LBRACE_CHAR + "\n" +
+                body.convertToJott() + "\n" +
+                RBRACE_CHAR + "\n";
     }
 
     /**

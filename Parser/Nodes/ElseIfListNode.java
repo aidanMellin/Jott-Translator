@@ -71,14 +71,9 @@ public class ElseIfListNode implements JottTree{
     public String convertToJott()
     {
         if (subnodes == null) return EMPTY_STRING;
-        else return JOTT_ELSEIF +
-                LBRACKET_CHAR +
-                subnodes.get(0).convertToJott() +
-                RBRACKET_CHAR +
-                LBRACE_CHAR +
-                subnodes.get(1).convertToJott() +
-                RBRACE_CHAR +
-                subnodes.get(2).convertToJott();
+        else return JOTT_ELSEIF + LBRACKET_CHAR + subnodes.get(0).convertToJott() + RBRACKET_CHAR + LBRACE_CHAR + "\n" +
+                subnodes.get(1).convertToJott() + "\n" +
+                RBRACE_CHAR + subnodes.get(2).convertToJott();
     }
 
     /**
