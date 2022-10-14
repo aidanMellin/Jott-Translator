@@ -1,0 +1,10 @@
+main[]:Integer{
+    if[x<4]{
+        print["less"];
+    }elseif[x>4]{
+        print["greater"];
+    }else{
+        print["equal"];
+    }
+    return 0;
+}

@@ -3,6 +3,7 @@ import Tokenizer.*;
 import Parser.*;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class IfStatementNode implements JottTree{
 
@@ -14,7 +15,7 @@ public class IfStatementNode implements JottTree{
     private final String ELSE_STRING = "else";
     private final String ELSEIF_STRING = "elseif";
 
-    private ArrayList<JottTree> subnodes;
+    private ArrayList<JottTree> subnodes = new ArrayList<>();
     private ArrayList<Token> tokens;
 
     public IfStatementNode(ArrayList<Token> tokens) {
@@ -30,7 +31,7 @@ public class IfStatementNode implements JottTree{
                 assert this.tokens.get(0).getTokenType() == TokenType.L_BRACKET;
                 this.tokens.remove(0);
                 // b_expr
-                ArrayList<Token> b_exprTokens = null;
+                ArrayList<Token> b_exprTokens = new ArrayList<>();
                 while (this.tokens.get(0).getTokenType() != TokenType.R_BRACKET) {
                     b_exprTokens.add(this.tokens.get(0));
                     this.tokens.remove(0);
@@ -43,24 +44,25 @@ public class IfStatementNode implements JottTree{
                 assert this.tokens.get(0).getTokenType() == TokenType.L_BRACE;
                 this.tokens.remove(0);
                 // body
-                ArrayList<Token> bodyTokens = null;
+                ArrayList<Token> bodyTokens = new ArrayList<>();
                 while (this.tokens.get(0).getTokenType() != TokenType.R_BRACE) {
                     bodyTokens.add(this.tokens.get(0));
                     this.tokens.remove(0);
                 }
+                subnodes.add(new BodyNode(bodyTokens));
                 // }
                 assert this.tokens.get(0).getTokenType() == TokenType.R_BRACE;
                 this.tokens.remove(0);
-                // else
-                if ((this.tokens.get(0).getTokenType() == TokenType.ID_KEYWORD) &&
-                        (this.tokens.get(0).getToken() == ELSE_STRING)) {
-                    subnodes.add(new ElseNode(this.tokens));
+
+                ArrayList<Token> elseif = new ArrayList<>();
+                int b_count = 0;
+                while (this.tokens.size() != 0 && (!Objects.equals(this.tokens.get(0).getToken(), ELSE_STRING) || b_count != 0)) {
+                    if (this.tokens.get(0).getTokenType() == TokenType.L_BRACE) b_count++;
+                    else if (this.tokens.get(0).getTokenType() == TokenType.R_BRACE) b_count--;
+                    elseif.add(this.tokens.remove(0));
                 }
-                // elseif
-                else if ((this.tokens.get(0).getTokenType() == TokenType.ID_KEYWORD) &&
-                        (this.tokens.get(1).getToken() == ELSEIF_STRING)) {
-                    subnodes.add(new ElseIfListNode(this.tokens));
-                }
+                subnodes.add(new ElseIfListNode(elseif));
+                subnodes.add(new ElseNode(this.tokens));
             }
         } catch (Exception e) {
             throw new RuntimeException();
@@ -73,14 +75,10 @@ public class IfStatementNode implements JottTree{
      */
     public String convertToJott()
     {
-        if(tokens.size() == 2) {
-            return(JOTT_IF + LBRACKET_CHAR + subnodes.get(0).convertToJott() +
-                    RBRACKET_CHAR + LBRACE_CHAR + "\n" + subnodes.get(1).convertToJott() + "\n" + RBRACE_CHAR + "\n");
-        }
-        else {
-            return(JOTT_IF + LBRACKET_CHAR + subnodes.get(0).convertToJott() + RBRACKET_CHAR +
-                    LBRACE_CHAR + "\n" + subnodes.get(1).convertToJott() + "\n" + RBRACE_CHAR + "\n" + subnodes.get(2).convertToJott()); //doesnt handle elseif
-        }
+        return JOTT_IF + LBRACKET_CHAR + subnodes.get(0).convertToJott() +
+                RBRACKET_CHAR + LBRACE_CHAR + "\n" +
+                subnodes.get(1).convertToJott() + "\n" +
+                subnodes.get(2).convertToJott() + subnodes.get(3).convertToJott();
     }
 
     /**

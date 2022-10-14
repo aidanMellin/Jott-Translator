@@ -72,8 +72,7 @@ public class IntExprNode implements JottTree {
                         tokens_used = new ArrayList<>();
                         op_count = 0;
                     }
-                }
-                else {
+                } else {
                     CreateSyntaxError("Unexpected Token", this.Tokens.get(0));
                 }
                 if (add_token) {

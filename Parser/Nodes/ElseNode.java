@@ -19,7 +19,7 @@ public class ElseNode implements JottTree{
     public ElseNode(ArrayList<Token> tokens) {
         try {
             this.tokens = tokens;
-            if (this.tokens == null) body = null;
+            if (this.tokens.size() == 0) body = null;
             else {
                 if (!(this.tokens.size() >= 3)) CreateSyntaxError("Invalid Token List", this.tokens.get(0));
                 if (this.tokens.get(0).getTokenType() != TokenType.ID_KEYWORD)

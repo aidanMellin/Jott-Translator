@@ -3,6 +3,7 @@ import Tokenizer.*;
 import Parser.*;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class BodyNode implements JottTree {
 
@@ -17,13 +18,14 @@ public class BodyNode implements JottTree {
     public BodyNode(ArrayList<Token> tokens) {
         try {
             this.tokens = tokens;
+
             if (this.tokens.size() == 0) {
                 return;
             } else if (this.tokens.get(0).getTokenType().equals(TokenType.ID_KEYWORD) && this.tokens.get(0).getToken().equals(RETURN_STR)) {
                 subnodes.add(new ReturnStatementNode(this.tokens));
             } else {
                 ArrayList<Token> bodyStmtTokens = new ArrayList<>();
-                if ((this.tokens.get(0).getToken().equals(IF_STR)) || (this.tokens.get(0).getToken().equals(WHILE_STR))) {
+                if (this.tokens.get(0).getToken().equals(WHILE_STR)) {
                     int leftBraceCount = 0;
                     while (!this.tokens.get(0).getTokenType().equals(TokenType.R_BRACE) || leftBraceCount != 0) {
                         if (this.tokens.get(0).getTokenType() == TokenType.L_BRACE) leftBraceCount++;
@@ -37,6 +39,50 @@ public class BodyNode implements JottTree {
                         if (this.tokens.get(0).getTokenType() == TokenType.R_BRACE) leftBraceCount--;
                     }
                     bodyStmtTokens.add((this.tokens.remove(0)));
+                } else if (this.tokens.get(0).getToken().equals(IF_STR)) {
+                    int leftBraceCount = 0;
+                    while (!this.tokens.get(0).getTokenType().equals(TokenType.R_BRACE) || leftBraceCount != 0) {
+                        if (this.tokens.get(0).getTokenType() == TokenType.L_BRACE) leftBraceCount++;
+
+                        bodyStmtTokens.add(this.tokens.get(0));
+                        this.tokens.remove(0);
+
+                        if ((tokens.size() == 1) && (this.tokens.get(0).getTokenType() != TokenType.R_BRACE)) {
+                            CreateSyntaxError("Unexpected Token - Expected '}'", this.tokens.get(0));
+                        }
+                        if (this.tokens.get(0).getTokenType() == TokenType.R_BRACE) leftBraceCount--;
+                    }
+                    bodyStmtTokens.add((this.tokens.remove(0)));
+                    if (Objects.equals(this.tokens.get(0).getToken(), "elseif")) {
+                        leftBraceCount = 0;
+                        while (!this.tokens.get(0).getTokenType().equals(TokenType.R_BRACE) || leftBraceCount != 0) {
+                            if (this.tokens.get(0).getTokenType() == TokenType.L_BRACE) leftBraceCount++;
+
+                            bodyStmtTokens.add(this.tokens.get(0));
+                            this.tokens.remove(0);
+
+                            if ((tokens.size() == 1) && (this.tokens.get(0).getTokenType() != TokenType.R_BRACE)) {
+                                CreateSyntaxError("Unexpected Token - Expected '}'", this.tokens.get(0));
+                            }
+                            if (this.tokens.get(0).getTokenType() == TokenType.R_BRACE) leftBraceCount--;
+                        }
+                        bodyStmtTokens.add((this.tokens.remove(0)));
+                    }
+                    if (Objects.equals(this.tokens.get(0).getToken(), "else")) {
+                        leftBraceCount = 0;
+                        while (!this.tokens.get(0).getTokenType().equals(TokenType.R_BRACE) || leftBraceCount != 0) {
+                            if (this.tokens.get(0).getTokenType() == TokenType.L_BRACE) leftBraceCount++;
+
+                            bodyStmtTokens.add(this.tokens.get(0));
+                            this.tokens.remove(0);
+
+                            if ((tokens.size() == 1) && (this.tokens.get(0).getTokenType() != TokenType.R_BRACE)) {
+                                CreateSyntaxError("Unexpected Token - Expected '}'", this.tokens.get(0));
+                            }
+                            if (this.tokens.get(0).getTokenType() == TokenType.R_BRACE) leftBraceCount--;
+                        }
+                        bodyStmtTokens.add((this.tokens.remove(0)));
+                    }
                 } else {
                     while (this.tokens.get(0).getTokenType() != TokenType.SEMICOLON) {
                         bodyStmtTokens.add(this.tokens.remove(0));
@@ -49,8 +95,8 @@ public class BodyNode implements JottTree {
                         }
                     }
                 }
-                subnodes.add(new BodyStatementNode(bodyStmtTokens));
-                subnodes.add(new BodyNode(this.tokens));
+                subnodes.add(new BodyStatementNode(new ArrayList<>(bodyStmtTokens)));
+                subnodes.add(new BodyNode(new ArrayList<>(this.tokens)));
             }
         } catch (Exception e) {
             throw new RuntimeException();
