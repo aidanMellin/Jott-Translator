@@ -1,0 +1,15 @@
+#this will fail phase 3 for no return
+#the loop does not have to run.
+
+foo[]:Integer{
+    Integer x = 0;
+	while[x<10]{
+		print[x];
+		return x;
+	}
+}
+
+main[]:Void{
+    Integer y = foo[];
+}
+
