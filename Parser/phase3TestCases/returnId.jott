@@ -1,0 +1,7 @@
+#this should pass parsing but fail sematic analysis (phase3)
+#return <id> is not allowed from void
+
+main[]:Void{
+    Double x = 5.0;
+	return x;
+}

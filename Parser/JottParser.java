@@ -25,7 +25,7 @@ public class JottParser {
         try {
             return new ProgramNode(tokens);
         } catch (Exception e) {
-             return null;
+            return null;
         }
     }
 
