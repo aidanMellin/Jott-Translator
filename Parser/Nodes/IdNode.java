@@ -9,9 +9,11 @@ public class IdNode implements JottTree {
     private Token idToken;
     private ArrayList<JottTree> subnodes = new ArrayList<>();
     private String idStored;
+    private int tabCount;
 
-    public IdNode(Token token){
+    public IdNode(Token token, int tc){
         try {
+            tabCount = tc;
             this.idToken = token;
             assert idToken != null;
             this.idStored = idToken.getToken();
@@ -29,7 +31,7 @@ public class IdNode implements JottTree {
     {
         StringBuilder jott_id = new StringBuilder();
         for (JottTree node : subnodes) jott_id.append(node.convertToJott());
-        return jott_id.toString();
+        return "\t".repeat(tabCount) + jott_id;
     }
 
     /**

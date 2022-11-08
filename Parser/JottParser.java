@@ -23,7 +23,7 @@ public class JottParser {
      */
     public static JottTree parse(ArrayList<Token> tokens){
         try {
-            return new ProgramNode(tokens);
+            return new ProgramNode(tokens, 0);
         } catch (Exception e) {
             return null;
         }

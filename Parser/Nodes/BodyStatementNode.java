@@ -11,9 +11,11 @@ public class BodyStatementNode implements JottTree {
 
     private final String IF_STR = "if";
     private final String WHILE_STR = "while";
+    private int tabCount;
 
-    public BodyStatementNode(ArrayList<Token> tokens) {
+    public BodyStatementNode(ArrayList<Token> tokens, int tc) {
         try {
+            tabCount = tc;
             this.tokens = tokens;
             assert this.tokens != null;
             if (this.tokens.get(0).getToken().equals(IF_STR)) {

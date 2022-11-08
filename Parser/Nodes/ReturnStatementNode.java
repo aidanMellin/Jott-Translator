@@ -10,9 +10,11 @@ public class ReturnStatementNode implements JottTree {
     private ArrayList<JottTree> subnodes = new ArrayList<>();
 
     private final String JOTT_RETURN = "return";
+    private int tabCount;
 
-    public ReturnStatementNode(ArrayList<Token> tokens) {
+    public ReturnStatementNode(ArrayList<Token> tokens, int tc) {
         try {
+            tabCount = tc;
             this.tokens = tokens;
             assert tokens != null;
             if (!Objects.equals(this.tokens.get(0).getToken(), JOTT_RETURN))
@@ -39,7 +41,7 @@ public class ReturnStatementNode implements JottTree {
      */
     public String convertToJott()
     {
-        return  "\t" + JOTT_RETURN + " " +
+        return  "\t".repeat(tabCount) + JOTT_RETURN + " " +
                 subnodes.get(0).convertToJott() +
                 subnodes.get(1).convertToJott();
     }

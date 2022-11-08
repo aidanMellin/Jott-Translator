@@ -13,13 +13,15 @@ public class FunctionDefinitionNode implements JottTree {
     private final String COLON_CHAR = ":";
     private ArrayList<JottTree> subnodes = new ArrayList<>();
     private final ArrayList<Token> tokens;
+    private int tabCount;
 
-    public FunctionDefinitionNode(ArrayList<Token> tokens) {
+    public FunctionDefinitionNode(ArrayList<Token> tokens, int tc) {
         try {
+            tabCount = tc;
             this.tokens = tokens;
             if (this.tokens.get(0).getTokenType() != TokenType.ID_KEYWORD)
                 CreateSyntaxError("Unexpected Token - Expected ID", this.tokens.get(0));
-            subnodes.add(new IdNode(this.tokens.remove(0)));
+            subnodes.add(new IdNode(this.tokens.remove(0), tabCount));
             if (this.tokens.get(0).getTokenType() != TokenType.L_BRACKET)
                 CreateSyntaxError("Unexpected Token - Expected '['", this.tokens.get(0));
             this.tokens.remove(0);
@@ -28,7 +30,7 @@ public class FunctionDefinitionNode implements JottTree {
                 func_def_params.add(this.tokens.remove(0));
                 assert this.tokens.size() != 0;
             }
-            subnodes.add(new FunctionDefinitionParametersNode(func_def_params));
+            subnodes.add(new FunctionDefinitionParametersNode(func_def_params, tabCount));
             if (this.tokens.get(0).getTokenType() != TokenType.R_BRACKET)
                 CreateSyntaxError("Unexpected Token - Expected ']'", this.tokens.get(0));
             this.tokens.remove(0);
@@ -37,7 +39,7 @@ public class FunctionDefinitionNode implements JottTree {
             this.tokens.remove(0);
             if (this.tokens.get(0).getTokenType() != TokenType.ID_KEYWORD)
                 CreateSyntaxError("Unexpected Token - Expected ID", this.tokens.get(0));
-            subnodes.add(new FunctionReturnNode(this.tokens.remove(0)));
+            subnodes.add(new FunctionReturnNode(this.tokens.remove(0), tabCount));
             if (this.tokens.get(0).getTokenType() != TokenType.L_BRACE)
                 CreateSyntaxError("Unexpected Token - Expected '{'", this.tokens.get(0));
             this.tokens.remove(0);
@@ -49,7 +51,7 @@ public class FunctionDefinitionNode implements JottTree {
                 if (this.tokens.size() == 0) CreateSyntaxError("Error: empty token array", body.get(body.size() - 1));
                 if (this.tokens.get(0).getTokenType() == TokenType.R_BRACE) b_count--;
             }
-            subnodes.add(new BodyNode(body));
+            subnodes.add(new BodyNode(body, tabCount));
             if (this.tokens.get(0).getTokenType() != TokenType.R_BRACE)
                 CreateSyntaxError("Unexpected Token - Expected '}'", this.tokens.get(0));
             this.tokens.remove(0);
@@ -65,10 +67,10 @@ public class FunctionDefinitionNode implements JottTree {
      */
     public String convertToJott()
     {
-        return  subnodes.get(0).convertToJott() + LBRACKET_CHAR + subnodes.get(1).convertToJott() + RBRACKET_CHAR + COLON_CHAR +
+        return  "\t".repeat(tabCount) + subnodes.get(0).convertToJott() + LBRACKET_CHAR + subnodes.get(1).convertToJott() + RBRACKET_CHAR + COLON_CHAR +
                 subnodes.get(2).convertToJott() + LBRACE_CHAR + "\n" +
-                subnodes.get(3).convertToJott() +
-                RBRACE_CHAR +
+                "\t".repeat(tabCount) + subnodes.get(3).convertToJott() +
+                "\t".repeat(tabCount) + RBRACE_CHAR +
                 "\n" + "\n";
     }
 

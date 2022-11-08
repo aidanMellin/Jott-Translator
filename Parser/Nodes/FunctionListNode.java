@@ -9,10 +9,12 @@ public class FunctionListNode implements JottTree { //TODO
     private ArrayList<Token> tokens;
     private JottTree function_def;
     private JottTree function_list;
+    private int tabCount = 0;
 
-    public FunctionListNode(ArrayList<Token> tokens){
+    public FunctionListNode(ArrayList<Token> tokens, int tc){
         try {
             this.tokens = tokens;
+            tabCount = tc;
             if (!(this.tokens.size() == 0)) {
                 // functionDefNode
                 ArrayList<Token> fDefTokens = new ArrayList<>();
@@ -35,10 +37,10 @@ public class FunctionListNode implements JottTree { //TODO
                 if(this.tokens.size() != 0) {
                     fDefTokens.add(this.tokens.remove(0));
                 }
-                function_def = new FunctionDefinitionNode(fDefTokens);
+                function_def = new FunctionDefinitionNode(fDefTokens, tc);
                 // functionList
                 assert this.tokens != null;
-                function_list = new FunctionListNode(this.tokens);
+                function_list = new FunctionListNode(this.tokens, tc);
             }
         } catch (Exception e) {
             throw new RuntimeException();
@@ -54,7 +56,7 @@ public class FunctionListNode implements JottTree { //TODO
             return("");
         }
         else {
-            return(function_def.convertToJott() + function_list.convertToJott());
+            return "\t".repeat(tabCount) + function_def.convertToJott() + function_list.convertToJott();
         }
     }
 

@@ -14,15 +14,17 @@ public class BodyNode implements JottTree {
     private final String RETURN_STR = "return";
     private final String IF_STR = "if";
     private final String WHILE_STR = "while";
+    private int tabCount;
 
-    public BodyNode(ArrayList<Token> tokens) {
+    public BodyNode(ArrayList<Token> tokens, int tc) {
         try {
+            tabCount = tc + 1;
             this.tokens = tokens;
 
             if (this.tokens.size() == 0) {
                 return;
             } else if (this.tokens.get(0).getTokenType().equals(TokenType.ID_KEYWORD) && this.tokens.get(0).getToken().equals(RETURN_STR)) {
-                subnodes.add(new ReturnStatementNode(this.tokens));
+                subnodes.add(new ReturnStatementNode(this.tokens, tabCount));
             } else {
                 ArrayList<Token> bodyStmtTokens = new ArrayList<>();
                 if (this.tokens.get(0).getToken().equals(WHILE_STR)) {
@@ -95,8 +97,8 @@ public class BodyNode implements JottTree {
                         }
                     }
                 }
-                subnodes.add(new BodyStatementNode(new ArrayList<>(bodyStmtTokens)));
-                subnodes.add(new BodyNode(new ArrayList<>(this.tokens)));
+                subnodes.add(new BodyStatementNode(new ArrayList<>(bodyStmtTokens), tabCount));
+                subnodes.add(new BodyNode(new ArrayList<>(this.tokens), tabCount));
             }
         } catch (Exception e) {
             throw new RuntimeException();

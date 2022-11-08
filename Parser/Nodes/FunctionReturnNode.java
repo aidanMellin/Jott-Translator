@@ -10,8 +10,10 @@ public class FunctionReturnNode implements JottTree{
     private final String JOTT_VOID = "Void";
     private final Token token;
 
-    public FunctionReturnNode(Token token) {
+    private int tabCount;
+    public FunctionReturnNode(Token token, int tc) {
         try {
+            tabCount = tc;
             this.token = token;
             assert this.token != null;
             if (Objects.equals(this.token.getToken(), JOTT_VOID)) subnode = null;

@@ -7,11 +7,12 @@ import java.util.ArrayList;
 public class ProgramNode implements JottTree { //TODO
 
     private final JottTree function_list;
+    private int tabCount;
 
 
-    public ProgramNode(ArrayList<Token> tokens){
-        try {
-            function_list = new FunctionListNode(tokens);
+    public ProgramNode(ArrayList<Token> tokens, int tc){
+        try {tabCount = tc;
+            function_list = new FunctionListNode(tokens, tabCount);
             // also add EOF symbol??
         } catch (Exception e) {
             throw new RuntimeException();
@@ -23,7 +24,7 @@ public class ProgramNode implements JottTree { //TODO
      */
     public String convertToJott()
     {
-        return(function_list.convertToJott());
+        return "\t".repeat(tabCount) + function_list.convertToJott();
     }
 
     /**
