@@ -9,26 +9,29 @@ public class StrExprNode implements JottTree {
     private JottTree subnode;
     private Token token;
     private ArrayList<Token> tokens;
+    private int tabCount;
 
-    public StrExprNode(Token token) {
+    public StrExprNode(Token token, int tc) {
         try {
+            tabCount = tc;
             this.token = token;
             assert this.token != null;
-            if (this.token.getTokenType() == TokenType.STRING) subnode = new StrLiteralNode(this.token);
-            else if (this.token.getTokenType() == TokenType.ID_KEYWORD) subnode = new IdNode(this.token);
+            if (this.token.getTokenType() == TokenType.STRING) subnode = new StrLiteralNode(this.token, tabCount);
+            else if (this.token.getTokenType() == TokenType.ID_KEYWORD) subnode = new IdNode(this.token, tabCount);
         } catch (Exception e) {
             throw new RuntimeException();
         }
     }
 
-    public StrExprNode(ArrayList<Token> tokens) {
+    public StrExprNode(ArrayList<Token> tokens, int tc) {
+        tabCount = tc;
         this.tokens = tokens;
         assert this.tokens != null;
         if (this.tokens.size() == 1) {
-            if (this.tokens.get(0).getTokenType() == TokenType.STRING) subnode = new StrLiteralNode(this.tokens.get(0));
-            else if (this.tokens.get(0).getTokenType() == TokenType.ID_KEYWORD) subnode = new IdNode(this.tokens.get(0));
+            if (this.tokens.get(0).getTokenType() == TokenType.STRING) subnode = new StrLiteralNode(this.tokens.get(0), tabCount);
+            else if (this.tokens.get(0).getTokenType() == TokenType.ID_KEYWORD) subnode = new IdNode(this.tokens.get(0), tabCount);
         } else {
-            subnode = new FunctionCallNode(this.tokens);
+            subnode = new FunctionCallNode(this.tokens, tabCount);
         }
     }
 

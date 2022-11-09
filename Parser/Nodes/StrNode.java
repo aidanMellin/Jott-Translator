@@ -10,14 +10,15 @@ public class StrNode implements JottTree {
     private final ArrayList<JottTree> subnodes = new ArrayList<>();
     private final String EMPTY_STR = "";
     private final String tokenString;
+    private int tabCount;
 
-    public StrNode(String tokenString) {
+    public StrNode(String tokenString, int tc) {
         try {
             this.tokenString = tokenString;
             if (!Objects.equals(tokenString, EMPTY_STR)) {
-                subnodes.add(new CharNode(tokenString.charAt(0)));
-                if (tokenString.length() > 1) subnodes.add(new StrNode(tokenString.substring(1)));
-                else subnodes.add(new StrNode(EMPTY_STR));
+                subnodes.add(new CharNode(tokenString.charAt(0), tabCount));
+                if (tokenString.length() > 1) subnodes.add(new StrNode(tokenString.substring(1), tabCount));
+                else subnodes.add(new StrNode(EMPTY_STR, tabCount));
             }
         } catch (Exception e) {
             throw new RuntimeException();

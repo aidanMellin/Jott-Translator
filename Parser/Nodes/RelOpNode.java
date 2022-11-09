@@ -5,8 +5,10 @@ import Parser.*;
 public class RelOpNode implements JottTree {
 
     private final Token token;
-    public RelOpNode(Token token) {
+    private int tabCount;
+    public RelOpNode(Token token, int tc) {
         try {
+            tabCount = tc;
             this.token = token;
             assert this.token != null;
             if (this.token.getTokenType() != TokenType.REL_OP)

@@ -11,8 +11,10 @@ public class TypeNode implements JottTree{
     private final String JOTT_DOUBLE = "Double";
     private final String JOTT_STRING = "String";
     private final String JOTT_BOOLEAN = "Boolean";
-    public TypeNode(Token token) {
+    private int tabCount;
+    public TypeNode(Token token, int tc) {
         try {
+            tabCount = tc;
             this.token = token;
             assert this.token != null;
             if (this.token.getTokenType() != TokenType.ID_KEYWORD)

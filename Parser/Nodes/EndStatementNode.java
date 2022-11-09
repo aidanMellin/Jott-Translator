@@ -6,9 +6,11 @@ public class EndStatementNode implements JottTree {
 
     private final String JOTT_END = ";\n";
     private Token token;
+    private int tabCount;
 
-    public EndStatementNode(Token token) {
+    public EndStatementNode(Token token, int tc) {
         try {
+            tabCount = tc;
             this.token = token;
             if (this.token.getTokenType() != TokenType.SEMICOLON)
                 CreateSyntaxError("Unexpected Token - Expected ';'", this.token);

@@ -5,9 +5,11 @@ import Parser.*;
 public class OpNode implements JottTree { //TODO
 
     private final Token token;
+    private int tabCount;
 
-    public OpNode(Token token) {
+    public OpNode(Token token, int tc) {
         try {
+            tabCount = tc;
             this.token = token;
             assert this.token != null;
             if (this.token.getTokenType() != TokenType.MATH_OP)

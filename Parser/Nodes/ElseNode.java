@@ -14,10 +14,12 @@ public class ElseNode implements JottTree{
     private final String RBRACE_CHAR = "}";
     private final String EMPTY_STRING = "";
     private ArrayList<Token> tokens;
+    private int tabCount;
 
 
-    public ElseNode(ArrayList<Token> tokens) {
+    public ElseNode(ArrayList<Token> tokens, int tc) {
         try {
+            tabCount = tc;
             this.tokens = tokens;
             if (this.tokens.size() == 0) body = null;
             else {
@@ -32,7 +34,7 @@ public class ElseNode implements JottTree{
                 bodyTokens.remove(0);
                 bodyTokens.remove(0);
                 bodyTokens.remove(bodyTokens.size() - 1);
-                body = new BodyNode(bodyTokens);
+                body = new BodyNode(bodyTokens, tabCount);
             }
         } catch (Exception e) {
             throw new RuntimeException();
@@ -48,7 +50,7 @@ public class ElseNode implements JottTree{
         if (body == null) return EMPTY_STRING;
         else return JOTT_ELSE + LBRACE_CHAR + "\n" +
                 body.convertToJott() + "\n" +
-                RBRACE_CHAR + "\n";
+                "\t".repeat(tabCount) + RBRACE_CHAR + "\n";
     }
 
     /**

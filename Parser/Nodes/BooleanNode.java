@@ -11,9 +11,11 @@ public class BooleanNode implements JottTree {
     private final String JOTT_TRUE = "True";
     private final String JOTT_FALSE = "False";
     private final Token token;
+    private int tabCount;
 
-    public BooleanNode(Token token) {
+    public BooleanNode(Token token, int tc) {
         try {
+            tabCount = tc;
             this.token = token;
             assert this.token != null;
             if (!Objects.equals(this.token.getToken(), JOTT_TRUE) && !Objects.equals(this.token.getToken(), JOTT_FALSE))

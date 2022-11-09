@@ -9,15 +9,17 @@ public class StrLiteralNode implements JottTree {
     private JottTree subnode;
     private final String QUOTE_CHAR = "\"";
     private Token token;
+    private int tabCount;
 
-    public StrLiteralNode(Token token) {
+    public StrLiteralNode(Token token, int tc) {
         try {
+            tabCount = tc;
             this.token = token;
             assert this.token != null;
             if (token.getTokenType() != TokenType.STRING)
                 CreateSyntaxError("Unexpected Token - Expected String", this.token);
             if (!token.getToken().matches("\"[a-zA-Z0-9\s]*\"")) CreateSyntaxError("Unrecognized Character", this.token);
-            subnode = new StrNode(token.getToken().substring(1, token.getToken().length()-1));
+            subnode = new StrNode(token.getToken().substring(1, token.getToken().length()-1), tabCount);
         } catch (Exception e) {
             throw new RuntimeException();
         }

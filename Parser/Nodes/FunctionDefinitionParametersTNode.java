@@ -11,9 +11,11 @@ public class FunctionDefinitionParametersTNode implements JottTree {
     private final String EMPTY_STRING = "";
     private ArrayList<JottTree> subnodes = new ArrayList<>();
     private final ArrayList<Token> tokens;
+    private int tabCount;
 
-    public FunctionDefinitionParametersTNode(ArrayList<Token> tokens) {
+    public FunctionDefinitionParametersTNode(ArrayList<Token> tokens, int tc) {
         try {
+            tabCount = tc;
             this.tokens = tokens;
             if (this.tokens.size() == 0) subnodes = null;
             else {
@@ -22,14 +24,14 @@ public class FunctionDefinitionParametersTNode implements JottTree {
                 this.tokens.remove(0);
                 if (this.tokens.get(0).getTokenType() != TokenType.ID_KEYWORD)
                     CreateSyntaxError("Unexpected Token - Expected ID", this.tokens.get(0));
-                subnodes.add(new IdNode(this.tokens.remove(0)));
+                subnodes.add(new IdNode(this.tokens.remove(0), tabCount));
                 if (this.tokens.get(0).getTokenType() != TokenType.COLON)
                     CreateSyntaxError("Unexpected Token - Expected ':'", this.tokens.get(0));
                 this.tokens.remove(0);
                 if (this.tokens.get(0).getTokenType() != TokenType.ID_KEYWORD)
                     CreateSyntaxError("Unexpected Token - Expected ID", this.tokens.get(0));
-                subnodes.add(new TypeNode(this.tokens.remove(0)));
-                subnodes.add(new FunctionDefinitionParametersTNode(this.tokens));
+                subnodes.add(new TypeNode(this.tokens.remove(0), tabCount));
+                subnodes.add(new FunctionDefinitionParametersTNode(this.tokens, tabCount));
             }
         } catch (Exception e) {
             throw new RuntimeException();

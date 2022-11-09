@@ -14,9 +14,11 @@ public class WhileLoopNode implements JottTree{
     private final String JOTT_WHILE = "while";
     private final ArrayList<JottTree> subnodes = new ArrayList<>();
     private final ArrayList<Token> tokens;
+    private int tabCount;
 
-    public WhileLoopNode(ArrayList<Token> tokens) {
+    public WhileLoopNode(ArrayList<Token> tokens, int tc) {
         try {
+            tabCount = tc;
             this.tokens = tokens;
             assert this.tokens != null;
             if (!Objects.equals(this.tokens.get(0).getToken(), JOTT_WHILE))
@@ -34,7 +36,7 @@ public class WhileLoopNode implements JottTree{
                     CreateSyntaxError("Error: empty token array", b_expr.get(b_expr.size() - 1));
                 if (this.tokens.get(0).getTokenType() == TokenType.R_BRACKET) b_count--;
             }
-            subnodes.add(new BoolExprNode(b_expr));
+            subnodes.add(new BoolExprNode(b_expr, tabCount));
             if (this.tokens.get(0).getTokenType() != TokenType.R_BRACKET)
                 CreateSyntaxError("Unexpected Token - Expected ']'", this.tokens.get(0));
             this.tokens.remove(0);
@@ -49,7 +51,7 @@ public class WhileLoopNode implements JottTree{
                 if (this.tokens.size() == 0) CreateSyntaxError("Error: empty token array", body.get(body.size() - 1));
                 if (this.tokens.get(0).getTokenType() == TokenType.R_BRACE) b_count--;
             }
-            subnodes.add(new BodyNode(body));
+            subnodes.add(new BodyNode(body, tabCount));
             if (this.tokens.get(0).getTokenType() != TokenType.R_BRACE)
                 CreateSyntaxError("Unexpected Token - Expected '}'", this.tokens.get(0));
             this.tokens.remove(0);
@@ -64,13 +66,13 @@ public class WhileLoopNode implements JottTree{
      */
     public String convertToJott()
     {
-        return "\t" + JOTT_WHILE +
+        return "\t".repeat(tabCount) + JOTT_WHILE +
                 LBRACKET_CHAR +
                 subnodes.get(0).convertToJott() +
                 RBRACKET_CHAR +
                 LBRACE_CHAR + "\n" +
-                subnodes.get(1).convertToJott() +
-                RBRACE_CHAR + "\n";
+                subnodes.get(1).convertToJott() + "\n" +
+                "\t".repeat(tabCount) + RBRACE_CHAR;
     }
 
     /**

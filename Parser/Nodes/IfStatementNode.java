@@ -17,9 +17,11 @@ public class IfStatementNode implements JottTree{
 
     private ArrayList<JottTree> subnodes = new ArrayList<>();
     private ArrayList<Token> tokens;
+    private int tabCount;
 
-    public IfStatementNode(ArrayList<Token> tokens) {
+    public IfStatementNode(ArrayList<Token> tokens, int tc) {
         try {
+            tabCount = tc;
             this.tokens = tokens;
             if (this.tokens.size() == 0) subnodes = null;
             else {
@@ -37,7 +39,7 @@ public class IfStatementNode implements JottTree{
                     this.tokens.remove(0);
                 }
                 // ]
-                subnodes.add(new BoolExprNode(b_exprTokens));
+                subnodes.add(new BoolExprNode(b_exprTokens, 0));
                 assert this.tokens.get(0).getTokenType() == TokenType.R_BRACKET;
                 this.tokens.remove(0);
                 // {
@@ -49,7 +51,7 @@ public class IfStatementNode implements JottTree{
                     bodyTokens.add(this.tokens.get(0));
                     this.tokens.remove(0);
                 }
-                subnodes.add(new BodyNode(bodyTokens));
+                subnodes.add(new BodyNode(bodyTokens, tabCount));
                 // }
                 assert this.tokens.get(0).getTokenType() == TokenType.R_BRACE;
                 this.tokens.remove(0);
@@ -61,8 +63,8 @@ public class IfStatementNode implements JottTree{
                     else if (this.tokens.get(0).getTokenType() == TokenType.R_BRACE) b_count--;
                     elseif.add(this.tokens.remove(0));
                 }
-                subnodes.add(new ElseIfListNode(elseif));
-                subnodes.add(new ElseNode(this.tokens));
+                subnodes.add(new ElseIfListNode(elseif, tabCount));
+                subnodes.add(new ElseNode(this.tokens, tabCount));
             }
         } catch (Exception e) {
             throw new RuntimeException();
@@ -75,10 +77,9 @@ public class IfStatementNode implements JottTree{
      */
     public String convertToJott()
     {
-        return JOTT_IF + LBRACKET_CHAR + subnodes.get(0).convertToJott() +
-                RBRACKET_CHAR + LBRACE_CHAR + "\n" +
+        return "\t".repeat(tabCount) + JOTT_IF + LBRACKET_CHAR + subnodes.get(0).convertToJott() + RBRACKET_CHAR + LBRACE_CHAR + "\n" +
                 subnodes.get(1).convertToJott() + "\n" +
-                subnodes.get(2).convertToJott() + subnodes.get(3).convertToJott();
+                "\t".repeat(tabCount) + RBRACE_CHAR + subnodes.get(2).convertToJott() + subnodes.get(3).convertToJott();
     }
 
     /**

@@ -9,9 +9,11 @@ public class ExpressionNode implements JottTree{
 
     private JottTree subnode;
     private ArrayList<Token> tokens;
+    private int tabCount;
 
-    public ExpressionNode(ArrayList<Token> tokens) {
+    public ExpressionNode(ArrayList<Token> tokens, int tc) {
         try {
+            tabCount = tc;
             this.tokens = tokens;
             this.subnode = null;
 
@@ -20,7 +22,7 @@ public class ExpressionNode implements JottTree{
             for (int i = 0; i < this.tokens.size(); i++) {
                 if (this.tokens.get(i).getTokenType().equals(TokenType.REL_OP)) {
                     bExprBool = true;
-                    subnode = new BoolExprNode(this.tokens);
+                    subnode = new BoolExprNode(this.tokens, 0);
                     break;
                 }
             }
@@ -33,10 +35,10 @@ public class ExpressionNode implements JottTree{
                     sExprBool = true;
                     if(this.tokens.size() == 1) {
                         Token strToken = this.tokens.get(0);
-                        subnode = new StrExprNode(strToken);
+                        subnode = new StrExprNode(strToken, 0);
                     }
                     else {
-                        subnode = new StrExprNode(this.tokens);
+                        subnode = new StrExprNode(this.tokens, 0);
                     }
 
                 }
@@ -51,10 +53,10 @@ public class ExpressionNode implements JottTree{
                     if (this.tokens.get(i).getTokenType().equals(TokenType.NUMBER)) {
                         if (this.tokens.get(i).getToken().contains(".")) {
                             dExprBool = true;
-                            subnode = new DoubleExprNode(this.tokens);
+                            subnode = new DoubleExprNode(this.tokens, 0);
                         } else {
                             iExprBool = true;
-                            subnode = new IntExprNode(this.tokens);
+                            subnode = new IntExprNode(this.tokens, 0);
                         }
                         break;
                     }
@@ -68,9 +70,9 @@ public class ExpressionNode implements JottTree{
             if (!bExprBool && !sExprBool && !iExprBool && !dExprBool) {
                 if (this.tokens.get(0).getTokenType().equals(TokenType.ID_KEYWORD)) {
                     if (this.tokens.size() == 1) {
-                        subnode = new IdNode(this.tokens.get(0));
+                        subnode = new IdNode(this.tokens.get(0), 0);
                     } else {
-                        subnode = new FunctionCallNode(this.tokens);
+                        subnode = new FunctionCallNode(this.tokens, 0);
                     }
                 } else {
                     CreateSyntaxError("Unexpected Token - Expected <Expression Type First>", this.tokens.get(0));

@@ -8,19 +8,20 @@ public class StatementNode implements JottTree{
 
     private ArrayList<JottTree> subnodes = new ArrayList<>();
     private ArrayList<Token> tokens;
+    private int tabCount;
 
-    public StatementNode(ArrayList<Token> tokens) {
+    public StatementNode(ArrayList<Token> tokens, int tc) {
         try {
             this.tokens = tokens;
             assert this.tokens != null;
             if (this.tokens.get(1).getTokenType() == TokenType.L_BRACKET) {
                 Token end_stmt = this.tokens.remove(this.tokens.size() - 1);
-                subnodes.add(new FunctionCallNode(this.tokens));
-                subnodes.add(new EndStatementNode(end_stmt));
+                subnodes.add(new FunctionCallNode(this.tokens, tabCount));
+                subnodes.add(new EndStatementNode(end_stmt, tabCount));
             } else if (this.tokens.size() == 3) {
-                subnodes.add(new VariableDeclarationNode(this.tokens));
+                subnodes.add(new VariableDeclarationNode(this.tokens, tabCount));
             } else {
-                subnodes.add(new AssignmentNode(this.tokens));
+                subnodes.add(new AssignmentNode(this.tokens, tabCount));
             }
         } catch (Exception e) {
             throw new RuntimeException();
@@ -34,9 +35,8 @@ public class StatementNode implements JottTree{
     public String convertToJott()
     {
         StringBuilder jott_stmt = new StringBuilder();
-        jott_stmt.append("\t");
         for (JottTree node : subnodes) jott_stmt.append(node.convertToJott());
-        return jott_stmt.toString();
+        return "\t".repeat(tabCount) + jott_stmt.toString();
     }
 
     /**

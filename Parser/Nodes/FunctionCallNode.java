@@ -10,22 +10,24 @@ public class FunctionCallNode implements JottTree{
     private final String LBRACKET_STRING = "[";
     private final ArrayList<JottTree> subnodes = new ArrayList<>();
     private final ArrayList<Token> tokens;
+    private int tabCount;
 
-    public FunctionCallNode(ArrayList<Token> tokens) {
+    public FunctionCallNode(ArrayList<Token> tokens, int tc) {
         try {
+            tabCount = tc;
             this.tokens = tokens;
             assert this.tokens != null;
             if (this.tokens.size() < 3) CreateSyntaxError("Invalid Function Call", this.tokens.get(0));
             if (!this.tokens.get(0).getToken().matches("[a-z][a-zA-z0-9]*"))
                 CreateSyntaxError("Invalid Function Name", this.tokens.get(0));
-            subnodes.add(new IdNode(this.tokens.get(0)));
+            subnodes.add(new IdNode(this.tokens.get(0), tabCount));
             ArrayList<Token> paramsTokens = new ArrayList<>();
             if (this.tokens.get(1).getTokenType() != TokenType.L_BRACKET)
                 CreateSyntaxError("Unexpected Token - Expected '['", this.tokens.get(1));
             if (this.tokens.get(this.tokens.size() - 1).getTokenType() != TokenType.R_BRACKET)
                 CreateSyntaxError("Unexpected Token - Expected ']'", this.tokens.get(1));
             for (int i = 2; i < this.tokens.size() - 1; i++) paramsTokens.add(this.tokens.get(i));
-            subnodes.add(new ParametersNode(paramsTokens));
+            subnodes.add(new ParametersNode(paramsTokens, tabCount));
         } catch (Exception e) {
             throw new RuntimeException();
         }

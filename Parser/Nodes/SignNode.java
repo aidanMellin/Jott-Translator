@@ -6,8 +6,9 @@ public class SignNode implements JottTree {
 
     private final String EMPTY_STRING = "";
     private Token token;
+    private int tabCount;
 
-    public SignNode(Token token) {
+    public SignNode(Token token, int tc) {
         try {
             this.token = token;
             if (this.token == null) return;

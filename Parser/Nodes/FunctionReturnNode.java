@@ -17,7 +17,7 @@ public class FunctionReturnNode implements JottTree{
             this.token = token;
             assert this.token != null;
             if (Objects.equals(this.token.getToken(), JOTT_VOID)) subnode = null;
-            else subnode = new TypeNode(this.token);
+            else subnode = new TypeNode(this.token, tabCount);
         } catch (Exception e) {
             throw new RuntimeException();
         }

@@ -8,9 +8,11 @@ public class IntExprNode implements JottTree {
     
     private ArrayList<JottTree> subnodes;
     private ArrayList<Token> Tokens;
+    private int tabCount;
 
-    public IntExprNode(ArrayList<Token> tokens) {
+    public IntExprNode(ArrayList<Token> tokens, int tc) {
         try {
+            tabCount = tc;
             Tokens = tokens;
             subnodes = new ArrayList<>();
 
@@ -32,15 +34,15 @@ public class IntExprNode implements JottTree {
                             tokens_to_send.add(current_token);
                             count++;
                         }
-                        temp_subnodes.add(new FunctionCallNode(tokens_to_send));
+                        temp_subnodes.add(new FunctionCallNode(tokens_to_send, 0));
                         i += count;
                     } else {
-                        temp_subnodes.add(new IdNode(temp_token));
+                        temp_subnodes.add(new IdNode(temp_token, 0));
                     }
                 } else if (temp_token.getTokenType() == TokenType.NUMBER) {
                     ArrayList<Token> temp_token_list = new ArrayList<>();
                     temp_token_list.add(temp_token);
-                    temp_subnodes.add(new IntNode(temp_token_list));
+                    temp_subnodes.add(new IntNode(temp_token_list, 0));
 
                 } else if (temp_token.getTokenType() == TokenType.MATH_OP) {
                     if (temp_token.getToken().equals("-")) {
@@ -52,19 +54,19 @@ public class IntExprNode implements JottTree {
                                 return;
                             } else {
                                 temp_token_list.add(Tokens.get(i + 1));
-                                temp_subnodes.add(new IntNode(temp_token_list));
+                                temp_subnodes.add(new IntNode(temp_token_list, 0));
                                 i++;
                             }
                         } else {
-                            temp_subnodes.add(new OpNode(temp_token));
+                            temp_subnodes.add(new OpNode(temp_token, 0));
                             op_count++;
                         }
                     } else {
-                        temp_subnodes.add(new OpNode(temp_token));
+                        temp_subnodes.add(new OpNode(temp_token, 0));
                         op_count++;
                     }
                     if (op_count > 1) {   //once a second math op has happened, the program takes the tokens used so far and makes them into a seperate node
-                        IntExprNode temp_condense = new IntExprNode(tokens_used);
+                        IntExprNode temp_condense = new IntExprNode(tokens_used, 0);
                         subnodes.add(temp_condense);
                         subnodes.add(temp_subnodes.get(temp_subnodes.size() - 1));
                         temp_subnodes = new ArrayList<>();
@@ -92,11 +94,11 @@ public class IntExprNode implements JottTree {
      */
     public String convertToJott()
     {
-        String str = "";
-        for(int i = 0; i < subnodes.size(); i++){
-            str += subnodes.get(i).convertToJott();
+        StringBuilder str = new StringBuilder();
+        for (JottTree subnode : subnodes) {
+            str.append(subnode.convertToJott());
         }
-        return str;
+        return str.toString();
     }
 
     /**

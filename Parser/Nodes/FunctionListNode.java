@@ -9,7 +9,7 @@ public class FunctionListNode implements JottTree { //TODO
     private ArrayList<Token> tokens;
     private JottTree function_def;
     private JottTree function_list;
-    private int tabCount = 0;
+    private int tabCount;
 
     public FunctionListNode(ArrayList<Token> tokens, int tc){
         try {
@@ -37,10 +37,10 @@ public class FunctionListNode implements JottTree { //TODO
                 if(this.tokens.size() != 0) {
                     fDefTokens.add(this.tokens.remove(0));
                 }
-                function_def = new FunctionDefinitionNode(fDefTokens, tc);
+                function_def = new FunctionDefinitionNode(fDefTokens, tabCount);
                 // functionList
                 assert this.tokens != null;
-                function_list = new FunctionListNode(this.tokens, tc);
+                function_list = new FunctionListNode(this.tokens, tabCount);
             }
         } catch (Exception e) {
             throw new RuntimeException();

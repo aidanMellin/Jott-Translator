@@ -16,9 +16,11 @@ public class ElseIfListNode implements JottTree{
 
     private ArrayList<JottTree> subnodes = new ArrayList<>();
     private ArrayList<Token> tokens;
+    private int tabCount;
 
-    public ElseIfListNode(ArrayList<Token> tokens) {
+    public ElseIfListNode(ArrayList<Token> tokens, int tc) {
         try {
+            tabCount = tc;
             this.tokens = tokens;
             if (this.tokens.size() == 0) subnodes = null;
             else {
@@ -37,7 +39,7 @@ public class ElseIfListNode implements JottTree{
                         CreateSyntaxError("Error: empty token array", b_expr.get(b_expr.size() - 1));
                     if (this.tokens.get(0).getTokenType() == TokenType.R_BRACKET) b_count--;
                 }
-                subnodes.add(new BoolExprNode(b_expr));
+                subnodes.add(new BoolExprNode(b_expr, 0));
                 if (this.tokens.get(0).getTokenType() != TokenType.R_BRACKET)
                     CreateSyntaxError("Unexpected Token - Expected ']'", this.tokens.get(0));
                 this.tokens.remove(0);
@@ -53,11 +55,11 @@ public class ElseIfListNode implements JottTree{
                         CreateSyntaxError("Error: empty token array", body.get(body.size() - 1));
                     if (this.tokens.get(0).getTokenType() == TokenType.R_BRACE) b_count--;
                 }
-                subnodes.add(new BodyNode(body));
+                subnodes.add(new BodyNode(body, tabCount));
                 if (this.tokens.get(0).getTokenType() != TokenType.R_BRACE)
                     CreateSyntaxError("Unexpected Token - Expected '}'", this.tokens.get(0));
                 this.tokens.remove(0);
-                subnodes.add(new ElseIfListNode(this.tokens));
+                subnodes.add(new ElseIfListNode(this.tokens, tabCount));
             }
         } catch (Exception e) {
             throw new RuntimeException();
@@ -73,7 +75,7 @@ public class ElseIfListNode implements JottTree{
         if (subnodes == null) return EMPTY_STRING;
         else return JOTT_ELSEIF + LBRACKET_CHAR + subnodes.get(0).convertToJott() + RBRACKET_CHAR + LBRACE_CHAR + "\n" +
                 subnodes.get(1).convertToJott() + "\n" +
-                RBRACE_CHAR + subnodes.get(2).convertToJott();
+                "\t".repeat(tabCount) + RBRACE_CHAR + subnodes.get(2).convertToJott();
     }
 
     /**

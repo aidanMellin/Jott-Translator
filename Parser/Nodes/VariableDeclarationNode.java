@@ -8,15 +8,17 @@ public class VariableDeclarationNode implements JottTree{
 
     private ArrayList<JottTree> subnodes = new ArrayList<>();
     private final ArrayList<Token> tokens;
+    private int tabCount;
     
-    public VariableDeclarationNode(ArrayList<Token> tokens) {
+    public VariableDeclarationNode(ArrayList<Token> tokens, int tc) {
         try {
+            tabCount = tc;
             this.tokens = tokens;
             assert this.tokens != null;
             if (this.tokens.size() != 3) CreateSyntaxError("Invalid Variable Declaration", this.tokens.get(0));
-            subnodes.add(new TypeNode(this.tokens.get(0)));
-            subnodes.add(new IdNode(this.tokens.get(1)));
-            subnodes.add(new EndStatementNode(this.tokens.get(2)));
+            subnodes.add(new TypeNode(this.tokens.get(0), tabCount));
+            subnodes.add(new IdNode(this.tokens.get(1), tabCount));
+            subnodes.add(new EndStatementNode(this.tokens.get(2), tabCount));
         } catch (Exception e) {
             throw new RuntimeException();
         }
@@ -30,7 +32,7 @@ public class VariableDeclarationNode implements JottTree{
     {
         StringBuilder jott_var_dec = new StringBuilder();
         for (JottTree node : subnodes) jott_var_dec.append(node.convertToJott());
-        return jott_var_dec.toString();
+        return "\t".repeat(tabCount) + jott_var_dec;
     }
 
     /**

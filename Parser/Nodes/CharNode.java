@@ -15,8 +15,10 @@ public enum char_type{
 private char_type type;
 
     private final String charStored;
+    private int tabCount;
 
-    public CharNode(char character){
+    public CharNode(char character, int tc){
+        tabCount = tc;
         charStored = String.valueOf(character);
     }
      /**

@@ -10,8 +10,9 @@ public class ParametersTNode implements JottTree{
     private final String EMPTY_STRING = "";
     private ArrayList<JottTree> subnodes;
     private ArrayList<Token> tokens;
+    private int tabCount;
 
-    public ParametersTNode(ArrayList<Token> tokens) {
+    public ParametersTNode(ArrayList<Token> tokens, int tc) {
         try {
             this.tokens = tokens;
             if (this.tokens.size() == 0) subnodes = null;
@@ -28,8 +29,8 @@ public class ParametersTNode implements JottTree{
                     else if (this.tokens.get(0).getTokenType() == TokenType.R_BRACKET) b_count++;
 
                 }
-                subnodes.add(new ExpressionNode(expr));
-                subnodes.add(new ParametersTNode(this.tokens));
+                subnodes.add(new ExpressionNode(expr, tabCount));
+                subnodes.add(new ParametersTNode(this.tokens, tabCount));
             }
         } catch (Exception e) {
             throw new RuntimeException();
