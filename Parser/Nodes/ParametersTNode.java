@@ -14,6 +14,7 @@ public class ParametersTNode implements JottTree{
 
     public ParametersTNode(ArrayList<Token> tokens, int tc) {
         try {
+            tabCount = tc;
             this.tokens = tokens;
             if (this.tokens.size() == 0) subnodes = null;
             else {
@@ -74,7 +75,11 @@ public class ParametersTNode implements JottTree{
      */
     public String convertToPython()
     {
-        return("");
+        if (subnodes == null) return EMPTY_STRING;
+        StringBuilder jott_params = new StringBuilder();
+        jott_params.append(COMMA_CHAR).append(" ");
+        for (JottTree node : subnodes) jott_params.append(node.convertToPython());
+        return jott_params.toString();
     }
 
     /**

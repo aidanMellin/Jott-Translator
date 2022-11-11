@@ -95,8 +95,8 @@ public class IntExprNode implements JottTree {
     public String convertToJott()
     {
         StringBuilder str = new StringBuilder();
-        for (JottTree subnode : subnodes) {
-            str.append(subnode.convertToJott());
+        for (JottTree node : subnodes) {
+            str.append(node.convertToJott());
         }
         return str.toString();
     }
@@ -125,7 +125,11 @@ public class IntExprNode implements JottTree {
      */
     public String convertToPython()
     {
-        return("");
+        StringBuilder str = new StringBuilder();
+        for (JottTree node : subnodes) {
+            str.append(node.convertToPython());
+        }
+        return str.toString();
     }
 
     /**

@@ -69,7 +69,7 @@ public class FunctionCallNode implements JottTree{
      */
     public String convertToPython()
     {
-        return("");
+        return subnodes.get(0).convertToPython() + "(" + subnodes.get(1).convertToPython() + ")";
     }
 
     /**

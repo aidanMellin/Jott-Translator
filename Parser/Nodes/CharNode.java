@@ -54,7 +54,7 @@ private char_type type;
      */
     public String convertToPython()
     {
-        return("");
+        return(charStored);
     }
 
     /**

@@ -68,7 +68,10 @@ public class ParametersNode implements JottTree{
      */
     public String convertToPython()
     {
-        return("");
+        if (subnodes == null) return EMPTY_STRING;
+        StringBuilder jott_params = new StringBuilder();
+        for (JottTree node : subnodes) jott_params.append(node.convertToPython());
+        return jott_params.toString();
     }
 
     /**

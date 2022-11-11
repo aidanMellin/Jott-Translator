@@ -76,7 +76,9 @@ public class IntNode implements JottTree {
      */
     public String convertToPython()
     {
-        return("");
+        StringBuilder jott_integer = new StringBuilder();
+        for(JottTree node : subnodes) jott_integer.append(node.convertToPython());
+        return jott_integer.toString();
     }
 
     /**

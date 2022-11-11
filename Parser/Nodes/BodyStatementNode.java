@@ -66,7 +66,7 @@ public class BodyStatementNode implements JottTree {
      */
     public String convertToPython()
     {
-        return("");
+        return subnodes.get(0).convertToPython();
     }
 
     /**

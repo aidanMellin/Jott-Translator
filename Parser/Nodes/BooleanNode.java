@@ -59,7 +59,8 @@ public class BooleanNode implements JottTree {
      */
     public String convertToPython()
     {
-        return("");
+        if (Objects.equals(this.token.getToken(), JOTT_TRUE)) return "True";
+        else return "False";
     }
 
     /**

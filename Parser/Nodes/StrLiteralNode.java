@@ -58,7 +58,7 @@ public class StrLiteralNode implements JottTree {
      */
     public String convertToPython()
     {
-        return("");
+        return(QUOTE_CHAR + subnode.convertToJott() + QUOTE_CHAR);
     }
 
     /**

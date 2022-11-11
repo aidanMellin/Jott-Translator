@@ -25,7 +25,7 @@ public class ProgramNode implements JottTree { //TODO
      */
     public String convertToJott()
     {
-        return "\t".repeat(tabCount) + function_list.convertToJott();
+        return function_list.convertToJott();
     }
 
     /**
@@ -52,7 +52,7 @@ public class ProgramNode implements JottTree { //TODO
      */
     public String convertToPython()
     {
-        return("");
+        return function_list.convertToPython();
     }
 
     /**

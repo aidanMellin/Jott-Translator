@@ -59,7 +59,7 @@ public class VariableDeclarationNode implements JottTree{
      */
     public String convertToPython()
     {
-        return("");
+        return subnodes.get(1).convertToPython();
     }
 
     /**

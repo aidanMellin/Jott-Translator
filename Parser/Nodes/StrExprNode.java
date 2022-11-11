@@ -68,7 +68,7 @@ public class StrExprNode implements JottTree {
      */
     public String convertToPython()
     {
-        return("");
+        return subnode.convertToPython();
     }
 
     /**

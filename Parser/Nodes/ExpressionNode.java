@@ -116,7 +116,7 @@ public class ExpressionNode implements JottTree{
      */
     public String convertToPython()
     {
-        return("");
+        return subnode.convertToPython();
     }
 
     /**

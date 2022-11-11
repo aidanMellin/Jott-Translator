@@ -146,7 +146,15 @@ public class BodyNode implements JottTree {
      */
     public String convertToPython()
     {
-        return("");
+        if(subnodes.size() == 1){
+            return(subnodes.get(0).convertToPython());
+        }
+        else if(subnodes.size() == 2){
+            return(subnodes.get(0).convertToPython() + subnodes.get(1).convertToPython());
+        }
+        else {
+            return "";
+        }
     }
 
     /**

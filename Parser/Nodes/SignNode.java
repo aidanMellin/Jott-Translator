@@ -53,7 +53,8 @@ public class SignNode implements JottTree {
      */
     public String convertToPython()
     {
-        return("");
+        if (token == null) return EMPTY_STRING;
+        else return token.getToken();
     }
 
     /**

@@ -102,7 +102,10 @@ public class ElseIfListNode implements JottTree{
      */
     public String convertToPython()
     {
-        return("");
+        if (subnodes == null) return EMPTY_STRING;
+        else return "elif " + subnodes.get(0).convertToPython() + ":\n" +
+                subnodes.get(1).convertToPython() +
+                "\n\t".repeat(tabCount) + subnodes.get(2).convertToPython();
     }
 
     /**

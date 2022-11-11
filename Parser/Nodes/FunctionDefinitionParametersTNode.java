@@ -76,7 +76,8 @@ public class FunctionDefinitionParametersTNode implements JottTree {
      */
     public String convertToPython()
     {
-        return("");
+        if (subnodes == null) return EMPTY_STRING;
+        return ", " + subnodes.get(0).convertToPython() + subnodes.get(2).convertToPython();
     }
 
     /**

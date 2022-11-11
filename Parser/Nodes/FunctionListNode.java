@@ -56,7 +56,7 @@ public class FunctionListNode implements JottTree { //TODO
             return("");
         }
         else {
-            return "\t".repeat(tabCount) + function_def.convertToJott() + function_list.convertToJott();
+            return function_def.convertToJott() + function_list.convertToJott();
         }
     }
 
@@ -84,7 +84,12 @@ public class FunctionListNode implements JottTree { //TODO
      */
     public String convertToPython()
     {
-        return("");
+        if(function_def == null) {
+            return("");
+        }
+        else {
+            return function_def.convertToPython() + function_list.convertToPython();
+        }
     }
 
     /**

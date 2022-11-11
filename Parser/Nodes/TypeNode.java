@@ -65,7 +65,10 @@ public class TypeNode implements JottTree{
      */
     public String convertToPython()
     {
-        return("");
+        if (Objects.equals(token.getToken(), JOTT_BOOLEAN)) return "BOOLEAN";
+        else if (Objects.equals(token.getToken(), JOTT_DOUBLE)) return "DOUBLE";
+        else if (Objects.equals(token.getToken(), JOTT_INTEGER)) return "INTEGER";
+        else return "String";
     }
 
     /**

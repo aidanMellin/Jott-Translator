@@ -77,7 +77,9 @@ public class ElseNode implements JottTree{
      */
     public String convertToPython()
     {
-        return("");
+        if (body == null) return EMPTY_STRING;
+        else return "else" + ":\n" +
+                body.convertToPython() + "\n";
     }
 
     /**

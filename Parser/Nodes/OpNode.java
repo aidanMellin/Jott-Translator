@@ -52,7 +52,7 @@ public class OpNode implements JottTree { //TODO
      */
     public String convertToPython()
     {
-        return("");
+        return token.getToken();
     }
 
     /**

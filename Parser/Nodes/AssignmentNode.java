@@ -248,7 +248,9 @@ public class AssignmentNode implements JottTree { //TODO
      */
     public String convertToPython()
     {
-        return("");
+        return subnodes.get(0).convertToJott() + " " +
+                EQ_CHAR + " " +
+                subnodes.get(1).convertToJott();
     }
 
     /**

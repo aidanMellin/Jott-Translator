@@ -51,7 +51,7 @@ public class RelOpNode implements JottTree {
      */
     public String convertToPython()
     {
-        return("");
+        return(token.getToken());
     }
 
     /**

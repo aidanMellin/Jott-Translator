@@ -170,7 +170,11 @@ public class BoolExprNode implements JottTree { //TODO
      */
     public String convertToPython()
     {
-        return("");
+        StringBuilder str = new StringBuilder();
+        for (JottTree node : subnodes) {
+            str.append(node.convertToPython());
+        }
+        return str.toString();
     }
 
     /**

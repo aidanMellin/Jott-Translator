@@ -77,7 +77,12 @@ public class DoubleNode implements JottTree {
      */
     public String convertToPython()
     {
-        return("");
+        StringBuilder jott_integer = new StringBuilder();
+        for(int i=0; i<subnodes.size(); i++) {
+            if (i-1 == PERIOD_PLACE) jott_integer.append(PERIOD_CHAR);
+            jott_integer.append(subnodes.get(i).convertToPython());
+        }
+        return jott_integer.toString();
     }
 
     /**
