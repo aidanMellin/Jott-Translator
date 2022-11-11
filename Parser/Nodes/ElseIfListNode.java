@@ -55,7 +55,7 @@ public class ElseIfListNode implements JottTree{
                         CreateSyntaxError("Error: empty token array", body.get(body.size() - 1));
                     if (this.tokens.get(0).getTokenType() == TokenType.R_BRACE) b_count--;
                 }
-                subnodes.add(new BodyNode(body, tabCount));
+                subnodes.add(new BodyNode(body, tabCount + 1));
                 if (this.tokens.get(0).getTokenType() != TokenType.R_BRACE)
                     CreateSyntaxError("Unexpected Token - Expected '}'", this.tokens.get(0));
                 this.tokens.remove(0);
@@ -74,7 +74,7 @@ public class ElseIfListNode implements JottTree{
     {
         if (subnodes == null) return EMPTY_STRING;
         else return JOTT_ELSEIF + LBRACKET_CHAR + subnodes.get(0).convertToJott() + RBRACKET_CHAR + LBRACE_CHAR + "\n" +
-                subnodes.get(1).convertToJott() + "\n" +
+                subnodes.get(1).convertToJott() +
                 "\t".repeat(tabCount) + RBRACE_CHAR + subnodes.get(2).convertToJott();
     }
 

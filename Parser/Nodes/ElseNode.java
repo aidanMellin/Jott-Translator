@@ -34,7 +34,7 @@ public class ElseNode implements JottTree{
                 bodyTokens.remove(0);
                 bodyTokens.remove(0);
                 bodyTokens.remove(bodyTokens.size() - 1);
-                body = new BodyNode(bodyTokens, tabCount);
+                body = new BodyNode(bodyTokens, tabCount + 1);
             }
         } catch (Exception e) {
             throw new RuntimeException();
@@ -49,7 +49,7 @@ public class ElseNode implements JottTree{
     {
         if (body == null) return EMPTY_STRING;
         else return JOTT_ELSE + LBRACE_CHAR + "\n" +
-                body.convertToJott() + "\n" +
+                body.convertToJott() +
                 "\t".repeat(tabCount) + RBRACE_CHAR + "\n";
     }
 

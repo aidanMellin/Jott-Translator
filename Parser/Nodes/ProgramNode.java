@@ -11,7 +11,8 @@ public class ProgramNode implements JottTree { //TODO
 
 
     public ProgramNode(ArrayList<Token> tokens, int tc){
-        try {tabCount = tc;
+        try {
+            tabCount = tc;
             function_list = new FunctionListNode(tokens, tabCount);
             // also add EOF symbol??
         } catch (Exception e) {

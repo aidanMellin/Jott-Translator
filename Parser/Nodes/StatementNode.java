@@ -12,6 +12,7 @@ public class StatementNode implements JottTree{
 
     public StatementNode(ArrayList<Token> tokens, int tc) {
         try {
+            tabCount = tc;
             this.tokens = tokens;
             assert this.tokens != null;
             if (this.tokens.get(1).getTokenType() == TokenType.L_BRACKET) {
@@ -36,7 +37,7 @@ public class StatementNode implements JottTree{
     {
         StringBuilder jott_stmt = new StringBuilder();
         for (JottTree node : subnodes) jott_stmt.append(node.convertToJott());
-        return "\t".repeat(tabCount) + jott_stmt.toString();
+        return "\t".repeat(tabCount) + jott_stmt;
     }
 
     /**

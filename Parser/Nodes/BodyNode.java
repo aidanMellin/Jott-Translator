@@ -18,7 +18,7 @@ public class BodyNode implements JottTree {
 
     public BodyNode(ArrayList<Token> tokens, int tc) {
         try {
-            tabCount = tc + 1;
+            tabCount = tc;
             this.tokens = tokens;
 
             if (this.tokens.size() == 0) {
