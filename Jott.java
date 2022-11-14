@@ -23,10 +23,10 @@ public class Jott {
                     System.exit(1);
                 }
                 String output = "";
-                if (Objects.equals(lang, "jott")) output = jottTree.convertToJott();
-                else if (Objects.equals(lang, "java")) output = jottTree.convertToJava();
-                else if (Objects.equals(lang, "c")) output = jottTree.convertToC();
-                else if (Objects.equals(lang, "python")) output = jottTree.convertToPython();
+                if (Objects.equals(lang, "jott")) output = JottTree.convertToJott(jottTokens);
+                else if (Objects.equals(lang, "java")) output = JottTree.convertToJava(jottTokens);
+                else if (Objects.equals(lang, "c")) output = JottTree.convertToC(jottTokens);
+                else if (Objects.equals(lang, "python")) output = JottTree.convertToPython(jottTokens);
                 else {
                     System.out.println("Unknown language");
                     System.exit(1);
@@ -42,11 +42,4 @@ public class Jott {
             System.exit(1);
         }
     }
-
-    public static String validateTree(String inputFile, String lang){
-        if(true){
-            return "";
-        }
-        return "bad.";
-    } 
 }
