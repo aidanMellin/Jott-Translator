@@ -19,6 +19,12 @@ public class VariableDeclarationNode implements JottTree{
             subnodes.add(new TypeNode(this.tokens.get(0), tabCount));
             subnodes.add(new IdNode(this.tokens.get(1), tabCount));
             subnodes.add(new EndStatementNode(this.tokens.get(2), tabCount));
+            symbolTable.put(subnodes.get(1).convertToJott(), new SymbolData(
+                    subnodes.get(1).convertToJott(),
+                    subnodes.get(0).convertToJott(),
+                    false,
+                    false)
+            );
         } catch (Exception e) {
             throw new RuntimeException();
         }

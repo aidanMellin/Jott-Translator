@@ -56,6 +56,11 @@ public class FunctionDefinitionNode implements JottTree {
                 CreateSyntaxError("Unexpected Token - Expected '}'", this.tokens.get(0));
             this.tokens.remove(0);
             if (this.tokens.size() != 0) CreateSyntaxError("Unexpected Tokens", this.tokens.get(0));
+            symbolTable.put(subnodes.get(0).convertToJott(), new SymbolData(
+                    subnodes.get(0).convertToJott(),
+                    subnodes.get(2).convertToJott(),
+                    (subnodes.get(0).convertToJott().equals("main")),
+                    true));
         } catch (Exception e) {
             throw new RuntimeException();
         }

@@ -15,6 +15,8 @@ public class AssignmentNode implements JottTree { //TODO
     private ArrayList<JottTree> subnodes = new ArrayList<>();
     private ArrayList<Token> tokens;
     private int tabCount;
+    private boolean isInit;
+    private String initType;
 
     public AssignmentNode(ArrayList<Token> tokens, int tc) {
         try {
@@ -22,8 +24,13 @@ public class AssignmentNode implements JottTree { //TODO
             this.tokens = tokens;
             assert this.tokens != null;
             Token last = this.tokens.get(this.tokens.size()-1);
+            isInit = this.tokens.get(0).getToken().equals("Double") ||
+                    this.tokens.get(0).getToken().equals("Integer") ||
+                    this.tokens.get(0).getToken().equals("String") ||
+                    this.tokens.get(0).getToken().equals("Boolean");
+            if (isInit) initType = this.tokens.get(0).getToken();
 
-            // Double <id> = <d_expr><end_statement>
+                // Double <id> = <d_expr><end_statement>
             if (Objects.equals(this.tokens.get(0).getToken(), JOTT_DOUBLE)) {
                 if (this.tokens.get(1).getTokenType().equals(TokenType.ID_KEYWORD)) {
                     subnodes.add(new IdNode(this.tokens.get(1), 0));
@@ -199,6 +206,13 @@ public class AssignmentNode implements JottTree { //TODO
             } else {
                 CreateSyntaxError("Unexpected Token - Expected <assignment>", this.tokens.get(0));
             }
+            if (isInit)
+                symbolTable.put(subnodes.get(0).convertToJott(), new SymbolData(
+                        subnodes.get(0).convertToJott(),
+                        initType,
+                        false,
+                        true)
+                );
         } catch (Exception e) {
             throw new RuntimeException();
         }
