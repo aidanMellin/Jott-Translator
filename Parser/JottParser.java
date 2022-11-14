@@ -32,7 +32,7 @@ public class JottParser {
     public static void main(String[] args) {
         ArrayList<Token> tokens = JottTokenizer.tokenize("Parser/phase2Tester/parserTestCases/ifstmt.jott");
         JottTree jottTree = parse(tokens);
-        String output = (jottTree != null) ? JottTree.convertToPython(tokens) : "error resulting in null";
+        String output = (jottTree != null) ? jottTree.convertToPython() : "error resulting in null";
         System.out.println(output);
     }
 }
