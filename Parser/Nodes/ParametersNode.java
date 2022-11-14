@@ -50,7 +50,10 @@ public class ParametersNode implements JottTree{
      */
     public String convertToJava()
     {
-        return("");
+        if (subnodes == null) return EMPTY_STRING;
+        StringBuilder jott_params = new StringBuilder();
+        for (JottTree node : subnodes) jott_params.append(node.convertToJava());
+        return jott_params.toString();
     }
 
     /**

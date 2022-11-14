@@ -43,7 +43,10 @@ public class StrNode implements JottTree {
      */
     public String convertToJava()
     {
-        return("");
+        StringBuilder jott_string = new StringBuilder();
+        if (Objects.equals(tokenString, EMPTY_STR)) return jott_string.toString();
+        for (JottTree node : subnodes) jott_string.append(node.convertToJava());
+        return jott_string.toString();
     }
 
     /**

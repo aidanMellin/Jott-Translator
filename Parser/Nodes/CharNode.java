@@ -21,7 +21,7 @@ private char_type type;
         tabCount = tc;
         charStored = String.valueOf(character);
     }
-     /**
+    /**
      * Will output a string of this tree in Jott
      * @return a string representing the Jott code of this tree
      */
@@ -36,7 +36,7 @@ private char_type type;
      */
     public String convertToJava()
     {
-        return("");
+        return(charStored);
     }
 
     /**

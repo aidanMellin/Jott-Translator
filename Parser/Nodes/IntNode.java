@@ -58,7 +58,9 @@ public class IntNode implements JottTree {
      */
     public String convertToJava()
     {
-        return("");
+        StringBuilder jott_integer = new StringBuilder();
+        for(JottTree node : subnodes) jott_integer.append(node.convertToJava());
+        return jott_integer.toString();
     }
 
     /**

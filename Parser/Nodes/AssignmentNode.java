@@ -230,7 +230,10 @@ public class AssignmentNode implements JottTree { //TODO
      */
     public String convertToJava()
     {
-        return("");
+        return subnodes.get(0).convertToJott() + " " + 
+            subnodes.get(1).convertToJott() + " " + 
+            EQ_CHAR + " " + 
+            subnodes.get(2).convertToJott();
     }
 
     /**

@@ -34,7 +34,7 @@ public class OpNode implements JottTree { //TODO
      */
     public String convertToJava()
     {
-        return("");
+        return token.getToken();
     }
 
     /**

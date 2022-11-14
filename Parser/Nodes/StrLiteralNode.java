@@ -40,7 +40,7 @@ public class StrLiteralNode implements JottTree {
      */
     public String convertToJava()
     {
-        return("");
+        return(QUOTE_CHAR + subnode.convertToJott() + QUOTE_CHAR);
     }
 
     /**

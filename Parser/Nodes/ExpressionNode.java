@@ -98,7 +98,7 @@ public class ExpressionNode implements JottTree{
      */
     public String convertToJava()
     {
-        return("");
+        return subnode.convertToJava();
     }
 
     /**

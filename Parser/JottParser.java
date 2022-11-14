@@ -7,10 +7,8 @@
 
 package Parser;
 import Tokenizer.*;
-import Parser.*;
 import Parser.Nodes.*;
 
-import javax.sound.midi.SysexMessage;
 import java.util.ArrayList;
 
 public class JottParser {
@@ -32,7 +30,7 @@ public class JottParser {
     public static void main(String[] args) {
         ArrayList<Token> tokens = JottTokenizer.tokenize("Parser/phase2Tester/parserTestCases/ifstmt.jott");
         JottTree jottTree = parse(tokens);
-        String output = (jottTree != null) ? jottTree.convertToPython() : "error resulting in null";
+        String output = (jottTree != null) ? jottTree.convertToJava() : "error resulting in null";
         System.out.println(output);
     }
 }

@@ -67,6 +67,7 @@ public class FunctionDefinitionNode implements JottTree {
      */
     public String convertToJott()
     {
+        //x[]:y{ stuff }
         return  "\t".repeat(tabCount) + subnodes.get(0).convertToJott() + LBRACKET_CHAR + subnodes.get(1).convertToJott() + RBRACKET_CHAR + COLON_CHAR +
                 subnodes.get(2).convertToJott() + LBRACE_CHAR + "\n" +
                 "\t".repeat(tabCount) + subnodes.get(3).convertToJott() +
@@ -80,7 +81,8 @@ public class FunctionDefinitionNode implements JottTree {
      */
     public String convertToJava()
     {
-        return("");
+        return "\t".repeat(tabCount) + "public static " + subnodes.get(0).convertToJava() + subnodes.get(1).convertToJava() +
+                subnodes.get(3).convertToJava() + "\n still need to fix this (FunctionCallDefinitionNode.java)";
     }
 
     /**

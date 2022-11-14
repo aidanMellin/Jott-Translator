@@ -41,7 +41,7 @@ public class VariableDeclarationNode implements JottTree{
      */
     public String convertToJava()
     {
-        return("");
+        return subnodes.get(1).convertToJava();
     }
 
     /**

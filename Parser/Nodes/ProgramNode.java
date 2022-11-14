@@ -34,7 +34,7 @@ public class ProgramNode implements JottTree { //TODO
      */
     public String convertToJava()
     {
-        return("");
+        return function_list.convertToJava();
     }
 
     /**

@@ -48,7 +48,7 @@ public class BodyStatementNode implements JottTree {
      */
     public String convertToJava()
     {
-        return("");
+        return subnodes.get(0).convertToJava();
     }
 
     /**

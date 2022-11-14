@@ -35,7 +35,8 @@ public class SignNode implements JottTree {
      */
     public String convertToJava()
     {
-        return("");
+        if (token == null) return EMPTY_STRING;
+        else return token.getToken();
     }
 
     /**

@@ -33,7 +33,7 @@ public class RelOpNode implements JottTree {
      */
     public String convertToJava()
     {
-        return("");
+        return(token.getToken());
     }
 
     /**

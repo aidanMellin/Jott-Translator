@@ -128,7 +128,15 @@ public class BodyNode implements JottTree {
      */
     public String convertToJava()
     {
-        return("");
+        if(subnodes.size() == 1){
+            return(subnodes.get(0).convertToJava());
+        }
+        else if(subnodes.size() == 2){
+            return(subnodes.get(0).convertToJava() + subnodes.get(1).convertToJava());
+        }
+        else {
+            return "";
+        }
     }
 
     /**

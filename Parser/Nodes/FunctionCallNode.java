@@ -51,7 +51,7 @@ public class FunctionCallNode implements JottTree{
      */
     public String convertToJava()
     {
-        return("");
+        return subnodes.get(0).convertToJava() + "(" + subnodes.get(1).convertToJava() + ")";
     }
 
     /**

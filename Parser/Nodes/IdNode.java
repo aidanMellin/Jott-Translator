@@ -40,7 +40,9 @@ public class IdNode implements JottTree {
      */
     public String convertToJava()
     {
-        return("");
+        StringBuilder jott_id = new StringBuilder();
+        for (JottTree node : subnodes) jott_id.append(node.convertToJava());
+        return jott_id.toString();
     }
 
     /**

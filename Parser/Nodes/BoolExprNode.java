@@ -152,7 +152,11 @@ public class BoolExprNode implements JottTree { //TODO
      */
     public String convertToJava()
     {
-        return("");
+        StringBuilder str = new StringBuilder();
+        for (JottTree node : subnodes) {
+            str.append(node.convertToJava());
+        }
+        return str.toString();
     }
 
     /**

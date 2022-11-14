@@ -66,7 +66,12 @@ public class FunctionListNode implements JottTree { //TODO
      */
     public String convertToJava()
     {
-        return("");
+        if(function_def == null) {
+            return("");
+        }
+        else {
+            return function_def.convertToJava() + function_list.convertToJava();
+        }
     }
 
     /**
