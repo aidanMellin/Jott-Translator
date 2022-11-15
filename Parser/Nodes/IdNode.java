@@ -6,6 +6,10 @@ import java.util.ArrayList;
 
 public class IdNode implements JottTree {
 
+    private String JOTT_PRINT = "print";
+    private String JAVA_PRINT = "System.out.println";
+    private String C_PRINT = "printf";
+
     private Token idToken;
     private ArrayList<JottTree> subnodes = new ArrayList<>();
     private String idStored;
@@ -40,9 +44,12 @@ public class IdNode implements JottTree {
      */
     public String convertToJava()
     {
-        StringBuilder jott_id = new StringBuilder();
-        for (JottTree node : subnodes) jott_id.append(node.convertToJava());
-        return jott_id.toString();
+        StringBuilder java_id = new StringBuilder();
+        for (JottTree node : subnodes) java_id.append(node.convertToJava());
+        if(java_id.toString().equals(JOTT_PRINT)){
+            return JAVA_PRINT;
+        }
+        return java_id.toString();
     }
 
     /**
@@ -51,7 +58,12 @@ public class IdNode implements JottTree {
      */
     public String convertToC()
     {
-        return("");
+        StringBuilder c_id = new StringBuilder();
+        for (JottTree node : subnodes) c_id.append(node.convertToJava());
+        if(c_id.toString().equals(JOTT_PRINT)){
+            return C_PRINT;
+        }
+        return c_id.toString();
     }
 
     /**

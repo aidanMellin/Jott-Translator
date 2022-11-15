@@ -258,10 +258,10 @@ public class AssignmentNode implements JottTree { //TODO
             case JOTT_INTEGER -> java_asmt.append(JAVA_INTEGER + " ");
             case JOTT_STRING -> java_asmt.append(JAVA_STRING + " ");
         }
-        java_asmt.append(subnodes.get(0).convertToJott()).append(" ");
+        java_asmt.append(subnodes.get(0).convertToJava()).append(" ");
         java_asmt.append(EQ_CHAR + " ");
-        java_asmt.append(subnodes.get(1).convertToJott());
-        java_asmt.append(subnodes.get(2).convertToJott());
+        java_asmt.append(subnodes.get(1).convertToJava());
+        java_asmt.append(subnodes.get(2).convertToJava());
         return java_asmt.toString();
     }
 
@@ -280,9 +280,10 @@ public class AssignmentNode implements JottTree { //TODO
      */
     public String convertToPython()
     {
-        return subnodes.get(0).convertToJott() + " " +
+        return subnodes.get(0).convertToPython() + " " +
                 EQ_CHAR + " " +
-                subnodes.get(1).convertToJott() + subnodes.get(2).convertToPython();
+                subnodes.get(1).convertToPython() +
+                subnodes.get(2).convertToPython();
     }
 
     /**

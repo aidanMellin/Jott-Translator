@@ -10,6 +10,8 @@ public class BooleanNode implements JottTree {
     private final String ERROR_MSG = "Unexpected Token - Expected True or False";
     private final String JOTT_TRUE = "True";
     private final String JOTT_FALSE = "False";
+    private final String JAVA_TRUE = "false";
+    private final String JAVA_FALSE = "false";
     private final Token token;
     private int tabCount;
 
@@ -41,8 +43,8 @@ public class BooleanNode implements JottTree {
      */
     public String convertToJava()
     {
-        if (Objects.equals(this.token.getToken(), JOTT_TRUE)) return "true";
-        else return "false";
+        if (Objects.equals(this.token.getToken(), JOTT_TRUE)) return JAVA_TRUE;
+        else return JAVA_FALSE;
     }
 
     /**

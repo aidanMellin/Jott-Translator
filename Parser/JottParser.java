@@ -28,8 +28,8 @@ public class JottParser {
     }
 
     public static void main(String[] args) {
-        //ArrayList<Token> tokens = JottTokenizer.tokenize("Parser/phase2Tester/parserTestCases/providedExample1.jott");
-        ArrayList<Token> tokens = JottTokenizer.tokenize("Parser/phase2Tester/parserTestCases/ifstmt.jott");
+        ArrayList<Token> tokens = JottTokenizer.tokenize("Parser/phase3TestCases/helloWorld.jott");
+        //ArrayList<Token> tokens = JottTokenizer.tokenize("Parser/phase2Tester/parserTestCases/validLoop.jott");
         JottTree jottTree = parse(tokens);
         String output = (jottTree != null) ? jottTree.convertToJava() : "error resulting in null";
         System.out.println(output);

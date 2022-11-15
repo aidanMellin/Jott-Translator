@@ -8,6 +8,8 @@ public class FunctionCallNode implements JottTree{
 
     private final String RBRACKET_STRING = "]";
     private final String LBRACKET_STRING = "[";
+    private final String RPARAN_STRING = ")";
+    private final String LPARAN_STRING = "(";
     private final ArrayList<JottTree> subnodes = new ArrayList<>();
     private final ArrayList<Token> tokens;
     private int tabCount;
@@ -51,7 +53,10 @@ public class FunctionCallNode implements JottTree{
      */
     public String convertToJava()
     {
-        return subnodes.get(0).convertToJava() + "(" + subnodes.get(1).convertToJava() + ")";
+        return subnodes.get(0).convertToJava() +
+                LPARAN_STRING +
+                subnodes.get(1).convertToJava() +
+                RPARAN_STRING;
     }
 
     /**
@@ -60,7 +65,10 @@ public class FunctionCallNode implements JottTree{
      */
     public String convertToC()
     {
-        return("");
+        return subnodes.get(0).convertToC() +
+                LPARAN_STRING +
+                subnodes.get(1).convertToC() +
+                RPARAN_STRING;
     }
 
     /**
@@ -69,7 +77,10 @@ public class FunctionCallNode implements JottTree{
      */
     public String convertToPython()
     {
-        return subnodes.get(0).convertToPython() + "(" + subnodes.get(1).convertToPython() + ")";
+        return subnodes.get(0).convertToPython() +
+                LPARAN_STRING +
+                subnodes.get(1).convertToPython() +
+                RPARAN_STRING;
     }
 
     /**
