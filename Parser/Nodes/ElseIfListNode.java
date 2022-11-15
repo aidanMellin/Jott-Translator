@@ -85,9 +85,9 @@ public class ElseIfListNode implements JottTree{
     public String convertToJava()
     {
         if (subnodes == null) return EMPTY_STRING;
-        else return "}else if(" + subnodes.get(0).convertToPython() + "){\n" +
-                subnodes.get(1).convertToPython() +
-                ";\n\t".repeat(tabCount) + subnodes.get(2).convertToPython()+ "\n"+"\t".repeat(tabCount)+"}";
+        else return "}else if(" + subnodes.get(0).convertToJava() + "){\n" +
+                subnodes.get(1).convertToJava() +
+                ";\n\t".repeat(tabCount) + subnodes.get(2).convertToJava()+ "\n"+"\t".repeat(tabCount)+"}";
     }
 
     /**
@@ -96,7 +96,21 @@ public class ElseIfListNode implements JottTree{
      */
     public String convertToC()
     {
-        return("");
+        String C_Code;
+        if(subnodes == null){
+            return EMPTY_STRING;
+        }
+
+        C_Code = "else if(";
+        C_Code += subnodes.get(0).convertToC();
+        C_Code += "){\n";
+        C_Code += subnodes.get(1).convertToC();
+        C_Code += "\n" + "\t".repeat(tabCount);
+        C_Code += subnodes.get(2).convertToC();
+        C_Code += "\n" + "\t".repeat(tabCount) + "}";
+
+        return C_Code;
+
     }
 
     /**
