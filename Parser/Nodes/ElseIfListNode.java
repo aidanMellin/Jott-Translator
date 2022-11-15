@@ -124,7 +124,7 @@ public class ElseIfListNode implements JottTree{
         if (subnodes == null) return EMPTY_STRING;
         else return "elif " + subnodes.get(0).convertToPython() + ":\n" +
                 subnodes.get(1).convertToPython() +
-                "\n\t".repeat(tabCount) + subnodes.get(2).convertToPython();
+                "\t".repeat(tabCount) + subnodes.get(2).convertToPython();
     }
 
     /**

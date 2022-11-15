@@ -267,7 +267,7 @@ public class AssignmentNode implements JottTree { //TODO
     {
         return subnodes.get(0).convertToJott() + " " +
                 EQ_CHAR + " " +
-                subnodes.get(1).convertToJott();
+                subnodes.get(1).convertToJott() + subnodes.get(2).convertToPython();
     }
 
     /**
