@@ -7,11 +7,13 @@ import java.util.Objects;
 
 public class IfStatementNode implements JottTree{
 
-    private final String JOTT_IF = "if";
+    private final String IF = "if";
     private final String LBRACKET_CHAR = "[";
     private final String RBRACKET_CHAR = "]";
     private final String LBRACE_CHAR = "{";
     private final String RBRACE_CHAR = "}";
+    private final String LPARAN_CHAR = "(";
+    private final String RPARAN_CHAR = ")";
     private final String ELSE_STRING = "else";
     private final String ELSEIF_STRING = "elseif";
 
@@ -27,7 +29,7 @@ public class IfStatementNode implements JottTree{
             else {
                 // if
                 assert this.tokens.get(0).getTokenType() == TokenType.ID_KEYWORD;
-                assert this.tokens.get(0).getToken() == JOTT_IF;
+                assert this.tokens.get(0).getToken() == IF;
                 this.tokens.remove(0);
                 // [
                 assert this.tokens.get(0).getTokenType() == TokenType.L_BRACKET;
@@ -77,7 +79,7 @@ public class IfStatementNode implements JottTree{
      */
     public String convertToJott()
     {
-        return "\t".repeat(tabCount) + JOTT_IF + LBRACKET_CHAR + subnodes.get(0).convertToJott() + RBRACKET_CHAR + LBRACE_CHAR + "\n" +
+        return "\t".repeat(tabCount) + IF + LBRACKET_CHAR + subnodes.get(0).convertToJott() + RBRACKET_CHAR + LBRACE_CHAR + "\n" +
                 subnodes.get(1).convertToJott() +
                 "\t".repeat(tabCount) + RBRACE_CHAR + subnodes.get(2).convertToJott() + subnodes.get(3).convertToJott();
     }
@@ -88,9 +90,9 @@ public class IfStatementNode implements JottTree{
      */
     public String convertToJava()
     {
-        return "\t".repeat(tabCount) + "if(" + subnodes.get(0).convertToJava() + "){\n" +
+        return "\t".repeat(tabCount) + IF + LPARAN_CHAR + subnodes.get(0).convertToJava() + RPARAN_CHAR + LBRACE_CHAR + "\n" +
                 subnodes.get(1).convertToJava() +
-                ";\n\t".repeat(tabCount) + subnodes.get(2).convertToJava() + subnodes.get(3).convertToJava()+"\n";
+                "\t".repeat(tabCount) + RBRACE_CHAR + subnodes.get(2).convertToJava() + subnodes.get(3).convertToJava();
     }
 
     /**

@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class ElseNode implements JottTree{
 
-    private final String JOTT_ELSE = "else";
+    private final String ELSE = "else";
     private final String LBRACE_CHAR = "{";
     private JottTree body;
     private final String RBRACE_CHAR = "}";
@@ -48,7 +48,7 @@ public class ElseNode implements JottTree{
     public String convertToJott()
     {
         if (body == null) return EMPTY_STRING;
-        else return JOTT_ELSE + LBRACE_CHAR + "\n" +
+        else return ELSE + LBRACE_CHAR + "\n" +
                 body.convertToJott() +
                 "\t".repeat(tabCount) + RBRACE_CHAR + "\n";
     }
@@ -60,8 +60,9 @@ public class ElseNode implements JottTree{
     public String convertToJava()
     {
         if (body == null) return EMPTY_STRING;
-        else return "else{\n" +
-                body.convertToJava() + ";\n"+"\t".repeat(tabCount)+"}";
+        else return ELSE + LBRACE_CHAR + "\n" +
+                body.convertToJava() +
+                "\t".repeat(tabCount)+ RBRACE_CHAR + "\n";
     }
 
     /**
