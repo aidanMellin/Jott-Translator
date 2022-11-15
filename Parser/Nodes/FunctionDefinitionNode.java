@@ -86,8 +86,8 @@ public class FunctionDefinitionNode implements JottTree {
      */
     public String convertToJava()
     {
-        return "\t".repeat(tabCount) + "public static " + subnodes.get(0).convertToJava() + subnodes.get(1).convertToJava() +
-                subnodes.get(3).convertToJava() + "\n still need to fix this (FunctionCallDefinitionNode.java)";
+        return "\t".repeat(tabCount) + "public static void " + subnodes.get(0).convertToJava() + "(){\n" + subnodes.get(1).convertToJava() +
+                subnodes.get(3).convertToJava() + "\n" + "\t".repeat(tabCount)+"}";
     }
 
     /**

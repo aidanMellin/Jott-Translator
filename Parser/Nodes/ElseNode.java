@@ -60,8 +60,8 @@ public class ElseNode implements JottTree{
     public String convertToJava()
     {
         if (body == null) return EMPTY_STRING;
-        else return "else" + "{\n" +
-                body.convertToJava() + "\n}";
+        else return "else{\n" +
+                body.convertToJava() + "\n"+"\t".repeat(tabCount)+"}";
     }
 
     /**
