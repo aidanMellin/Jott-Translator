@@ -99,7 +99,16 @@ public class IfStatementNode implements JottTree{
      */
     public String convertToC()
     {
-        return("");
+        String C_Code;
+        C_Code = "\t".repeat(tabCount) + "if(";
+        C_Code += subnodes.get(0).convertToC();
+        C_Code += ") {\n";
+        C_Code += subnodes.get(1).convertToC();
+        C_Code += "\t".repeat(tabCount) + "}";
+        C_Code += subnodes.get(2).convertToC() + subnodes.get(3).convertToC() + "\n";
+
+        return(C_Code);
+
     }
 
     /**
