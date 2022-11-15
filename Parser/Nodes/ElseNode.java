@@ -61,7 +61,7 @@ public class ElseNode implements JottTree{
     {
         if (body == null) return EMPTY_STRING;
         else return "else{\n" +
-                body.convertToJava() + "\n"+"\t".repeat(tabCount)+"}";
+                body.convertToJava() + ";\n"+"\t".repeat(tabCount)+"}";
     }
 
     /**
