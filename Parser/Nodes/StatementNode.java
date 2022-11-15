@@ -46,7 +46,9 @@ public class StatementNode implements JottTree{
      */
     public String convertToJava()
     {
-        return "\t".repeat(tabCount) + subnodes.get(0).convertToJava();
+        StringBuilder java_stmt = new StringBuilder();
+        for (JottTree node : subnodes) java_stmt.append(node.convertToJava());
+        return "\t".repeat(tabCount) + java_stmt;
     }
 
     /**
@@ -64,7 +66,9 @@ public class StatementNode implements JottTree{
      */
     public String convertToPython()
     {
-        return "\t".repeat(tabCount) + subnodes.get(0).convertToPython();
+        StringBuilder python_stmt = new StringBuilder();
+        for (JottTree node : subnodes) python_stmt.append(node.convertToPython());
+        return "\t".repeat(tabCount) + python_stmt;
     }
 
     /**

@@ -4,7 +4,9 @@ import Parser.*;
 
 public class EndStatementNode implements JottTree {
 
-    private final String JOTT_END = ";\n";
+    private final String JOTT_JAVA_C_END = ";\n";
+    private final String PYTHON_END = "\n";
+
     private Token token;
     private int tabCount;
 
@@ -25,7 +27,7 @@ public class EndStatementNode implements JottTree {
      */
     public String convertToJott()
     {
-        return(JOTT_END);
+        return(JOTT_JAVA_C_END);
     }
 
     /**
@@ -34,7 +36,7 @@ public class EndStatementNode implements JottTree {
      */
     public String convertToJava()
     {
-        return("");
+        return(JOTT_JAVA_C_END);
     }
 
     /**
@@ -43,7 +45,7 @@ public class EndStatementNode implements JottTree {
      */
     public String convertToC()
     {
-        return("");
+        return(JOTT_JAVA_C_END);
     }
 
     /**
@@ -52,7 +54,7 @@ public class EndStatementNode implements JottTree {
      */
     public String convertToPython()
     {
-        return ("");
+        return (PYTHON_END);
     }
 
     /**
