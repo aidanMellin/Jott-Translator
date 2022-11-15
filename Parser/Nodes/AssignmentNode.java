@@ -11,6 +11,12 @@ public class AssignmentNode implements JottTree { //TODO
     private final String JOTT_INTEGER = "Integer";
     private final String JOTT_STRING = "String";
     private final String JOTT_BOOLEAN = "Boolean";
+
+    private final String JAVA_DOUBLE = "double";
+    private final String JAVA_INTEGER = "int";
+    private final String JAVA_STRING = "String";
+    private final String JAVA_BOOLEAN = "boolean";
+
     private final String EQ_CHAR = "=";
     private ArrayList<JottTree> subnodes = new ArrayList<>();
     private ArrayList<Token> tokens;
@@ -20,6 +26,7 @@ public class AssignmentNode implements JottTree { //TODO
 
     public AssignmentNode(ArrayList<Token> tokens, int tc) {
         try {
+
             tabCount = tc;
             this.tokens = tokens;
             assert this.tokens != null;
@@ -244,10 +251,18 @@ public class AssignmentNode implements JottTree { //TODO
      */
     public String convertToJava()
     {
-        return subnodes.get(0).convertToJott() + " " + 
-            subnodes.get(1).convertToJott() + " " + 
-            EQ_CHAR + " " + 
-            subnodes.get(2).convertToJott();
+        StringBuilder java_asmt = new StringBuilder();
+        switch (tokens.get(0).getToken()) {
+            case JOTT_DOUBLE -> java_asmt.append(JAVA_DOUBLE + " ");
+            case JOTT_BOOLEAN -> java_asmt.append(JAVA_BOOLEAN + " ");
+            case JOTT_INTEGER -> java_asmt.append(JAVA_INTEGER + " ");
+            case JOTT_STRING -> java_asmt.append(JAVA_STRING + " ");
+        }
+        java_asmt.append(subnodes.get(0).convertToJott()).append(" ");
+        java_asmt.append(EQ_CHAR + " ");
+        java_asmt.append(subnodes.get(1).convertToJott());
+        java_asmt.append(subnodes.get(2).convertToJott());
+        return java_asmt.toString();
     }
 
     /**
