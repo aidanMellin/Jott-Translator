@@ -70,7 +70,16 @@ public class ElseNode implements JottTree{
      */
     public String convertToC()
     {
-        return("");
+        String C_Code;
+        if(body == null){
+            return EMPTY_STRING;
+        }
+
+        C_Code = "else{\n";
+        C_Code += body.convertToC();
+        C_Code += "\t".repeat(tabCount) + "}\n";
+
+        return C_Code;
     }
 
     /**
