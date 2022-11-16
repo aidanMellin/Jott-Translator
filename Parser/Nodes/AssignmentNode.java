@@ -24,13 +24,14 @@ public class AssignmentNode implements JottTree { //TODO
     private boolean isInit;
     private String initType;
     private String expr_type;
+    private Token firstToken;
 
     public AssignmentNode(ArrayList<Token> tokens, int tc) {
         try {
-
             tabCount = tc;
             this.tokens = tokens;
             assert this.tokens != null;
+            firstToken = this.tokens.get(0);
             Token last = this.tokens.get(this.tokens.size()-1);
             isInit = this.tokens.get(0).getToken().equals("Double") ||
                     this.tokens.get(0).getToken().equals("Integer") ||
@@ -309,24 +310,37 @@ public class AssignmentNode implements JottTree { //TODO
      */
     public boolean validateTree()
     {
-        if (isInit)
-            return symbolTable.get(subnodes.get(0).convertToJott()).varCount == 1 &&
-                    !symbolTable.get(subnodes.get(0).convertToJott()).IsFunction &&
-                    symbolTable.get(subnodes.get(0).convertToJott()).ReturnType.equals(expr_type) &&
-                    subnodes.get(0).validateTree() &&
+        try {
+            if (isInit) {
+                if (symbolTable.get(subnodes.get(0).convertToJott()).varCount != 1)
+                    CreateSemanticError("Variable is already initialized or instantiated", firstToken);
+                else if (symbolTable.get(subnodes.get(0).convertToJott()).IsFunction)
+                    CreateSemanticError("Variable is already declared as a function", firstToken);
+                else if (!symbolTable.get(subnodes.get(0).convertToJott()).ReturnType.equals(expr_type))
+                    CreateSemanticError("Invalid assignment: types do not match", firstToken);
+            } else {
+                if (!symbolTable.containsKey(subnodes.get(0).convertToJott()))
+                    CreateSemanticError("Variable has not been initialized", firstToken);
+                else if (symbolTable.get(subnodes.get(0).convertToJott()).IsFunction)
+                    CreateSemanticError("Invalid assignment to a function:", firstToken);
+                else if (!symbolTable.get(subnodes.get(0).convertToJott()).ReturnType.equals(expr_type))
+                    CreateSemanticError("Invalid assignment: types do not match", firstToken);
+            }
+            return subnodes.get(0).validateTree() &&
                     subnodes.get(1).validateTree() &&
                     subnodes.get(2).validateTree();
-        else
-            return symbolTable.containsKey(subnodes.get(0).convertToJott()) &&
-                    !symbolTable.get(subnodes.get(0).convertToJott()).IsFunction &&
-                    symbolTable.get(subnodes.get(0).convertToJott()).ReturnType.equals(expr_type) &&
-                    subnodes.get(0).validateTree() &&
-                    subnodes.get(1).validateTree() &&
-                    subnodes.get(2).validateTree();
+        } catch (Exception e) {
+            throw new RuntimeException();
+        }
     }
 
     public void CreateSyntaxError(String msg, Token token) throws Exception {
         System.err.println("Syntax Error:\n" + msg + "\n" + token.getFilename() + ":" + token.getLineNum());
+        throw new Exception();
+    }
+
+    public void CreateSemanticError(String msg, Token token) throws Exception {
+        System.err.println("Semantic Error:\n" + msg + "\n" + token.getFilename() + ":" + token.getLineNum());
         throw new Exception();
     }
 }
