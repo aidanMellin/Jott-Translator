@@ -16,6 +16,7 @@ public class ProgramNode implements JottTree { //TODO
             function_list = new FunctionListNode(tokens, tabCount);
             // also add EOF symbol??
         } catch (Exception e) {
+            e.printStackTrace();
             throw new RuntimeException();
         }
     }

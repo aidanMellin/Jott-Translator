@@ -71,8 +71,8 @@ public class WhileLoopNode implements JottTree{
                 subnodes.get(0).convertToJott() +
                 RBRACKET_CHAR +
                 LBRACE_CHAR + "\n" +
-                subnodes.get(1).convertToJott() + "\n" +
-                "\t".repeat(tabCount) + RBRACE_CHAR;
+                subnodes.get(1).convertToJott() +
+                "\t".repeat(tabCount) + RBRACE_CHAR + "\n";
     }
 
     /**

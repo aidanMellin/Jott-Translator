@@ -81,7 +81,7 @@ public class IfStatementNode implements JottTree{
     {
         return "\t".repeat(tabCount) + IF + LBRACKET_CHAR + subnodes.get(0).convertToJott() + RBRACKET_CHAR + LBRACE_CHAR + "\n" +
                 subnodes.get(1).convertToJott() +
-                "\t".repeat(tabCount) + RBRACE_CHAR + subnodes.get(2).convertToJott() + subnodes.get(3).convertToJott();
+                "\t".repeat(tabCount) + RBRACE_CHAR + subnodes.get(2).convertToJott() + subnodes.get(3).convertToJott() + "\n";
     }
 
     /**

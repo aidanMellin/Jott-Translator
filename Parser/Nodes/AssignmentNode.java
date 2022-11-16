@@ -47,7 +47,6 @@ public class AssignmentNode implements JottTree { //TODO
                 }
 
                 ArrayList<Token> d_expr = new ArrayList<>(this.tokens);
-                System.err.println(d_expr);
                 d_expr.remove(0); // Double
                 d_expr.remove(0); // <id>
                 if (d_expr.get(0).getToken().equals(EQ_CHAR)) {
