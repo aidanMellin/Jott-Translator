@@ -46,7 +46,7 @@ public class IntExprNode implements JottTree {
 
                 } else if (temp_token.getTokenType() == TokenType.MATH_OP) {
                     if (temp_token.getToken().equals("-")) {
-                        if (i == 0 || Tokens.get(i - 1).getTokenType() != TokenType.NUMBER) {
+                        if (i == 0 || (Tokens.get(i - 1).getTokenType() != TokenType.NUMBER && Tokens.get(i - 1).getTokenType() != TokenType.ID_KEYWORD)) {
                             ArrayList<Token> temp_token_list = new ArrayList<>();
                             temp_token_list.add(temp_token);
                             if (Tokens.get(i + 1).getTokenType() != TokenType.NUMBER) {
