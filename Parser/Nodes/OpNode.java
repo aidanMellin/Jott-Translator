@@ -43,7 +43,7 @@ public class OpNode implements JottTree { //TODO
      */
     public String convertToC()
     {
-        return("");
+        return(token.getToken());
     }
 
     /**

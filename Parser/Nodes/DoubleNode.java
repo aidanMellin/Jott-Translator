@@ -73,7 +73,16 @@ public class DoubleNode implements JottTree {
      */
     public String convertToC()
     {
-        return("");
+        String C_Code = "";
+        for(int i = 0; i < subnodes.size(); i++){
+            if(i-1 == PERIOD_PLACE){
+                C_Code += PERIOD_CHAR;
+            }
+            C_Code += subnodes.get(i);
+        }
+
+        return C_Code;
+
     }
 
     /**
