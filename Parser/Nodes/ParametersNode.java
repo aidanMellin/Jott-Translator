@@ -87,7 +87,7 @@ public class ParametersNode implements JottTree{
      */
     public boolean validateTree()
     {
-        if (subnodes == null) return symbolTable.get(function).Params.size() == cnt;
+        if (expressionNode == null) return symbolTable.get(function).Params.size() == cnt;
         else return (symbolTable.get(function).ParamsTypes.get(cnt).equals(expressionNode.expr_type)) &&
                 expressionNode.validateTree() &&
                 parametersTNode.validateTree();
