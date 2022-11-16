@@ -2,6 +2,7 @@ package Parser.Nodes;
 import Tokenizer.*;
 import Parser.*;
 
+import java.security.spec.ECField;
 import java.util.ArrayList;
 
 public class ParametersNode implements JottTree{
@@ -15,6 +16,7 @@ public class ParametersNode implements JottTree{
     private int tabCount;
     private int cnt = 0;
     private String function;
+    private Token firstToken;
 
     public ParametersNode(ArrayList<Token> tokens, int tc, String func) {
         try {
@@ -25,6 +27,7 @@ public class ParametersNode implements JottTree{
                 parametersTNode = null;
             }
             else {
+                firstToken = this.tokens.get(0);
                 ArrayList<Token> expr = new ArrayList<>();
                 int b_count = 0;
                 while ((b_count != 0 || this.tokens.get(0).getTokenType() != TokenType.COMMA) && this.tokens.size() != 0) {
@@ -87,10 +90,18 @@ public class ParametersNode implements JottTree{
      */
     public boolean validateTree()
     {
-        if (expressionNode == null) return symbolTable.get(function).Params.size() == cnt;
-        else return (symbolTable.get(function).ParamsTypes.get(cnt).equals(expressionNode.expr_type)) &&
-                expressionNode.validateTree() &&
-                parametersTNode.validateTree();
+        try {
+            if (expressionNode == null)
+                if (symbolTable.get(function).Params.size() != cnt)
+                    CreateSemanticError("Unexpected parameters for " + function, firstToken);
+                else return true;
+            else
+                if (!symbolTable.get(function).ParamsTypes.get(cnt).equals(expressionNode.expr_type))
+                    CreateSemanticError("Unexpected parameters for " + function, firstToken);
+                return expressionNode.validateTree() &&  parametersTNode.validateTree();
+        } catch (Exception e) {
+            throw new RuntimeException();
+        }
     }
 
     public void CreateSyntaxError(String msg, Token token) throws Exception{

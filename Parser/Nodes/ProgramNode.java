@@ -13,10 +13,12 @@ public class ProgramNode implements JottTree { //TODO
     private final String RBRACE_CHAR = "}";
     private final JottTree function_list;
     private int tabCount;
+    private Token firstToken;
 
     public ProgramNode(ArrayList<Token> tokens, int tc){
         try {
             tabCount = tc;
+            firstToken = tokens.get(0);
             function_list = new FunctionListNode(tokens, tabCount + 1);
             // also add EOF symbol??
         } catch (Exception e) {
@@ -67,7 +69,13 @@ public class ProgramNode implements JottTree { //TODO
      */
     public boolean validateTree()
     {
-        return symbolTable.containsKey("main") && symbolTable.get("main").IsMain && function_list.validateTree();
+        try {
+            if (!symbolTable.containsKey("main") && !symbolTable.get("main").IsMain)
+                CreateSemanticError("Missing main function from program", firstToken);
+            return function_list.validateTree();
+        } catch (Exception e) {
+            throw new RuntimeException();
+        }
     }
 
     public void CreateSyntaxError(String msg, Token token) throws Exception{

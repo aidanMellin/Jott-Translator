@@ -16,6 +16,7 @@ public class ParametersTNode implements JottTree{
     private int tabCount;
     private int cnt;
     private String function;
+    private Token firstToken;
 
     public ParametersTNode(ArrayList<Token> tokens, int tc, int c, String func) {
         try {
@@ -28,6 +29,7 @@ public class ParametersTNode implements JottTree{
                 parametersTNode = null;
             }
             else {
+                firstToken = this.tokens.get(0);
                 if (this.tokens.get(0).getTokenType() != TokenType.COMMA)
                     CreateSyntaxError("Unexpected Token - Expected ','", this.tokens.get(0));
                 this.tokens.remove(0);
@@ -94,10 +96,18 @@ public class ParametersTNode implements JottTree{
      */
     public boolean validateTree()
     {
-        if (expressionNode == null) return symbolTable.get(function).Params.size() == cnt;
-        else return (symbolTable.get(function).ParamsTypes.get(cnt).equals(expressionNode.expr_type)) &&
-                expressionNode.validateTree() &&
-                parametersTNode.validateTree();
+        try {
+            if (expressionNode == null)
+                if (symbolTable.get(function).Params.size() != cnt)
+                    CreateSemanticError("Unexpected parameters for " + function, firstToken);
+                else return true;
+            else
+            if (!symbolTable.get(function).ParamsTypes.get(cnt).equals(expressionNode.expr_type))
+                CreateSemanticError("Unexpected parameters for " + function, firstToken);
+            return expressionNode.validateTree() &&  parametersTNode.validateTree();
+        } catch (Exception e) {
+            throw new RuntimeException();
+        }
     }
 
     public void CreateSyntaxError(String msg, Token token) throws Exception{
