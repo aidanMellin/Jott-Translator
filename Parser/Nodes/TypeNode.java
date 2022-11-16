@@ -7,10 +7,17 @@ import java.util.Objects;
 public class TypeNode implements JottTree{
 
     private final Token token;
+
     private final String JOTT_INTEGER = "Integer";
     private final String JOTT_DOUBLE = "Double";
     private final String JOTT_STRING = "String";
     private final String JOTT_BOOLEAN = "Boolean";
+
+    private final String JAVA_DOUBLE = "double";
+    private final String JAVA_INTEGER = "int";
+    private final String JAVA_STRING = "String";
+    private final String JAVA_BOOLEAN = "boolean";
+
     private int tabCount;
     public TypeNode(Token token, int tc) {
         try {
@@ -47,10 +54,10 @@ public class TypeNode implements JottTree{
      */
     public String convertToJava()
     {
-        if (Objects.equals(token.getToken(), JOTT_BOOLEAN)) return "BOOLEAN";
-        else if (Objects.equals(token.getToken(), JOTT_DOUBLE)) return "DOUBLE";
-        else if (Objects.equals(token.getToken(), JOTT_INTEGER)) return "INTEGER";
-        else return "String";
+        if (Objects.equals(token.getToken(), JOTT_BOOLEAN)) return JAVA_BOOLEAN;
+        else if (Objects.equals(token.getToken(), JOTT_DOUBLE)) return JAVA_DOUBLE;
+        else if (Objects.equals(token.getToken(), JOTT_INTEGER)) return JAVA_INTEGER;
+        else return JOTT_STRING;
     }
 
     /**

@@ -6,14 +6,18 @@ import java.util.ArrayList;
 
 public class ProgramNode implements JottTree { //TODO
 
+    private final String C_CLASSES = "";
+    private final String JAVA_CLASS = "public class ";
+    private final String JAVA_FILE = "(HAVE TO GET FILE NAME)";
+    private final String LBRACE_CHAR = "{";
+    private final String RBRACE_CHAR = "}";
     private final JottTree function_list;
     private int tabCount;
-
 
     public ProgramNode(ArrayList<Token> tokens, int tc){
         try {
             tabCount = tc;
-            function_list = new FunctionListNode(tokens, tabCount);
+            function_list = new FunctionListNode(tokens, tabCount + 1);
             // also add EOF symbol??
         } catch (Exception e) {
             e.printStackTrace();
@@ -35,7 +39,7 @@ public class ProgramNode implements JottTree { //TODO
      */
     public String convertToJava()
     {
-        return function_list.convertToJava();
+        return JAVA_CLASS + JAVA_FILE + LBRACE_CHAR + "\n" + function_list.convertToJava() + RBRACE_CHAR;
     }
 
     /**

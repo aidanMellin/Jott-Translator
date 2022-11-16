@@ -91,8 +91,8 @@ public class IfStatementNode implements JottTree{
     public String convertToJava()
     {
         return "\t".repeat(tabCount) + IF + LPARAN_CHAR + subnodes.get(0).convertToJava() + RPARAN_CHAR + LBRACE_CHAR + "\n" +
-                subnodes.get(1).convertToJava() +
-                "\t".repeat(tabCount) + RBRACE_CHAR + subnodes.get(2).convertToJava() + subnodes.get(3).convertToJava();
+                subnodes.get(1).convertToJava() + "\n" +
+                "\t".repeat(tabCount) + RBRACE_CHAR + subnodes.get(2).convertToJava() + subnodes.get(3).convertToJava() + "\n";
     }
 
     /**

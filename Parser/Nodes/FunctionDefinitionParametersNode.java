@@ -7,6 +7,7 @@ import java.util.ArrayList;
 public class FunctionDefinitionParametersNode implements JottTree {
 
     private final String COLON_CHAR = ":";
+    private final String SPACE = " ";
     private ArrayList<JottTree> subnodes = new ArrayList<>();
     private final String EMPTY_STRING = "";
     private final ArrayList<Token> tokens;
@@ -56,7 +57,7 @@ public class FunctionDefinitionParametersNode implements JottTree {
     public String convertToJava()
     {
         if (subnodes == null) return EMPTY_STRING;
-        return subnodes.get(0).convertToJava() + subnodes.get(2).convertToJava();
+        return subnodes.get(1).convertToJava() + " " + subnodes.get(0).convertToJava() + subnodes.get(2).convertToJava();
     }
 
     /**

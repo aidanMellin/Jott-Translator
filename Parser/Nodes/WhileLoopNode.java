@@ -11,7 +11,9 @@ public class WhileLoopNode implements JottTree{
     private final String RBRACKET_CHAR = "]";
     private final String LBRACE_CHAR = "{";
     private final String RBRACE_CHAR = "}";
-    private final String JOTT_WHILE = "while";
+    private final String LPARAN_CHAR = "(";
+    private final String RPARAN_CHAR = ")";
+    private final String WHILE = "while";
     private final ArrayList<JottTree> subnodes = new ArrayList<>();
     private final ArrayList<Token> tokens;
     private int tabCount;
@@ -21,7 +23,7 @@ public class WhileLoopNode implements JottTree{
             tabCount = tc;
             this.tokens = tokens;
             assert this.tokens != null;
-            if (!Objects.equals(this.tokens.get(0).getToken(), JOTT_WHILE))
+            if (!Objects.equals(this.tokens.get(0).getToken(), WHILE))
                 CreateSyntaxError("Unexpected Token - Expected 'while'", this.tokens.get(0));
             this.tokens.remove(0);
             if (this.tokens.get(0).getTokenType() != TokenType.L_BRACKET)
@@ -66,7 +68,7 @@ public class WhileLoopNode implements JottTree{
      */
     public String convertToJott()
     {
-        return "\t".repeat(tabCount) + JOTT_WHILE +
+        return "\t".repeat(tabCount) + WHILE +
                 LBRACKET_CHAR +
                 subnodes.get(0).convertToJott() +
                 RBRACKET_CHAR +
@@ -81,8 +83,13 @@ public class WhileLoopNode implements JottTree{
      */
     public String convertToJava()
     {
-        return "\t".repeat(tabCount) + "while " + subnodes.get(0).convertToJava() + ":\n" +
-                subnodes.get(1).convertToJava() + "\n";
+        return "\t".repeat(tabCount) + WHILE +
+                LPARAN_CHAR +
+                subnodes.get(0).convertToJava() +
+                RPARAN_CHAR +
+                LBRACE_CHAR + "\n" +
+                subnodes.get(1).convertToJava() +
+                "\t".repeat(tabCount) + RBRACE_CHAR + "\n";
     }
 
     /**

@@ -10,6 +10,9 @@ public class FunctionDefinitionNode implements JottTree {
     private final String LBRACKET_CHAR = "[";
     private final String RBRACE_CHAR = "}";
     private final String LBRACE_CHAR = "{";
+    private final String RPARAN_CHAR = ")";
+    private final String LPARAN_CHAR = "(";
+    private final String JAVA_METHOD_STR = "public static ";
     private final String COLON_CHAR = ":";
     private ArrayList<JottTree> subnodes = new ArrayList<>();
     private final ArrayList<Token> tokens;
@@ -99,8 +102,11 @@ public class FunctionDefinitionNode implements JottTree {
      */
     public String convertToJava()
     {
-        return "\t".repeat(tabCount) + "public static void " + subnodes.get(0).convertToJava() + "(){\n" + subnodes.get(1).convertToJava() +
-                subnodes.get(3).convertToJava() + "\n" + "\t".repeat(tabCount)+"}";
+        return "\t".repeat(tabCount) + JAVA_METHOD_STR + subnodes.get(0).convertToJava() +
+                LPARAN_CHAR + subnodes.get(1).convertToJava() + RPARAN_CHAR + LBRACE_CHAR + "\n" +
+                subnodes.get(3).convertToJava()  +
+                "\t".repeat(tabCount)+ RBRACE_CHAR +
+                "\n" + "\n";
     }
 
     /**
