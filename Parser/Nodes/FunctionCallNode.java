@@ -13,11 +13,13 @@ public class FunctionCallNode implements JottTree{
     private final ArrayList<JottTree> subnodes = new ArrayList<>();
     private final ArrayList<Token> tokens;
     private int tabCount;
+    private Token firstToken;
 
     public FunctionCallNode(ArrayList<Token> tokens, int tc) {
         try {
             tabCount = tc;
             this.tokens = tokens;
+            firstToken = this.tokens.get(0);
             assert this.tokens != null;
             if (this.tokens.size() < 3) CreateSyntaxError("Invalid Function Call", this.tokens.get(0));
             if (!this.tokens.get(0).getToken().matches("[a-z][a-zA-z0-9]*"))
@@ -90,10 +92,16 @@ public class FunctionCallNode implements JottTree{
      */
     public boolean validateTree()
     {
-        return symbolTable.containsKey(subnodes.get(0).convertToJott()) &&
-                symbolTable.get(subnodes.get(0).convertToJott()).IsFunction &&
-                subnodes.get(0).validateTree() &&
-                subnodes.get(1).validateTree();
+        try {
+            if (!symbolTable.containsKey(subnodes.get(0).convertToJott()) )
+                CreateSemanticError("Unrecognized function call", firstToken);
+            else if (symbolTable.get(subnodes.get(0).convertToJott()).IsFunction)
+                CreateSemanticError("Cannot call a function that is a variable", firstToken);
+            return subnodes.get(0).validateTree() &&
+                    subnodes.get(1).validateTree();
+        } catch (Exception e) {
+            throw new RuntimeException();
+        }
     }
 
     public void CreateSyntaxError(String msg, Token token) throws Exception{

@@ -15,11 +15,13 @@ public class FunctionDefinitionNode implements JottTree {
     private final ArrayList<Token> tokens;
     private int tabCount;
     private boolean funcExists = false;
+    private Token firstToken;
 
     public FunctionDefinitionNode(ArrayList<Token> tokens, int tc) {
         try {
             tabCount = tc;
             this.tokens = tokens;
+            firstToken = this.tokens.get(0);
             if (this.tokens.get(0).getTokenType() != TokenType.ID_KEYWORD)
                 CreateSyntaxError("Unexpected Token - Expected ID", this.tokens.get(0));
             subnodes.add(new IdNode(this.tokens.remove(0), tabCount));
@@ -127,19 +129,23 @@ public class FunctionDefinitionNode implements JottTree {
      */
     public boolean validateTree()
     {
-        if (subnodes.get(0).convertToJott().equals("main"))
-            return funcExists &&
-                    symbolTable.get("main").ReturnType.equals("Void") &&
-                    subnodes.get(0).validateTree() &&
+        try {
+            if (subnodes.get(0).convertToJott().equals("main")) {
+                if (!symbolTable.get("main").ReturnType.equals("Void"))
+                    CreateSemanticError("Main function is not type Void", firstToken);
+                else if (funcExists)
+                    CreateSemanticError("Function already exists", firstToken);
+            } else {
+                if (funcExists)
+                    CreateSemanticError("Function already exists", firstToken);
+            }
+            return subnodes.get(0).validateTree() &&
                     subnodes.get(1).validateTree() &&
                     subnodes.get(2).validateTree() &&
                     subnodes.get(3).validateTree();
-        else
-            return funcExists &&
-                    subnodes.get(0).validateTree() &&
-                    subnodes.get(1).validateTree() &&
-                    subnodes.get(2).validateTree() &&
-                    subnodes.get(3).validateTree();
+        } catch (Exception e) {
+            throw new RuntimeException();
+        }
     }
 
     public void CreateSyntaxError(String msg, Token token) throws Exception{

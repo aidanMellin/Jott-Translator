@@ -12,11 +12,13 @@ public class ExpressionNode implements JottTree{
     private int tabCount;
     private boolean isVar = false;
     public String expr_type;
+    private Token firstToken;
 
     public ExpressionNode(ArrayList<Token> tokens, int tc) {
         try {
             tabCount = tc;
             this.tokens = tokens;
+            firstToken = this.tokens.get(0);
             this.subnode = null;
 
             // <b_expr>
@@ -134,8 +136,14 @@ public class ExpressionNode implements JottTree{
      */
     public boolean validateTree()
     {
-        if (isVar) return symbolTable.containsKey(subnode.convertToJott()) && subnode.validateTree();
-        else return subnode.validateTree();
+        try {
+            if (isVar)
+                if (!symbolTable.containsKey(subnode.convertToJott()))
+                    CreateSemanticError("Unrecognized or undeclared variable or function", firstToken);
+            return subnode.validateTree();
+        } catch (Exception e) {
+            throw new RuntimeException();
+        }
     }
 
     public void CreateSyntaxError(String msg, Token token) throws Exception{
