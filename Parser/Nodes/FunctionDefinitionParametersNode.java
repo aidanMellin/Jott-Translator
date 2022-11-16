@@ -12,7 +12,7 @@ public class FunctionDefinitionParametersNode implements JottTree {
     private final ArrayList<Token> tokens;
     private int tabCount;
 
-    public FunctionDefinitionParametersNode(ArrayList<Token> tokens, int tc) {
+    public FunctionDefinitionParametersNode(ArrayList<Token> tokens, int tc, String func) {
         try {
             tabCount = tc;
             this.tokens = tokens;
@@ -21,13 +21,15 @@ public class FunctionDefinitionParametersNode implements JottTree {
                 if (this.tokens.get(0).getTokenType() != TokenType.ID_KEYWORD)
                     CreateSyntaxError("Unexpected Token - Expected ID", this.tokens.get(0));
                 subnodes.add(new IdNode(this.tokens.remove(0), tabCount));
+                symbolTable.get(func).Params.add(subnodes.get(0).convertToJott());
                 if (this.tokens.get(0).getTokenType() != TokenType.COLON)
                     CreateSyntaxError("Unexpected Token - Expected ':'", this.tokens.get(0));
                 this.tokens.remove(0);
                 if (this.tokens.get(0).getTokenType() != TokenType.ID_KEYWORD)
                     CreateSyntaxError("Unexpected Token - Expected ID", this.tokens.get(0));
                 subnodes.add(new TypeNode(this.tokens.remove(0), tabCount));
-                subnodes.add(new FunctionDefinitionParametersTNode(this.tokens, tabCount));
+                symbolTable.get(func).ParamsTypes.add(subnodes.get(0).convertToJott());
+                subnodes.add(new FunctionDefinitionParametersTNode(this.tokens, tabCount, func));
             }
         } catch (Exception e) {
             throw new RuntimeException();
@@ -83,7 +85,11 @@ public class FunctionDefinitionParametersNode implements JottTree {
      */
     public boolean validateTree()
     {
-        return(false);
+        if (subnodes == null) return true;
+        else return !symbolTable.containsKey(subnodes.get(0).convertToJott()) &&
+                subnodes.get(0).validateTree() &&
+                subnodes.get(1).validateTree() &&
+                subnodes.get(2).validateTree();
     }
 
     public void CreateSyntaxError(String msg, Token token) throws Exception{

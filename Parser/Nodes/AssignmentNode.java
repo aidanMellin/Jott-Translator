@@ -218,7 +218,10 @@ public class AssignmentNode implements JottTree { //TODO
                         subnodes.get(0).convertToJott(),
                         initType,
                         false,
-                        true)
+                        true,
+                        false,
+                        null,
+                        null)
                 );
         } catch (Exception e) {
             throw new RuntimeException();
@@ -293,7 +296,17 @@ public class AssignmentNode implements JottTree { //TODO
      */
     public boolean validateTree()
     {
-        return(false);
+        if (isInit)
+            return (!symbolTable.containsKey(subnodes.get(0).convertToJott()) || !symbolTable.get(subnodes.get(0).convertToJott()).IsFunction) &&
+                    subnodes.get(0).validateTree() &&
+                    subnodes.get(1).validateTree() &&
+                    subnodes.get(2).validateTree();
+        else
+            return symbolTable.containsKey(subnodes.get(0).convertToJott()) &&
+                    !symbolTable.get(subnodes.get(0).convertToJott()).IsFunction &&
+                    subnodes.get(0).validateTree() &&
+                    subnodes.get(1).validateTree() &&
+                    subnodes.get(2).validateTree();
     }
 
     public void CreateSyntaxError(String msg, Token token) throws Exception {

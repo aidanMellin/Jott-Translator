@@ -62,9 +62,8 @@ private char_type type;
 	 * Errors validating will be reported to System.err
      * @return true if valid Jott code; false otherwise
      */
-    public boolean validateTree()
-    {
-        return(false);
+    public boolean validateTree() {
+        return charStored != null;
     }
 
     public void CreateSyntaxError(String msg, Token token) throws Exception{

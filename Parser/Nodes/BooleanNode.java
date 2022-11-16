@@ -73,7 +73,7 @@ public class BooleanNode implements JottTree {
      */
     public boolean validateTree()
     {
-        return(false);
+        return this.token.getToken().equals(JOTT_TRUE) || this.token.getToken().equals(JOTT_FALSE);
     }
 
     public void CreateSyntaxError(String msg, Token token) throws Exception{

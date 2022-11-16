@@ -131,7 +131,9 @@ public class IfStatementNode implements JottTree{
      */
     public boolean validateTree()
     {
-        return(false);
+        return subnodes.get(0).validateTree() &&
+                subnodes.get(1).validateTree() &&
+                subnodes.get(2).validateTree();
     }
 
     public void CreateSyntaxError(String msg, Token token) throws Exception{

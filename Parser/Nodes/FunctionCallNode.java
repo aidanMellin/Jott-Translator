@@ -29,7 +29,7 @@ public class FunctionCallNode implements JottTree{
             if (this.tokens.get(this.tokens.size() - 1).getTokenType() != TokenType.R_BRACKET)
                 CreateSyntaxError("Unexpected Token - Expected ']'", this.tokens.get(1));
             for (int i = 2; i < this.tokens.size() - 1; i++) paramsTokens.add(this.tokens.get(i));
-            subnodes.add(new ParametersNode(paramsTokens, tabCount));
+            subnodes.add(new ParametersNode(paramsTokens, tabCount, subnodes.get(0).convertToJott()));
         } catch (Exception e) {
             throw new RuntimeException();
         }
@@ -90,7 +90,10 @@ public class FunctionCallNode implements JottTree{
      */
     public boolean validateTree()
     {
-        return(false);
+        return symbolTable.containsKey(subnodes.get(0).convertToJott()) &&
+                symbolTable.get(subnodes.get(0).convertToJott()).IsFunction &&
+                subnodes.get(0).validateTree() &&
+                subnodes.get(1).validateTree();
     }
 
     public void CreateSyntaxError(String msg, Token token) throws Exception{

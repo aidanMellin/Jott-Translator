@@ -84,7 +84,7 @@ public class IdNode implements JottTree {
      */
     public boolean validateTree()
     {
-        return(false);
+        return idStored.matches("[a-z][a-zA-z0-9]*");
     }
 
     public void CreateSyntaxError(String msg, Token token) throws Exception{

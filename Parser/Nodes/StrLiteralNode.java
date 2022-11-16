@@ -68,7 +68,7 @@ public class StrLiteralNode implements JottTree {
      */
     public boolean validateTree()
     {
-        return(false);
+        return convertToJott().matches("\"[a-zA-Z0-9\s]*\"");
     }
 
     public void CreateSyntaxError(String msg, Token token) throws Exception{

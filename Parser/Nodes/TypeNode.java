@@ -81,7 +81,10 @@ public class TypeNode implements JottTree{
      */
     public boolean validateTree()
     {
-        return(false);
+        return token.getToken().equals(JOTT_BOOLEAN) ||
+                token.getToken().equals(JOTT_DOUBLE) ||
+                token.getToken().equals(JOTT_INTEGER) ||
+                token.getToken().equals(JOTT_STRING);
     }
 
     public void CreateSyntaxError(String msg, Token token) throws Exception{

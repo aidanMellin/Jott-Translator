@@ -11,9 +11,13 @@ public class ParametersTNode implements JottTree{
     private ArrayList<JottTree> subnodes;
     private ArrayList<Token> tokens;
     private int tabCount;
+    private int cnt;
+    private String function;
 
-    public ParametersTNode(ArrayList<Token> tokens, int tc) {
+    public ParametersTNode(ArrayList<Token> tokens, int tc, int c, String func) {
         try {
+            function = func;
+            cnt = c;
             tabCount = tc;
             this.tokens = tokens;
             if (this.tokens.size() == 0) subnodes = null;
@@ -31,7 +35,7 @@ public class ParametersTNode implements JottTree{
 
                 }
                 subnodes.add(new ExpressionNode(expr, tabCount));
-                subnodes.add(new ParametersTNode(this.tokens, tabCount));
+                subnodes.add(new ParametersTNode(this.tokens, tabCount, cnt+1, func));
             }
         } catch (Exception e) {
             throw new RuntimeException();

@@ -67,7 +67,8 @@ public class FunctionReturnNode implements JottTree{
      */
     public boolean validateTree()
     {
-        return(false);
+        if (subnode == null) return true;
+        else return subnode.validateTree();
     }
 
     public void CreateSyntaxError(String msg, Token token) throws Exception{

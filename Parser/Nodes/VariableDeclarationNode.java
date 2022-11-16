@@ -23,7 +23,10 @@ public class VariableDeclarationNode implements JottTree{
                     subnodes.get(1).convertToJott(),
                     subnodes.get(0).convertToJott(),
                     false,
-                    false)
+                    false,
+                    false,
+                    null,
+                    null)
             );
         } catch (Exception e) {
             throw new RuntimeException();

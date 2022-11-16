@@ -62,7 +62,7 @@ public class ProgramNode implements JottTree { //TODO
      */
     public boolean validateTree()
     {
-        return(false);
+        return symbolTable.containsKey("main") && symbolTable.get("main").IsMain && function_list.validateTree();
     }
 
     public void CreateSyntaxError(String msg, Token token) throws Exception{

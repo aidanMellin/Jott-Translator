@@ -62,7 +62,7 @@ public class OpNode implements JottTree { //TODO
      */
     public boolean validateTree()
     {
-        return(false);
+        return convertToJott().matches("[-+/*]?");
     }
 
     public void CreateSyntaxError(String msg, Token token) throws Exception{

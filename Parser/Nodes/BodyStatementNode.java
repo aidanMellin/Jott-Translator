@@ -76,7 +76,7 @@ public class BodyStatementNode implements JottTree {
      */
     public boolean validateTree()
     {
-        return(false);
+        return subnodes.get(0).validateTree();
     }
 
     public void CreateSyntaxError(String msg, Token token) throws Exception{

@@ -101,7 +101,8 @@ public class ElseNode implements JottTree{
      */
     public boolean validateTree()
     {
-        return(false);
+        if (body == null) return true;
+        else return body.validateTree();
     }
 
     public void CreateSyntaxError(String msg, Token token) throws Exception{

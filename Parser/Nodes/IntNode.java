@@ -90,7 +90,7 @@ public class IntNode implements JottTree {
      */
     public boolean validateTree()
     {
-        return(false);
+        return convertToJott().matches("-?[0-9]+");
     }
 
     public void CreateSyntaxError(String msg, Token token) throws Exception{

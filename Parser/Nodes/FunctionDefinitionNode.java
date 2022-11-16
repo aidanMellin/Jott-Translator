@@ -14,6 +14,7 @@ public class FunctionDefinitionNode implements JottTree {
     private ArrayList<JottTree> subnodes = new ArrayList<>();
     private final ArrayList<Token> tokens;
     private int tabCount;
+    private boolean funcExists = false;
 
     public FunctionDefinitionNode(ArrayList<Token> tokens, int tc) {
         try {
@@ -22,6 +23,16 @@ public class FunctionDefinitionNode implements JottTree {
             if (this.tokens.get(0).getTokenType() != TokenType.ID_KEYWORD)
                 CreateSyntaxError("Unexpected Token - Expected ID", this.tokens.get(0));
             subnodes.add(new IdNode(this.tokens.remove(0), tabCount));
+            if (symbolTable.containsKey(subnodes.get(0).convertToJott()) && symbolTable.get(subnodes.get(0).convertToJott()).IsFunction) funcExists = true;
+            else symbolTable.put(subnodes.get(0).convertToJott(), new SymbolData(
+                    subnodes.get(0).convertToJott(),
+                    null,
+                    (subnodes.get(0).convertToJott().equals("main")),
+                    true,
+                    true,
+                    new ArrayList<>(),
+                    new ArrayList<>()
+            ));
             if (this.tokens.get(0).getTokenType() != TokenType.L_BRACKET)
                 CreateSyntaxError("Unexpected Token - Expected '['", this.tokens.get(0));
             this.tokens.remove(0);
@@ -30,7 +41,7 @@ public class FunctionDefinitionNode implements JottTree {
                 func_def_params.add(this.tokens.remove(0));
                 assert this.tokens.size() != 0;
             }
-            subnodes.add(new FunctionDefinitionParametersNode(func_def_params, tabCount));
+            subnodes.add(new FunctionDefinitionParametersNode(func_def_params, tabCount, subnodes.get(0).convertToJott()));
             if (this.tokens.get(0).getTokenType() != TokenType.R_BRACKET)
                 CreateSyntaxError("Unexpected Token - Expected ']'", this.tokens.get(0));
             this.tokens.remove(0);
@@ -40,6 +51,9 @@ public class FunctionDefinitionNode implements JottTree {
             if (this.tokens.get(0).getTokenType() != TokenType.ID_KEYWORD)
                 CreateSyntaxError("Unexpected Token - Expected ID", this.tokens.get(0));
             subnodes.add(new FunctionReturnNode(this.tokens.remove(0), tabCount));
+
+            symbolTable.get(subnodes.get(0).convertToJott()).ReturnType = subnodes.get(2).convertToJott();
+
             if (this.tokens.get(0).getTokenType() != TokenType.L_BRACE)
                 CreateSyntaxError("Unexpected Token - Expected '{'", this.tokens.get(0));
             this.tokens.remove(0);
@@ -56,11 +70,7 @@ public class FunctionDefinitionNode implements JottTree {
                 CreateSyntaxError("Unexpected Token - Expected '}'", this.tokens.get(0));
             this.tokens.remove(0);
             if (this.tokens.size() != 0) CreateSyntaxError("Unexpected Tokens", this.tokens.get(0));
-            symbolTable.put(subnodes.get(0).convertToJott(), new SymbolData(
-                    subnodes.get(0).convertToJott(),
-                    subnodes.get(2).convertToJott(),
-                    (subnodes.get(0).convertToJott().equals("main")),
-                    true));
+
         } catch (Exception e) {
             throw new RuntimeException();
         }
@@ -116,7 +126,19 @@ public class FunctionDefinitionNode implements JottTree {
      */
     public boolean validateTree()
     {
-        return(false);
+        if (subnodes.get(0).convertToJott().equals("main"))
+            return funcExists &&
+                    symbolTable.get("main").ReturnType.equals("Void") &&
+                    subnodes.get(0).validateTree() &&
+                    subnodes.get(1).validateTree() &&
+                    subnodes.get(2).validateTree() &&
+                    subnodes.get(3).validateTree();
+        else
+            return funcExists &&
+                    subnodes.get(0).validateTree() &&
+                    subnodes.get(1).validateTree() &&
+                    subnodes.get(2).validateTree() &&
+                    subnodes.get(3).validateTree();
     }
 
     public void CreateSyntaxError(String msg, Token token) throws Exception{

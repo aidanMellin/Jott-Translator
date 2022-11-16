@@ -78,7 +78,12 @@ public class StatementNode implements JottTree{
      */
     public boolean validateTree()
     {
-        return(false);
+        if (subnodes.size() == 2)
+            return subnodes.get(0).validateTree() &&
+                subnodes.get(1).validateTree();
+        else if (subnodes.size() == 1)
+            return subnodes.get(0).validateTree();
+        else return false;
     }
 
     public void CreateSyntaxError(String msg, Token token) throws Exception{

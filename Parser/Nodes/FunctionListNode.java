@@ -104,7 +104,8 @@ public class FunctionListNode implements JottTree { //TODO
      */
     public boolean validateTree()
     {
-        return(false);
+        if (function_def == null) return true;
+        else return function_def.validateTree() && function_list.validateTree();
     }
 
     public void CreateSyntaxError(String msg, Token token) throws Exception{

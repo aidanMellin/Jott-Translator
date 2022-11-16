@@ -65,7 +65,7 @@ public class SignNode implements JottTree {
      */
     public boolean validateTree()
     {
-        return(false);
+        return token == null || convertToJott().matches("[-+]?");
     }
 
     public void CreateSyntaxError(String msg, Token token) throws Exception{

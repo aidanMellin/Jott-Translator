@@ -61,7 +61,7 @@ public class RelOpNode implements JottTree {
      */
     public boolean validateTree()
     {
-        return(false);
+        return token != null;
     }
 
     public void CreateSyntaxError(String msg, Token token) throws Exception{

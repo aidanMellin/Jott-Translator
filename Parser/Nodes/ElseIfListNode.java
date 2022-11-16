@@ -134,7 +134,10 @@ public class ElseIfListNode implements JottTree{
      */
     public boolean validateTree()
     {
-        return(false);
+        if (subnodes == null) return true;
+        else return subnodes.get(0).validateTree() &&
+                subnodes.get(1).validateTree() &&
+                subnodes.get(2).validateTree();
     }
 
     public void CreateSyntaxError(String msg, Token token) throws Exception{
