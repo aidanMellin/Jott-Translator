@@ -69,7 +69,13 @@ public class IntNode implements JottTree {
      */
     public String convertToC()
     {
-        return("");
+        String C_Code = "";
+
+        for(JottTree node : subnodes){
+            C_Code += node.convertToC();
+        }
+
+        return C_Code;
     }
 
     /**

@@ -45,7 +45,7 @@ private char_type type;
      */
     public String convertToC()
     {
-        return("");
+        return(charStored);
     }
 
     /**

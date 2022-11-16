@@ -42,7 +42,7 @@ public class RelOpNode implements JottTree {
      */
     public String convertToC()
     {
-        return("");
+        return(token.getToken());
     }
 
     /**

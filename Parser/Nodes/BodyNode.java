@@ -145,7 +145,13 @@ public class BodyNode implements JottTree {
      */
     public String convertToC()
     {
-        return("");
+        if(subnodes.size() == 1){
+            return subnodes.get(0).convertToC();
+        } else if(subnodes.size() == 2){
+            return subnodes.get(0).convertToC() + subnodes.get(1).convertToC();
+        }
+
+        return "";
     }
 
     /**
