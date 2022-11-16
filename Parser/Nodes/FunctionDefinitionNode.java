@@ -31,7 +31,8 @@ public class FunctionDefinitionNode implements JottTree {
                     true,
                     true,
                     new ArrayList<>(),
-                    new ArrayList<>()
+                    new ArrayList<>(),
+                    1
             ));
             if (this.tokens.get(0).getTokenType() != TokenType.L_BRACKET)
                 CreateSyntaxError("Unexpected Token - Expected '['", this.tokens.get(0));

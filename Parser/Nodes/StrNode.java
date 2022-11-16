@@ -14,6 +14,7 @@ public class StrNode implements JottTree {
 
     public StrNode(String tokenString, int tc) {
         try {
+            tabCount = tc;
             this.tokenString = tokenString;
             if (!Objects.equals(tokenString, EMPTY_STR)) {
                 subnodes.add(new CharNode(tokenString.charAt(0), tabCount));

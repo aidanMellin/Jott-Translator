@@ -26,7 +26,8 @@ public class VariableDeclarationNode implements JottTree{
                     false,
                     false,
                     null,
-                    null)
+                    null,
+                    1)
             );
         } catch (Exception e) {
             throw new RuntimeException();
