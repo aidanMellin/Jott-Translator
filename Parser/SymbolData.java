@@ -11,8 +11,9 @@ public class SymbolData {
     public boolean IsFunction;
     public ArrayList<String> Params;
     public ArrayList<String> ParamsTypes;
+    public int varCount;
 
-    public SymbolData(String name, String returnType, boolean isMain, boolean isInitialized, boolean isFunction, ArrayList<String> params, ArrayList<String> paramsTypes) {
+    public SymbolData(String name, String returnType, boolean isMain, boolean isInitialized, boolean isFunction, ArrayList<String> params, ArrayList<String> paramsTypes, int cnt) {
         Name = name;
         ReturnType = returnType;
         IsMain = isMain;
@@ -20,5 +21,6 @@ public class SymbolData {
         IsFunction = isFunction;
         Params = params;
         ParamsTypes = paramsTypes;
+        varCount = cnt;
     }
 }

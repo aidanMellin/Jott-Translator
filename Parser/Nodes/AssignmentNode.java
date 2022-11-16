@@ -23,6 +23,7 @@ public class AssignmentNode implements JottTree { //TODO
     private int tabCount;
     private boolean isInit;
     private String initType;
+    private String expr_type;
 
     public AssignmentNode(ArrayList<Token> tokens, int tc) {
         try {
@@ -59,6 +60,7 @@ public class AssignmentNode implements JottTree { //TODO
                 if (d_expr.size() == 0) CreateSyntaxError("Expected <exp> got <end_stmt>", this.tokens.get(this.tokens.size()-1));
 
                 subnodes.add(new DoubleExprNode(d_expr, 0));
+                expr_type = "Double";
                 if (this.tokens.get(this.tokens.size() - 1).getTokenType().equals(TokenType.SEMICOLON)) {
                     subnodes.add(new EndStatementNode(this.tokens.get(this.tokens.size() - 1), 0));
                 } else {
@@ -84,6 +86,7 @@ public class AssignmentNode implements JottTree { //TODO
                 if (i_expr.size() == 0) CreateSyntaxError("Expected <exp> got <end_stmt>", this.tokens.get(this.tokens.size()-1));
 
                 subnodes.add(new IntExprNode(i_expr, 0));
+                expr_type = "Integer";
                 if (this.tokens.get(this.tokens.size() - 1).getTokenType().equals(TokenType.SEMICOLON)) {
                     subnodes.add(new EndStatementNode(this.tokens.get(this.tokens.size() - 1), 0));
                 } else {
@@ -107,6 +110,7 @@ public class AssignmentNode implements JottTree { //TODO
                 b_expr.remove(b_expr.size() - 1);
                 if (b_expr.size() == 0) CreateSyntaxError("Expected <exp> got <end_stmt>", this.tokens.get(this.tokens.size()-1));
                 subnodes.add(new BoolExprNode(b_expr, tabCount));
+                expr_type = "Boolean";
                 if (this.tokens.get(this.tokens.size() - 1).getTokenType().equals(TokenType.SEMICOLON)) {
                     subnodes.add(new EndStatementNode(this.tokens.get(this.tokens.size() - 1), 0));
                 } else {
@@ -131,6 +135,7 @@ public class AssignmentNode implements JottTree { //TODO
                 if (s_expr.size() == 0) CreateSyntaxError("Expected <exp> got <end_stmt>", this.tokens.get(this.tokens.size()-1));
 
                 subnodes.add(new StrExprNode(s_expr, 0));
+                expr_type = "String";
                 if (this.tokens.get(this.tokens.size() - 1).getTokenType().equals(TokenType.SEMICOLON)) {
                     subnodes.add(new EndStatementNode(this.tokens.get(this.tokens.size() - 1), 0));
                 } else {
@@ -154,6 +159,7 @@ public class AssignmentNode implements JottTree { //TODO
                         ArrayList<Token> b_expr = this.tokens;
                         b_expr.remove(b_expr.size() - 1);
                         subnodes.add(new BoolExprNode(b_expr, 0));
+                        expr_type = "Boolean";
                         break;
                     }
                 }
@@ -167,6 +173,7 @@ public class AssignmentNode implements JottTree { //TODO
                         ArrayList<Token> s_expr = this.tokens;
                         s_expr.remove(s_expr.size() - 1);
                         subnodes.add(new StrExprNode(s_expr, 0));
+                        expr_type = "String";
                     }
                 }
 
@@ -180,11 +187,13 @@ public class AssignmentNode implements JottTree { //TODO
                                 ArrayList<Token> d_expr = this.tokens;
                                 d_expr.remove(d_expr.size() - 1);
                                 subnodes.add(new DoubleExprNode(d_expr, 0));
+                                expr_type = "Double";
                             } else {
                                 iExprBool = true;
                                 ArrayList<Token> i_expr = this.tokens;
                                 i_expr.remove(i_expr.size() - 1);
                                 subnodes.add(new IntExprNode(i_expr, 0));
+                                expr_type = "Integer";
                             }
                             break;
                         }
@@ -213,16 +222,21 @@ public class AssignmentNode implements JottTree { //TODO
             } else {
                 CreateSyntaxError("Unexpected Token - Expected <assignment>", this.tokens.get(0));
             }
-            if (isInit)
-                symbolTable.put(subnodes.get(0).convertToJott(), new SymbolData(
+            if (isInit) {
+                if (symbolTable.containsKey(subnodes.get(0).convertToJott()) && !symbolTable.get(subnodes.get(0).convertToJott()).IsFunction)
+                    symbolTable.get(subnodes.get(0).convertToJott()).varCount++;
+                else
+                    symbolTable.put(subnodes.get(0).convertToJott(), new SymbolData(
                         subnodes.get(0).convertToJott(),
                         initType,
                         false,
                         true,
                         false,
                         null,
-                        null)
+                        null,
+                        1)
                 );
+            }
         } catch (Exception e) {
             throw new RuntimeException();
         }
@@ -297,13 +311,16 @@ public class AssignmentNode implements JottTree { //TODO
     public boolean validateTree()
     {
         if (isInit)
-            return (!symbolTable.containsKey(subnodes.get(0).convertToJott()) || !symbolTable.get(subnodes.get(0).convertToJott()).IsFunction) &&
+            return symbolTable.get(subnodes.get(0).convertToJott()).varCount == 1 &&
+                    !symbolTable.get(subnodes.get(0).convertToJott()).IsFunction &&
+                    symbolTable.get(subnodes.get(0).convertToJott()).ReturnType.equals(expr_type) &&
                     subnodes.get(0).validateTree() &&
                     subnodes.get(1).validateTree() &&
                     subnodes.get(2).validateTree();
         else
             return symbolTable.containsKey(subnodes.get(0).convertToJott()) &&
                     !symbolTable.get(subnodes.get(0).convertToJott()).IsFunction &&
+                    symbolTable.get(subnodes.get(0).convertToJott()).ReturnType.equals(expr_type) &&
                     subnodes.get(0).validateTree() &&
                     subnodes.get(1).validateTree() &&
                     subnodes.get(2).validateTree();
