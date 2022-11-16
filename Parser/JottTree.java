@@ -48,4 +48,6 @@ public interface JottTree {
     boolean validateTree();
 
     void CreateSyntaxError(String msg, Token token) throws Exception;
+
+    void CreateSemanticError(String msg, Token token) throws Exception;
 }

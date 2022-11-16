@@ -92,4 +92,9 @@ public class IdNode implements JottTree {
         throw new Exception();
     }
 
+    public void CreateSemanticError(String msg, Token token) throws Exception {
+        System.err.println("Semantic Error:\n" + msg + "\n" + token.getFilename() + ":" + token.getLineNum());
+        throw new Exception();
+    }
+
 }
