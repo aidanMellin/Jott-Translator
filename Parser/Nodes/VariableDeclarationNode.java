@@ -9,12 +9,14 @@ public class VariableDeclarationNode implements JottTree{
     private ArrayList<JottTree> subnodes = new ArrayList<>();
     private final ArrayList<Token> tokens;
     private int tabCount;
+    private Token firstToken;
     
     public VariableDeclarationNode(ArrayList<Token> tokens, int tc) {
         try {
             tabCount = tc;
             this.tokens = tokens;
             assert this.tokens != null;
+            firstToken = this.tokens.get(0);
             if (this.tokens.size() != 3) CreateSyntaxError("Invalid Variable Declaration", this.tokens.get(0));
             subnodes.add(new TypeNode(this.tokens.get(0), tabCount));
             subnodes.add(new IdNode(this.tokens.get(1), tabCount));
@@ -79,7 +81,15 @@ public class VariableDeclarationNode implements JottTree{
      */
     public boolean validateTree()
     {
-        return(false);
+        try {
+            if (symbolTable.containsKey(subnodes.get(1).convertToJott()) && !symbolTable.get(subnodes.get(1).convertToJott()).IsFunction)
+                CreateSemanticError("Variable has already been declared", firstToken);
+            return subnodes.get(0).validateTree() &&
+                    subnodes.get(1).validateTree() &&
+                    subnodes.get(2).validateTree();
+        } catch (Exception e) {
+            throw new RuntimeException();
+        }
     }
 
     public void CreateSyntaxError(String msg, Token token) throws Exception{

@@ -11,6 +11,7 @@ public class FunctionDefinitionParametersNode implements JottTree {
     private final String EMPTY_STRING = "";
     private final ArrayList<Token> tokens;
     private int tabCount;
+    private Token firstToken;
 
     public FunctionDefinitionParametersNode(ArrayList<Token> tokens, int tc, String func) {
         try {
@@ -18,6 +19,7 @@ public class FunctionDefinitionParametersNode implements JottTree {
             this.tokens = tokens;
             if (this.tokens.size() == 0) subnodes = null;
             else {
+                firstToken = this.tokens.get(0);
                 if (this.tokens.get(0).getTokenType() != TokenType.ID_KEYWORD)
                     CreateSyntaxError("Unexpected Token - Expected ID", this.tokens.get(0));
                 subnodes.add(new IdNode(this.tokens.remove(0), tabCount));
@@ -85,11 +87,16 @@ public class FunctionDefinitionParametersNode implements JottTree {
      */
     public boolean validateTree()
     {
-        if (subnodes == null) return true;
-        else return !symbolTable.containsKey(subnodes.get(0).convertToJott()) &&
-                subnodes.get(0).validateTree() &&
-                subnodes.get(1).validateTree() &&
-                subnodes.get(2).validateTree();
+        try {
+            if (subnodes == null) return true;
+            else if (symbolTable.containsKey(subnodes.get(0).convertToJott()))
+                CreateSemanticError("Variable is already declared in program", firstToken);
+            return subnodes.get(0).validateTree() &&
+                    subnodes.get(1).validateTree() &&
+                    subnodes.get(2).validateTree();
+        } catch (Exception e) {
+            throw new RuntimeException();
+        }
     }
 
     public void CreateSyntaxError(String msg, Token token) throws Exception{
