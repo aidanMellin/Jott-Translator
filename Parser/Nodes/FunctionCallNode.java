@@ -70,6 +70,14 @@ public class FunctionCallNode implements JottTree{
      */
     public String convertToC()
     {
+        if(subnodes.get(0).convertToC().equals("printf")) {
+            return subnodes.get(0).convertToC() +
+                    LPARAN_STRING +
+                    "\"\\n\", " +
+                    subnodes.get(1).convertToC() +
+                    RPARAN_STRING;
+        }
+
         return subnodes.get(0).convertToC() +
                 LPARAN_STRING +
                 subnodes.get(1).convertToC() +
