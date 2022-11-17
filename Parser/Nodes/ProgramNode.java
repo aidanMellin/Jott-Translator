@@ -107,7 +107,8 @@ public class ProgramNode implements JottTree { //TODO
      */
     public String convertToC()
     {
-        return C_LIBRARIES + "\n\n" + function_list.convertToC();
+        return C_LIBRARIES + "\n\n" + function_list.convertToC() + "\n" + 
+        "char* concat(char* str1, char* str2){\n\tchar str3[100];\n\tint i = 0, j = 0;\n\twhile (str1[i] != '\0') {\n\t\tstr3[j] = str1[i];\n\t\ti++;\n\t\tj++;\n\t}\n\ti = 0;\n\twhile (str2[i] != '\0') {\n\t\tstr3[j] = str2[i];\n\t\ti++;\n\t\tj++;\n\t}\n\tstr3[j] = '\0';\n\treturn str3;\n}";
     }
 
     /**
