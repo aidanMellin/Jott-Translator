@@ -165,6 +165,8 @@ public class FunctionDefinitionNode implements JottTree {
             if (subnodes.get(0).convertToJott().equals("main")) {
                 if (!symbolTable.get("main").ReturnType.equals("Void"))
                     CreateSemanticError("Main function is not type Void", firstToken);
+                else if (symbolTable.get("main").Params.size() != 0)
+                    CreateSemanticError("Main Function does not accept any parameters", firstToken);
                 else if (funcExists)
                     CreateSemanticError("Function already exists", firstToken);
             } else {

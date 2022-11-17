@@ -11,6 +11,7 @@ public class IntExprNode implements JottTree {
     private ArrayList<Token> Tokens;
     private int tabCount;
     Hashtable<String, SymbolData> symbolTable;
+    private String expr_type;
 
     public IntExprNode(ArrayList<Token> tokens, int tc, Hashtable<String, SymbolData> symbolTable) {
         try {
@@ -37,15 +38,17 @@ public class IntExprNode implements JottTree {
                             count++;
                         }
                         temp_subnodes.add(new FunctionCallNode(tokens_to_send, 0, symbolTable));
+                        expr_type = "func_call";
                         i += count;
                     } else {
                         temp_subnodes.add(new IdNode(temp_token, 0, symbolTable));
+                        expr_type = "id";
                     }
                 } else if (temp_token.getTokenType() == TokenType.NUMBER) {
                     ArrayList<Token> temp_token_list = new ArrayList<>();
                     temp_token_list.add(temp_token);
                     temp_subnodes.add(new IntNode(temp_token_list, 0, symbolTable));
-
+                    expr_type = "int";
                 } else if (temp_token.getTokenType() == TokenType.MATH_OP) {
                     if (temp_token.getToken().equals("-")) {
                         if (i == 0 || (Tokens.get(i - 1).getTokenType() != TokenType.NUMBER && Tokens.get(i - 1).getTokenType() != TokenType.ID_KEYWORD)) {
@@ -57,6 +60,7 @@ public class IntExprNode implements JottTree {
                             } else {
                                 temp_token_list.add(Tokens.get(i + 1));
                                 temp_subnodes.add(new IntNode(temp_token_list, 0, symbolTable));
+                                expr_type = "int";
                                 i++;
                             }
                         } else {
@@ -151,10 +155,39 @@ public class IntExprNode implements JottTree {
      */
     public boolean validateTree()
     {
-        for (JottTree node : subnodes) {
-            if (!node.validateTree()) return false;
+        try {
+            if (subnodes.size() == 1) {
+                switch (expr_type) {
+                    case "int":
+                        break;
+                    case "func_call":
+                        if (!symbolTable.containsKey(this.Tokens.get(0).getToken()) ||
+                                !symbolTable.get(this.Tokens.get(0).getToken()).ReturnType.equals("Integer") ||
+                                !symbolTable.get(this.Tokens.get(0).getToken()).IsFunction)
+                            CreateSemanticError("Mis-match typing in integer expression: invalid function use", this.Tokens.get(0));
+                        break;
+                    case "id":
+                        if (!symbolTable.containsKey(this.Tokens.get(0).getToken()) ||
+                                !symbolTable.get(this.Tokens.get(0).getToken()).ReturnType.equals("Boolean") ||
+                                symbolTable.get(this.Tokens.get(0).getToken()).IsFunction)
+                            CreateSemanticError("Mis-match typing in integer expression: invalid variable use", this.Tokens.get(0));
+                    default:
+                        CreateSemanticError("Error in validating integer expr", Tokens.get(0));
+                        break;
+                }
+                return subnodes.get(0).validateTree();
+            } else {
+                if (subnodes.get(0).getClass() != subnodes.get(2).getClass() ||
+                    subnodes.get(0).getClass() != this.getClass() ||
+                    subnodes.get(2).getClass() != this.getClass())
+                    CreateSemanticError("Mis-matching types in expression", Tokens.get(0));
+                return subnodes.get(0).validateTree() &&
+                        subnodes.get(1).validateTree() &&
+                        subnodes.get(2).validateTree();
+            }
+        } catch (Exception e) {
+            throw new RuntimeException();
         }
-        return true;
     }
 
     public void CreateSyntaxError(String msg, Token token) throws Exception{
