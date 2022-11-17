@@ -37,9 +37,8 @@ public class JottParser {
 
     public static void main(String[] args) {
         String fileName;
-        String textFileName = "fileName.jott";
+        String textFileName = "largerValid.jott";
         String[] fileNameTokens = textFileName.split("\\.");
-        System.out.println(fileNameTokens[0]);
         fileName = fileNameTokens[0];
         ArrayList<Token> tokens = JottTokenizer.tokenize("Parser/phase3TestCases/funcCallParamInvalid.jott");
         //ArrayList<Token> tokens = JottTokenizer.tokenize("Parser/phase2Tester/parserTestCases/validLoop.jott");
