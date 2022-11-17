@@ -33,12 +33,13 @@ public class Jott {
                 }
                 FileWriter writer = new FileWriter(outputFile);
                 writer.write(output);
+                writer.close();
             } catch (Exception e) {
                 System.out.println(e.getMessage());
                 System.exit(1);
             }
         }catch (IndexOutOfBoundsException e){
-            System.out.printf("Error Caught: Incomplete arguments to run program.\n%s%n", e);
+            System.out.printf("Error Caught: Incomplete arguments to run program.\n%s%n\nusage: Jott.java inputFile outputFile language", e);
             System.exit(1);
         }
     }
