@@ -216,6 +216,8 @@ public class AssignmentNode implements JottTree {
                         ArrayList<Token> s_expr = this.tokens;
                         s_expr.remove(s_expr.size() - 1);
                         subnodes.add(new BoolExprNode(s_expr, 0, symbolTable));
+                        if (symbolTable.containsKey(s_expr.get(0).getToken()))
+                            expr_type = symbolTable.get(s_expr.get(0).getToken()).ReturnType;
                     } else {
                         CreateSyntaxError("Unexpected Token - Expected <Expression Type First>", this.tokens.get(0));
                     }
@@ -339,6 +341,8 @@ public class AssignmentNode implements JottTree {
                     CreateSemanticError("Variable is already declared as a function", firstToken);
                 else if (!symbolTable.get(subnodes.get(0).convertToJott()).ReturnType.equals(expr_type))
                     CreateSemanticError("Invalid assignment: types do not match", firstToken);
+                else if (keywords.contains(subnodes.get(0).convertToJott()))
+                    CreateSemanticError("Cannot use a keyword as a variable", firstToken);
             } else {
                 if (!symbolTable.containsKey(subnodes.get(0).convertToJott()))
                     CreateSemanticError("Variable has not been initialized", firstToken);

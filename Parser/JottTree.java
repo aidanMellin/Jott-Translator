@@ -9,10 +9,13 @@ package Parser;
 import Tokenizer.Token;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Hashtable;
 
 public interface JottTree {
+
+    ArrayList<String> keywords = new ArrayList<>(Arrays.asList("return", "while", "if", "elseif", "else", "Double", "String", "Boolean", "Void", "Integer"));
 
     /**
      * Will output a string of this tree in Jott

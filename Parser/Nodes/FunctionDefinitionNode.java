@@ -151,6 +151,8 @@ public class FunctionDefinitionNode implements JottTree {
     public boolean validateTree()
     {
         try {
+            if (keywords.contains(subnodes.get(0).convertToJott()))
+                CreateSemanticError("Cannot use a keyword as a function", firstToken);
             if (subnodes.get(0).convertToJott().equals("main")) {
                 if (!symbolTable.get("main").ReturnType.equals("Void"))
                     CreateSemanticError("Main function is not type Void", firstToken);

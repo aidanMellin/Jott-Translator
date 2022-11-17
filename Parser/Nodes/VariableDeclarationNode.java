@@ -87,6 +87,8 @@ public class VariableDeclarationNode implements JottTree{
         try {
             if (symbolTable.containsKey(subnodes.get(1).convertToJott()) && !symbolTable.get(subnodes.get(1).convertToJott()).IsFunction)
                 CreateSemanticError("Variable has already been declared", firstToken);
+            if (keywords.contains(subnodes.get(1).convertToJott()))
+                CreateSemanticError("Cannot use a keyword as a variable", firstToken);
             return subnodes.get(0).validateTree() &&
                     subnodes.get(1).validateTree() &&
                     subnodes.get(2).validateTree();
