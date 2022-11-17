@@ -8,18 +8,19 @@ public class ProgramNode implements JottTree { //TODO
 
     private final String C_CLASSES = "";
     private final String JAVA_CLASS = "public class ";
-    private final String JAVA_FILE = "(HAVE TO GET FILE NAME)";
     private final String LBRACE_CHAR = "{";
     private final String RBRACE_CHAR = "}";
+    private String FILE_NAME;
     private final JottTree function_list;
     private int tabCount;
     private Token firstToken;
 
-    public ProgramNode(ArrayList<Token> tokens, int tc){
+    public ProgramNode(ArrayList<Token> tokens, int tc, String fileName){
         try {
+            this.FILE_NAME = fileName;
             tabCount = tc;
             firstToken = tokens.get(0);
-            function_list = new FunctionListNode(tokens, tabCount + 1);
+            function_list = new FunctionListNode(tokens, tabCount);
             // also add EOF symbol??
         } catch (Exception e) {
             e.printStackTrace();
@@ -41,7 +42,7 @@ public class ProgramNode implements JottTree { //TODO
      */
     public String convertToJava()
     {
-        return JAVA_CLASS + JAVA_FILE + LBRACE_CHAR + "\n" + function_list.convertToJava() + RBRACE_CHAR;
+        return JAVA_CLASS + FILE_NAME + LBRACE_CHAR + "\n" + function_list.convertToJava() + RBRACE_CHAR;
     }
 
     /**
@@ -50,7 +51,7 @@ public class ProgramNode implements JottTree { //TODO
      */
     public String convertToC()
     {
-        return("");
+        return function_list.convertToC();
     }
 
     /**

@@ -9,6 +9,7 @@ import java.util.Objects;
 
 public class Jott {
     public static void main(String[] args) {
+        String fileName = "fileName";
         String lang, inputFile, outputFile;
         try{
             inputFile = args[0];
@@ -17,7 +18,7 @@ public class Jott {
             System.out.printf("Outputting %s, %s, %s%n",inputFile, outputFile, lang);
             try {
                 ArrayList<Token> jottTokens = JottTokenizer.tokenize(inputFile);
-                JottTree jottTree = JottParser.parse(jottTokens);
+                JottTree jottTree = JottParser.parse(jottTokens, fileName);
                 if (jottTree == null) {
                     System.out.println("Error during parsing");
                     System.exit(1);

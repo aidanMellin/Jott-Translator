@@ -73,6 +73,7 @@ public class JottParserTester {
 
     private boolean parserTest(TestCase test, String orginalJottCode){
         try {
+            String fileName = "fileName";
             ArrayList<Token> tokens = JottTokenizer.tokenize("Parser/phase2Tester/parserTestCases/" + test.fileName);
 
             if (tokens == null) {
@@ -83,7 +84,7 @@ public class JottParserTester {
             }
             System.out.println(tokenListString(tokens));
             ArrayList<Token> cpyTokens = new ArrayList<>(tokens);
-            JottTree root = JottParser.parse(tokens);
+            JottTree root = JottParser.parse(tokens, fileName);
 
             if (!test.error && root == null) {
                 System.err.println("\tFailed Test: " + test.testName);
