@@ -2,6 +2,7 @@ package Parser.Nodes;
 import Tokenizer.*;
 import Parser.*;
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.Objects;
 
 public class ReturnStatementNode implements JottTree {
@@ -11,9 +12,11 @@ public class ReturnStatementNode implements JottTree {
 
     private final String JOTT_RETURN = "return";
     private int tabCount;
+    Hashtable<String, SymbolData> symbolTable;
 
-    public ReturnStatementNode(ArrayList<Token> tokens, int tc) {
+    public ReturnStatementNode(ArrayList<Token> tokens, int tc, Hashtable<String, SymbolData> symbolTable) {
         try {
+            this.symbolTable = symbolTable;
             tabCount = tc;
             this.tokens = tokens;
             assert tokens != null;
@@ -27,8 +30,8 @@ public class ReturnStatementNode implements JottTree {
                 expr.add(this.tokens.remove(0));
             if (this.tokens.size() != 1 && this.tokens.get(0).getTokenType() != TokenType.SEMICOLON)
                 CreateSyntaxError("Unexpected Token - Expected ';'", this.tokens.get(0));
-            subnodes.add(new ExpressionNode(expr, tabCount));
-            subnodes.add(new EndStatementNode(this.tokens.remove(0), tabCount));
+            subnodes.add(new ExpressionNode(expr, tabCount, this.symbolTable));
+            subnodes.add(new EndStatementNode(this.tokens.remove(0), tabCount, this.symbolTable));
             if (this.tokens.size() != 0) CreateSyntaxError("Expected } got <id>", this.tokens.get(0));
         } catch (Exception e) {
             throw new RuntimeException();

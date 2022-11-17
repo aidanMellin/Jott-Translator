@@ -3,9 +3,10 @@ import Tokenizer.*;
 import Parser.*;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.Objects;
 
-public class AssignmentNode implements JottTree { //TODO
+public class AssignmentNode implements JottTree {
 
     private final String JOTT_DOUBLE = "Double";
     private final String JOTT_INTEGER = "Integer";
@@ -30,9 +31,11 @@ public class AssignmentNode implements JottTree { //TODO
     private String initType;
     private String expr_type;
     private Token firstToken;
+    Hashtable<String, SymbolData> symbolTable;
 
-    public AssignmentNode(ArrayList<Token> tokens, int tc) {
+    public AssignmentNode(ArrayList<Token> tokens, int tc, Hashtable<String, SymbolData> symbolTable) {
         try {
+            this.symbolTable = symbolTable;
             tabCount = tc;
             this.tokens = tokens;
             assert this.tokens != null;
@@ -47,7 +50,7 @@ public class AssignmentNode implements JottTree { //TODO
                 // Double <id> = <d_expr><end_statement>
             if (Objects.equals(this.tokens.get(0).getToken(), JOTT_DOUBLE)) {
                 if (this.tokens.get(1).getTokenType().equals(TokenType.ID_KEYWORD)) {
-                    subnodes.add(new IdNode(this.tokens.get(1), 0));
+                    subnodes.add(new IdNode(this.tokens.get(1), 0, this.symbolTable));
                 } else {
                     CreateSyntaxError("Unexpected Token - Expected <id>", this.tokens.get(1));
                 }
@@ -64,10 +67,10 @@ public class AssignmentNode implements JottTree { //TODO
                 d_expr.remove(d_expr.size() - 1); // <d_expr>
                 if (d_expr.size() == 0) CreateSyntaxError("Expected <exp> got <end_stmt>", this.tokens.get(this.tokens.size()-1));
 
-                subnodes.add(new DoubleExprNode(d_expr, 0));
+                subnodes.add(new DoubleExprNode(d_expr, 0, this.symbolTable));
                 expr_type = "Double";
                 if (this.tokens.get(this.tokens.size() - 1).getTokenType().equals(TokenType.SEMICOLON)) {
-                    subnodes.add(new EndStatementNode(this.tokens.get(this.tokens.size() - 1), 0));
+                    subnodes.add(new EndStatementNode(this.tokens.get(this.tokens.size() - 1), 0, this.symbolTable));
                 } else {
                     CreateSyntaxError("Unexpected Token - Expected ;", this.tokens.get(this.tokens.size() - 1));
                 }
@@ -75,7 +78,7 @@ public class AssignmentNode implements JottTree { //TODO
             } // Integer <id> = <i_expr><end_statement>
             else if (Objects.equals(this.tokens.get(0).getToken(), JOTT_INTEGER)) {
                 if (this.tokens.get(1).getTokenType().equals(TokenType.ID_KEYWORD)) {
-                    subnodes.add(new IdNode(this.tokens.get(1), 0));
+                    subnodes.add(new IdNode(this.tokens.get(1), 0, this.symbolTable));
                 } else {
                     CreateSyntaxError("Unexpected Token - Expected <id>", this.tokens.get(1));
                 }
@@ -90,17 +93,17 @@ public class AssignmentNode implements JottTree { //TODO
                 i_expr.remove(i_expr.size() - 1);
                 if (i_expr.size() == 0) CreateSyntaxError("Expected <exp> got <end_stmt>", this.tokens.get(this.tokens.size()-1));
 
-                subnodes.add(new IntExprNode(i_expr, 0));
+                subnodes.add(new IntExprNode(i_expr, 0, this.symbolTable));
                 expr_type = "Integer";
                 if (this.tokens.get(this.tokens.size() - 1).getTokenType().equals(TokenType.SEMICOLON)) {
-                    subnodes.add(new EndStatementNode(this.tokens.get(this.tokens.size() - 1), 0));
+                    subnodes.add(new EndStatementNode(this.tokens.get(this.tokens.size() - 1), 0, this.symbolTable));
                 } else {
                     CreateSyntaxError("Unexpected Token - Expected ;", this.tokens.get(this.tokens.size() - 1));
                 }
             } // Boolean <id> = <b_expr><end_statement>
             else if (Objects.equals(this.tokens.get(0).getToken(), JOTT_BOOLEAN)) {
                 if (this.tokens.get(1).getTokenType().equals(TokenType.ID_KEYWORD)) {
-                    subnodes.add(new IdNode(this.tokens.get(1), 0));
+                    subnodes.add(new IdNode(this.tokens.get(1), 0, this.symbolTable));
                 } else {
                     CreateSyntaxError("Unexpected Token - Expected <id>", this.tokens.get(1));
                 }
@@ -114,17 +117,17 @@ public class AssignmentNode implements JottTree { //TODO
                 }
                 b_expr.remove(b_expr.size() - 1);
                 if (b_expr.size() == 0) CreateSyntaxError("Expected <exp> got <end_stmt>", this.tokens.get(this.tokens.size()-1));
-                subnodes.add(new BoolExprNode(b_expr, tabCount));
+                subnodes.add(new BoolExprNode(b_expr, tabCount, this.symbolTable));
                 expr_type = "Boolean";
                 if (this.tokens.get(this.tokens.size() - 1).getTokenType().equals(TokenType.SEMICOLON)) {
-                    subnodes.add(new EndStatementNode(this.tokens.get(this.tokens.size() - 1), 0));
+                    subnodes.add(new EndStatementNode(this.tokens.get(this.tokens.size() - 1), 0, this.symbolTable));
                 } else {
                     CreateSyntaxError("Unexpected Token - Expected ;", this.tokens.get(this.tokens.size() - 1));
                 }
             } // string <id> = <s_expr><end_statement>
             else if (Objects.equals(this.tokens.get(0).getToken(), JOTT_STRING)) {
                 if (this.tokens.get(1).getTokenType().equals(TokenType.ID_KEYWORD)) {
-                    subnodes.add(new IdNode(this.tokens.get(1), 0));
+                    subnodes.add(new IdNode(this.tokens.get(1), 0, this.symbolTable));
                 } else {
                     CreateSyntaxError("Unexpected Token - Expected <id>", this.tokens.get(1));
                 }
@@ -139,15 +142,15 @@ public class AssignmentNode implements JottTree { //TODO
                 s_expr.remove(s_expr.size() - 1);
                 if (s_expr.size() == 0) CreateSyntaxError("Expected <exp> got <end_stmt>", this.tokens.get(this.tokens.size()-1));
 
-                subnodes.add(new StrExprNode(s_expr, 0));
+                subnodes.add(new StrExprNode(s_expr, 0, this.symbolTable));
                 expr_type = "String";
                 if (this.tokens.get(this.tokens.size() - 1).getTokenType().equals(TokenType.SEMICOLON)) {
-                    subnodes.add(new EndStatementNode(this.tokens.get(this.tokens.size() - 1), 0));
+                    subnodes.add(new EndStatementNode(this.tokens.get(this.tokens.size() - 1), 0, this.symbolTable));
                 } else {
                     CreateSyntaxError("Unexpected Token - Expected ;", this.tokens.get(this.tokens.size() - 1));
                 }
             } else if (Objects.equals(this.tokens.get(0).getTokenType(), TokenType.ID_KEYWORD)) {
-                subnodes.add(new IdNode(this.tokens.get(0), 0)); // <id>
+                subnodes.add(new IdNode(this.tokens.get(0), 0, this.symbolTable)); // <id>
                 this.tokens.remove(0);
                 if (this.tokens.get(0).getToken().equals(EQ_CHAR)) {
                     this.tokens.remove(0); // =
@@ -163,7 +166,7 @@ public class AssignmentNode implements JottTree { //TODO
                         bExprBool = true;
                         ArrayList<Token> b_expr = this.tokens;
                         b_expr.remove(b_expr.size() - 1);
-                        subnodes.add(new BoolExprNode(b_expr, 0));
+                        subnodes.add(new BoolExprNode(b_expr, 0, this.symbolTable));
                         expr_type = "Boolean";
                         break;
                     }
@@ -177,7 +180,7 @@ public class AssignmentNode implements JottTree { //TODO
                         sExprBool = true;
                         ArrayList<Token> s_expr = this.tokens;
                         s_expr.remove(s_expr.size() - 1);
-                        subnodes.add(new StrExprNode(s_expr, 0));
+                        subnodes.add(new StrExprNode(s_expr, 0, this.symbolTable));
                         expr_type = "String";
                     }
                 }
@@ -191,13 +194,13 @@ public class AssignmentNode implements JottTree { //TODO
                                 dExprBool = true;
                                 ArrayList<Token> d_expr = this.tokens;
                                 d_expr.remove(d_expr.size() - 1);
-                                subnodes.add(new DoubleExprNode(d_expr, 0));
+                                subnodes.add(new DoubleExprNode(d_expr, 0, this.symbolTable));
                                 expr_type = "Double";
                             } else {
                                 iExprBool = true;
                                 ArrayList<Token> i_expr = this.tokens;
                                 i_expr.remove(i_expr.size() - 1);
-                                subnodes.add(new IntExprNode(i_expr, 0));
+                                subnodes.add(new IntExprNode(i_expr, 0, this.symbolTable));
                                 expr_type = "Integer";
                             }
                             break;
@@ -213,14 +216,14 @@ public class AssignmentNode implements JottTree { //TODO
                     if (this.tokens.get(0).getTokenType().equals(TokenType.ID_KEYWORD)) {
                         ArrayList<Token> s_expr = this.tokens;
                         s_expr.remove(s_expr.size() - 1);
-                        subnodes.add(new BoolExprNode(s_expr, 0));
+                        subnodes.add(new BoolExprNode(s_expr, 0, this.symbolTable));
                     } else {
                         CreateSyntaxError("Unexpected Token - Expected <Expression Type First>", this.tokens.get(0));
                     }
                 }
 
                 if (last.getTokenType().equals(TokenType.SEMICOLON)) {
-                    subnodes.add(new EndStatementNode(last, 0));
+                    subnodes.add(new EndStatementNode(last, 0, this.symbolTable));
                 } else {
                     CreateSyntaxError("Unexpected Token - Expected ;", this.tokens.get(this.tokens.size() - 1));
                 }
@@ -228,10 +231,10 @@ public class AssignmentNode implements JottTree { //TODO
                 CreateSyntaxError("Unexpected Token - Expected <assignment>", this.tokens.get(0));
             }
             if (isInit) {
-                if (symbolTable.containsKey(subnodes.get(0).convertToJott()) && !symbolTable.get(subnodes.get(0).convertToJott()).IsFunction)
-                    symbolTable.get(subnodes.get(0).convertToJott()).varCount++;
+                if (this.symbolTable.containsKey(subnodes.get(0).convertToJott()) && !symbolTable.get(subnodes.get(0).convertToJott()).IsFunction)
+                    this.symbolTable.get(subnodes.get(0).convertToJott()).varCount++;
                 else
-                    symbolTable.put(subnodes.get(0).convertToJott(), new SymbolData(
+                    this.symbolTable.put(subnodes.get(0).convertToJott(), new SymbolData(
                         subnodes.get(0).convertToJott(),
                         initType,
                         false,

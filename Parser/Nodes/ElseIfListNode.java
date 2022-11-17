@@ -3,6 +3,7 @@ import Tokenizer.*;
 import Parser.*;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.Objects;
 
 public class ElseIfListNode implements JottTree{
@@ -19,9 +20,11 @@ public class ElseIfListNode implements JottTree{
     private ArrayList<JottTree> subnodes = new ArrayList<>();
     private ArrayList<Token> tokens;
     private int tabCount;
+    Hashtable<String, SymbolData> symbolTable;
 
-    public ElseIfListNode(ArrayList<Token> tokens, int tc) {
+    public ElseIfListNode(ArrayList<Token> tokens, int tc, Hashtable<String, SymbolData> symbolTable) {
         try {
+            this.symbolTable = symbolTable;
             tabCount = tc;
             this.tokens = tokens;
             if (this.tokens.size() == 0) subnodes = null;
@@ -41,7 +44,7 @@ public class ElseIfListNode implements JottTree{
                         CreateSyntaxError("Error: empty token array", b_expr.get(b_expr.size() - 1));
                     if (this.tokens.get(0).getTokenType() == TokenType.R_BRACKET) b_count--;
                 }
-                subnodes.add(new BoolExprNode(b_expr, 0));
+                subnodes.add(new BoolExprNode(b_expr, 0, this.symbolTable));
                 if (this.tokens.get(0).getTokenType() != TokenType.R_BRACKET)
                     CreateSyntaxError("Unexpected Token - Expected ']'", this.tokens.get(0));
                 this.tokens.remove(0);
@@ -57,11 +60,11 @@ public class ElseIfListNode implements JottTree{
                         CreateSyntaxError("Error: empty token array", body.get(body.size() - 1));
                     if (this.tokens.get(0).getTokenType() == TokenType.R_BRACE) b_count--;
                 }
-                subnodes.add(new BodyNode(body, tabCount + 1));
+                subnodes.add(new BodyNode(body, tabCount + 1, this.symbolTable));
                 if (this.tokens.get(0).getTokenType() != TokenType.R_BRACE)
                     CreateSyntaxError("Unexpected Token - Expected '}'", this.tokens.get(0));
                 this.tokens.remove(0);
-                subnodes.add(new ElseIfListNode(this.tokens, tabCount));
+                subnodes.add(new ElseIfListNode(this.tokens, tabCount, this.symbolTable));
             }
         } catch (Exception e) {
             throw new RuntimeException();

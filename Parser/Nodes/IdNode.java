@@ -3,6 +3,7 @@ import Tokenizer.*;
 import Parser.*;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 
 public class IdNode implements JottTree {
 
@@ -14,15 +15,17 @@ public class IdNode implements JottTree {
     private ArrayList<JottTree> subnodes = new ArrayList<>();
     private String idStored;
     private int tabCount;
+    Hashtable<String, SymbolData> symbolTable;
 
-    public IdNode(Token token, int tc){
+    public IdNode(Token token, int tc, Hashtable<String, SymbolData> symbolTable){
         try {
+            this.symbolTable = symbolTable;
             tabCount = tc;
             this.idToken = token;
             assert idToken != null;
             this.idStored = idToken.getToken();
             if (!idStored.matches("[a-z][a-zA-z0-9]*")) CreateSyntaxError("Unexpected Character", idToken);
-            for (int i = 0; i < idStored.length(); i++) subnodes.add(new CharNode(idStored.charAt(i), tabCount));
+            for (int i = 0; i < idStored.length(); i++) subnodes.add(new CharNode(idStored.charAt(i), tabCount, this.symbolTable));
         } catch (Exception e) {
             throw new RuntimeException();
         }
@@ -74,6 +77,7 @@ public class IdNode implements JottTree {
     {
         StringBuilder jott_id = new StringBuilder();
         for (JottTree node : subnodes) jott_id.append(node.convertToPython());
+        if (jott_id.toString().equals("length")) return "len";
         return jott_id.toString();
     }
 

@@ -3,6 +3,7 @@ import Tokenizer.*;
 import Parser.*;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 
 public class VariableDeclarationNode implements JottTree{
 
@@ -10,18 +11,20 @@ public class VariableDeclarationNode implements JottTree{
     private final ArrayList<Token> tokens;
     private int tabCount;
     private Token firstToken;
+    Hashtable<String, SymbolData> symbolTable;
     
-    public VariableDeclarationNode(ArrayList<Token> tokens, int tc) {
+    public VariableDeclarationNode(ArrayList<Token> tokens, int tc, Hashtable<String, SymbolData> symbolTable) {
         try {
+            this.symbolTable = symbolTable;
             tabCount = tc;
             this.tokens = tokens;
             assert this.tokens != null;
             firstToken = this.tokens.get(0);
             if (this.tokens.size() != 3) CreateSyntaxError("Invalid Variable Declaration", this.tokens.get(0));
-            subnodes.add(new TypeNode(this.tokens.get(0), tabCount));
-            subnodes.add(new IdNode(this.tokens.get(1), tabCount));
-            subnodes.add(new EndStatementNode(this.tokens.get(2), tabCount));
-            symbolTable.put(subnodes.get(1).convertToJott(), new SymbolData(
+            subnodes.add(new TypeNode(this.tokens.get(0), tabCount, this.symbolTable));
+            subnodes.add(new IdNode(this.tokens.get(1), tabCount, this.symbolTable));
+            subnodes.add(new EndStatementNode(this.tokens.get(2), tabCount, this.symbolTable));
+            this.symbolTable.put(subnodes.get(1).convertToJott(), new SymbolData(
                     subnodes.get(1).convertToJott(),
                     subnodes.get(0).convertToJott(),
                     false,

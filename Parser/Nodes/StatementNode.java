@@ -3,26 +3,29 @@ import Tokenizer.*;
 import Parser.*;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 
 public class StatementNode implements JottTree{
 
     private ArrayList<JottTree> subnodes = new ArrayList<>();
     private ArrayList<Token> tokens;
     private int tabCount;
+    Hashtable<String, SymbolData> symbolTable;
 
-    public StatementNode(ArrayList<Token> tokens, int tc) {
+    public StatementNode(ArrayList<Token> tokens, int tc, Hashtable<String, SymbolData> symbolTable) {
         try {
+            this.symbolTable = symbolTable;
             tabCount = tc;
             this.tokens = tokens;
             assert this.tokens != null;
             if (this.tokens.get(1).getTokenType() == TokenType.L_BRACKET) {
                 Token end_stmt = this.tokens.remove(this.tokens.size() - 1);
-                subnodes.add(new FunctionCallNode(this.tokens, tabCount));
-                subnodes.add(new EndStatementNode(end_stmt, tabCount));
+                subnodes.add(new FunctionCallNode(this.tokens, tabCount, this.symbolTable));
+                subnodes.add(new EndStatementNode(end_stmt, tabCount, this.symbolTable));
             } else if (this.tokens.size() == 3) {
-                subnodes.add(new VariableDeclarationNode(this.tokens, tabCount));
+                subnodes.add(new VariableDeclarationNode(this.tokens, tabCount, this.symbolTable));
             } else {
-                subnodes.add(new AssignmentNode(this.tokens, tabCount));
+                subnodes.add(new AssignmentNode(this.tokens, tabCount, this.symbolTable));
             }
         } catch (Exception e) {
             throw new RuntimeException();

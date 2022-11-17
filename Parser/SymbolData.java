@@ -23,4 +23,8 @@ public class SymbolData {
         ParamsTypes = paramsTypes;
         varCount = cnt;
     }
+
+    public String funcToString() {
+        return Name + ParamsTypes.toString();
+    }
 }

@@ -2,6 +2,7 @@ package Parser.Nodes;
 import Tokenizer.*;
 import Parser.*;
 
+import java.util.Hashtable;
 import java.util.Objects;
 
 public class TypeNode implements JottTree{
@@ -24,8 +25,10 @@ public class TypeNode implements JottTree{
     private final String C_BOOLEAN = "bool";
 
     private int tabCount;
-    public TypeNode(Token token, int tc) {
+    Hashtable<String, SymbolData> symbolTable;
+    public TypeNode(Token token, int tc, Hashtable<String, SymbolData> symbolTable) {
         try {
+            this.symbolTable = symbolTable;
             tabCount = tc;
             this.token = token;
             assert this.token != null;

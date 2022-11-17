@@ -3,6 +3,7 @@ import Tokenizer.*;
 import Parser.*;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 
 public class CharNode implements JottTree {
 
@@ -16,8 +17,10 @@ private char_type type;
 
     private final String charStored;
     private int tabCount;
+    Hashtable<String, SymbolData> symbolTable;
 
-    public CharNode(char character, int tc){
+    public CharNode(char character, int tc, Hashtable<String, SymbolData> symbolTable){
+        this.symbolTable = symbolTable;
         tabCount = tc;
         charStored = String.valueOf(character);
     }

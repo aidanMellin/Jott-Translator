@@ -3,6 +3,7 @@ import Tokenizer.*;
 import Parser.*;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 
 public class StrExprNode implements JottTree {
 
@@ -10,28 +11,31 @@ public class StrExprNode implements JottTree {
     private Token token;
     private ArrayList<Token> tokens;
     private int tabCount;
+    Hashtable<String, SymbolData> symbolTable;
 
-    public StrExprNode(Token token, int tc) {
+    public StrExprNode(Token token, int tc, Hashtable<String, SymbolData> symbolTable) {
         try {
+            this.symbolTable = symbolTable;
             tabCount = tc;
             this.token = token;
             assert this.token != null;
-            if (this.token.getTokenType() == TokenType.STRING) subnode = new StrLiteralNode(this.token, tabCount);
-            else if (this.token.getTokenType() == TokenType.ID_KEYWORD) subnode = new IdNode(this.token, tabCount);
+            if (this.token.getTokenType() == TokenType.STRING) subnode = new StrLiteralNode(this.token, tabCount, this.symbolTable);
+            else if (this.token.getTokenType() == TokenType.ID_KEYWORD) subnode = new IdNode(this.token, tabCount, this.symbolTable);
         } catch (Exception e) {
             throw new RuntimeException();
         }
     }
 
-    public StrExprNode(ArrayList<Token> tokens, int tc) {
+    public StrExprNode(ArrayList<Token> tokens, int tc, Hashtable<String, SymbolData> symbolTable) {
         tabCount = tc;
+        this.symbolTable = symbolTable;
         this.tokens = tokens;
         assert this.tokens != null;
         if (this.tokens.size() == 1) {
-            if (this.tokens.get(0).getTokenType() == TokenType.STRING) subnode = new StrLiteralNode(this.tokens.get(0), tabCount);
-            else if (this.tokens.get(0).getTokenType() == TokenType.ID_KEYWORD) subnode = new IdNode(this.tokens.get(0), tabCount);
+            if (this.tokens.get(0).getTokenType() == TokenType.STRING) subnode = new StrLiteralNode(this.tokens.get(0), tabCount, this.symbolTable);
+            else if (this.tokens.get(0).getTokenType() == TokenType.ID_KEYWORD) subnode = new IdNode(this.tokens.get(0), tabCount, this.symbolTable);
         } else {
-            subnode = new FunctionCallNode(this.tokens, tabCount);
+            subnode = new FunctionCallNode(this.tokens, tabCount, this.symbolTable);
         }
     }
 

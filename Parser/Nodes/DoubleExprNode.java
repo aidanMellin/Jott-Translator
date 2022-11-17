@@ -3,15 +3,18 @@ import Tokenizer.*;
 import Parser.*;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 
 public class DoubleExprNode implements JottTree {
 
     private ArrayList<JottTree> subnodes;
     private ArrayList<Token> Tokens;
     private int tabCount;
+    Hashtable<String, SymbolData> symbolTable;
 
-    public DoubleExprNode(ArrayList<Token> tokens, int tc) {
+    public DoubleExprNode(ArrayList<Token> tokens, int tc, Hashtable<String, SymbolData> symbolTable) {
         try {
+            this.symbolTable = symbolTable;
             tabCount = tc;
             Tokens = tokens;
             subnodes = new ArrayList<>();
@@ -34,15 +37,15 @@ public class DoubleExprNode implements JottTree {
                             tokens_to_send.add(current_token);
                             count++;
                         }
-                        temp_subnodes.add(new FunctionCallNode(tokens_to_send, 0));
+                        temp_subnodes.add(new FunctionCallNode(tokens_to_send, 0, this.symbolTable));
                         i += count;
                     } else {
-                        temp_subnodes.add(new IdNode(temp_token, 0));
+                        temp_subnodes.add(new IdNode(temp_token, 0, this.symbolTable));
                     }
                 } else if (temp_token.getTokenType() == TokenType.NUMBER) {
                     ArrayList<Token> temp_token_list = new ArrayList<>();
                     temp_token_list.add(temp_token);
-                    temp_subnodes.add(new DoubleNode(temp_token_list, 0));
+                    temp_subnodes.add(new DoubleNode(temp_token_list, 0, this.symbolTable));
 
                 } else if (temp_token.getTokenType() == TokenType.MATH_OP) {
                     if (temp_token.getToken().equals("-")) {
@@ -54,19 +57,19 @@ public class DoubleExprNode implements JottTree {
                                 return;
                             } else {
                                 temp_token_list.add(Tokens.get(i + 1));
-                                temp_subnodes.add(new DoubleNode(temp_token_list, 0));
+                                temp_subnodes.add(new DoubleNode(temp_token_list, 0, this.symbolTable));
                                 i++;
                             }
                         } else {
-                            temp_subnodes.add(new OpNode(temp_token, 0));
+                            temp_subnodes.add(new OpNode(temp_token, 0, this.symbolTable));
                             op_count++;
                         }
                     } else {
-                        temp_subnodes.add(new OpNode(temp_token, 0));
+                        temp_subnodes.add(new OpNode(temp_token, 0, this.symbolTable));
                         op_count++;
                     }
                     if (op_count > 1) {   //once a second math op has happened, the program takes the tokens used so far and makes them into a seperate node
-                        DoubleExprNode temp_condense = new DoubleExprNode(tokens_used, 0);
+                        DoubleExprNode temp_condense = new DoubleExprNode(tokens_used, 0, this.symbolTable);
                         subnodes.add(temp_condense);
                         subnodes.add(temp_subnodes.get(temp_subnodes.size() - 1));
                         temp_subnodes = new ArrayList<>();

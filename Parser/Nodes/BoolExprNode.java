@@ -3,15 +3,18 @@ import Tokenizer.*;
 import Parser.*;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 
 public class BoolExprNode implements JottTree { //TODO
 
     private ArrayList<JottTree> subnodes;
     private ArrayList<Token> tokens;
     private int tabCount;
+    Hashtable<String, SymbolData> symbolTable;
 
-    public BoolExprNode(ArrayList<Token> tokens, int tc) {
+    public BoolExprNode(ArrayList<Token> tokens, int tc, Hashtable<String, SymbolData> symbolTable) {
         try {
+            this.symbolTable = symbolTable;
             tabCount = tc;
             this.tokens = tokens;
             subnodes = new ArrayList<>();
@@ -21,7 +24,7 @@ public class BoolExprNode implements JottTree { //TODO
             int op_count = 0;
 
             if (this.tokens.size() == 1 && (this.tokens.get(0).getToken() == "True" || this.tokens.get(0).getToken() == "False")){
-                subnodes.add(new BooleanNode(this.tokens.get(0), 0));
+                subnodes.add(new BooleanNode(this.tokens.get(0), 0, this.symbolTable));
                 return;
             }
             for (int i = 0; i < tokens.size(); i++) {
@@ -38,9 +41,9 @@ public class BoolExprNode implements JottTree { //TODO
                         temp_token = tokens.get(count);
                     }
                     if (is_double) {
-                        temp_subnodes.add(new DoubleExprNode(num_tokens, 0));
+                        temp_subnodes.add(new DoubleExprNode(num_tokens, 0, this.symbolTable));
                     } else {
-                        temp_subnodes.add(new IntExprNode(num_tokens, 0));
+                        temp_subnodes.add(new IntExprNode(num_tokens, 0, this.symbolTable));
                     }
                     tokens_used.addAll(num_tokens);
                     i = count - 1;
@@ -82,17 +85,17 @@ public class BoolExprNode implements JottTree { //TODO
                     temp.addAll(num_tokens);
 
                     if (is_double) {
-                        temp_subnodes.add(new DoubleExprNode(temp, 0));
+                        temp_subnodes.add(new DoubleExprNode(temp, 0, this.symbolTable));
                     } else {
-                        temp_subnodes.add(new IntExprNode(temp, 0));
+                        temp_subnodes.add(new IntExprNode(temp, 0, this.symbolTable));
                     }
                     i = count - 1;
                     tokens_used.addAll(num_tokens);
                 } else if (temp_token.getTokenType() == TokenType.REL_OP) {
-                    temp_subnodes.add(new RelOpNode(temp_token, tabCount));
+                    temp_subnodes.add(new RelOpNode(temp_token, tabCount, this.symbolTable));
                     op_count++;
                     if (op_count > 1) {   //once a second rel op has happened, the program takes the tokens used so far and makes them into a seperate node
-                        BoolExprNode temp_condense = new BoolExprNode(tokens_used, 0);
+                        BoolExprNode temp_condense = new BoolExprNode(tokens_used, 0, this.symbolTable);
                         subnodes.add(temp_condense);
                         subnodes.add(temp_subnodes.get(temp_subnodes.size() - 1));
                         temp_subnodes = new ArrayList<>();
@@ -103,7 +106,7 @@ public class BoolExprNode implements JottTree { //TODO
                         tokens_used.add(temp_token);
                     }
                 } else if (temp_token.getTokenType() == TokenType.STRING) {
-                    temp_subnodes.add(new StrExprNode(temp_token, 0));
+                    temp_subnodes.add(new StrExprNode(temp_token, 0, this.symbolTable));
                     tokens_used.add(temp_token);
                 } else if (temp_token.getTokenType() == TokenType.ID_KEYWORD) {
                     if (i < tokens.size() - 1 && tokens.get(i + 1).getTokenType() == TokenType.L_BRACKET) {
@@ -116,11 +119,11 @@ public class BoolExprNode implements JottTree { //TODO
                             tokens_to_send.add(current_token);
                             count++;
                         }
-                        temp_subnodes.add(new FunctionCallNode(tokens_to_send, 0));
+                        temp_subnodes.add(new FunctionCallNode(tokens_to_send, 0, this.symbolTable));
                         i += count-1;
                         tokens_used.addAll(tokens_to_send);
                     } else {
-                        temp_subnodes.add(new IdNode(temp_token, 0));
+                        temp_subnodes.add(new IdNode(temp_token, 0, this.symbolTable));
                         tokens_used.add(temp_token);
                     }
                 }

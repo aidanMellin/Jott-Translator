@@ -2,12 +2,16 @@ package Parser.Nodes;
 import Tokenizer.*;
 import Parser.*;
 
+import java.util.Hashtable;
+
 public class RelOpNode implements JottTree {
 
     private final Token token;
     private int tabCount;
-    public RelOpNode(Token token, int tc) {
+    Hashtable<String, SymbolData> symbolTable;
+    public RelOpNode(Token token, int tc, Hashtable<String, SymbolData> symbolTable) {
         try {
+            this.symbolTable = symbolTable;
             tabCount = tc;
             this.token = token;
             assert this.token != null;

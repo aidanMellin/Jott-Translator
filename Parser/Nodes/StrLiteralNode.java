@@ -3,6 +3,7 @@ import Tokenizer.*;
 import Parser.*;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 
 public class StrLiteralNode implements JottTree {
 
@@ -10,16 +11,18 @@ public class StrLiteralNode implements JottTree {
     private final String QUOTE_CHAR = "\"";
     private Token token;
     private int tabCount;
+    Hashtable<String, SymbolData> symbolTable;
 
-    public StrLiteralNode(Token token, int tc) {
+    public StrLiteralNode(Token token, int tc, Hashtable<String, SymbolData> symbolTable) {
         try {
+            this.symbolTable = symbolTable;
             tabCount = tc;
             this.token = token;
             assert this.token != null;
             if (token.getTokenType() != TokenType.STRING)
                 CreateSyntaxError("Unexpected Token - Expected String", this.token);
             if (!token.getToken().matches("\"[a-zA-Z0-9\s]*\"")) CreateSyntaxError("Unrecognized Character", this.token);
-            subnode = new StrNode(token.getToken().substring(1, token.getToken().length()-1), tabCount);
+            subnode = new StrNode(token.getToken().substring(1, token.getToken().length()-1), tabCount, this.symbolTable);
         } catch (Exception e) {
             throw new RuntimeException();
         }

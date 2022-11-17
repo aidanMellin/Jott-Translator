@@ -2,6 +2,7 @@ package Parser.Nodes;
 import Tokenizer.*;
 import Parser.*;
 
+import java.util.Hashtable;
 import java.util.Objects;
 
 public class FunctionReturnNode implements JottTree{
@@ -12,13 +13,15 @@ public class FunctionReturnNode implements JottTree{
     private final Token token;
 
     private int tabCount;
-    public FunctionReturnNode(Token token, int tc) {
+    Hashtable<String, SymbolData> symbolTable;
+    public FunctionReturnNode(Token token, int tc, Hashtable<String, SymbolData> symbolTable) {
         try {
+            this.symbolTable = symbolTable;
             tabCount = tc;
             this.token = token;
             assert this.token != null;
             if (Objects.equals(this.token.getToken(), JOTT_VOID)) subnode = null;
-            else subnode = new TypeNode(this.token, tabCount);
+            else subnode = new TypeNode(this.token, tabCount, this.symbolTable);
         } catch (Exception e) {
             throw new RuntimeException();
         }

@@ -2,14 +2,18 @@ package Parser.Nodes;
 import Tokenizer.*;
 import Parser.*;
 
+import java.util.Hashtable;
+
 public class SignNode implements JottTree {
 
     private final String EMPTY_STRING = "";
     private Token token;
     private int tabCount;
+    Hashtable<String, SymbolData> symbolTable;
 
-    public SignNode(Token token, int tc) {
+    public SignNode(Token token, int tc, Hashtable<String, SymbolData> symbolTable) {
         try {
+            this.symbolTable = symbolTable;
             this.token = token;
             if (this.token == null) return;
             else if (this.token.getTokenType() != TokenType.MATH_OP)

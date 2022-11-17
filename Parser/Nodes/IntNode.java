@@ -3,24 +3,27 @@ import Tokenizer.*;
 import Parser.*;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 
 public class IntNode implements JottTree {
 
     private final ArrayList<JottTree> subnodes = new ArrayList<>();
     private final ArrayList<Token> tokens;
     private int tabCount;
+    Hashtable<String, SymbolData> symbolTable;
 
-    public IntNode(ArrayList<Token> tokens, int tc) {
+    public IntNode(ArrayList<Token> tokens, int tc, Hashtable<String, SymbolData> symbolTable) {
         try {
+            this.symbolTable = symbolTable;
             tabCount = tc;
             this.tokens = tokens;
             if (this.tokens.size() == 1) {
-                subnodes.add(new SignNode(null, tabCount));
+                subnodes.add(new SignNode(null, tabCount, this.symbolTable));
                 if (!tokens.get(0).getToken().matches("[0-9]+"))
                     CreateSyntaxError("Unexpected Character", this.tokens.get(0));
                 assert tokens.get(0).getTokenType() == TokenType.NUMBER;
                 for (int i = 0; i < tokens.get(0).getToken().length(); i++)
-                    subnodes.add(new CharNode(tokens.get(0).getToken().charAt(i), tabCount));
+                    subnodes.add(new CharNode(tokens.get(0).getToken().charAt(i), tabCount, this.symbolTable));
             } else if (this.tokens.size() == 2) {
                 if (!tokens.get(0).getToken().matches("[-+]?"))
                     CreateSyntaxError("Unexpected Character - Expected '-' or '+'", this.tokens.get(0));
@@ -32,9 +35,9 @@ public class IntNode implements JottTree {
                 ;
                 if (tokens.get(1).getTokenType() != TokenType.NUMBER)
                     CreateSyntaxError("Unexpected Token - Expected Number", this.tokens.get(0));
-                subnodes.add(new SignNode(tokens.get(0), tabCount));
+                subnodes.add(new SignNode(tokens.get(0), tabCount, this.symbolTable));
                 for (int i = 1; i < tokens.get(1).getToken().length(); i++)
-                    subnodes.add(new CharNode(tokens.get(1).getToken().charAt(i), tabCount));
+                    subnodes.add(new CharNode(tokens.get(1).getToken().charAt(i), tabCount, this.symbolTable));
             }
         } catch (Exception e) {
             throw new RuntimeException();
