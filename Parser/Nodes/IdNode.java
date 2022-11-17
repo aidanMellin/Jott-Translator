@@ -74,6 +74,7 @@ public class IdNode implements JottTree {
     {
         StringBuilder jott_id = new StringBuilder();
         for (JottTree node : subnodes) jott_id.append(node.convertToPython());
+        if (jott_id.toString().equals("length")) return "len";
         return jott_id.toString();
     }
 

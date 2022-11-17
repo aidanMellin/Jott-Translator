@@ -86,7 +86,13 @@ public class ParametersTNode implements JottTree{
     public String convertToPython()
     {
         if (expressionNode == null) return EMPTY_STRING;
-        return ", "+expressionNode.convertToJott() + parametersTNode.convertToJott();
+        if (function.equals("concat")) {
+            return expressionNode.convertToPython() + parametersTNode.convertToPython();
+        }
+        if (function.equals("input")) {
+            return EMPTY_STRING;
+        }
+        return ", "+expressionNode.convertToPython() + parametersTNode.convertToPython();
     }
 
     /**

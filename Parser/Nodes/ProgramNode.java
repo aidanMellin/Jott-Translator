@@ -31,6 +31,47 @@ public class ProgramNode implements JottTree { //TODO
                     new ArrayList<>(),
                     1
             ));
+            symbolTable.get("print").Params.add("expr");
+            symbolTable.put("input", new SymbolData(
+                    "input",
+                    "String",
+                    false,
+                    true,
+                    true,
+                    new ArrayList<>(),
+                    new ArrayList<>(),
+                    1
+            ));
+            symbolTable.get("input").Params.add("msg");
+            symbolTable.get("input").Params.add("size");
+            symbolTable.get("input").ParamsTypes.add("String");
+            symbolTable.get("input").ParamsTypes.add("Integer");
+            symbolTable.put("concat", new SymbolData(
+                    "concat",
+                    "String",
+                    false,
+                    true,
+                    true,
+                    new ArrayList<>(),
+                    new ArrayList<>(),
+                    1
+            ));
+            symbolTable.get("concat").Params.add("str1");
+            symbolTable.get("concat").Params.add("str2");
+            symbolTable.get("concat").ParamsTypes.add("String");
+            symbolTable.get("concat").ParamsTypes.add("String");
+            symbolTable.put("length", new SymbolData(
+                    "length",
+                    "Integer",
+                    false,
+                    true,
+                    true,
+                    new ArrayList<>(),
+                    new ArrayList<>(),
+                    1
+            ));
+            symbolTable.get("length").Params.add("str");
+            symbolTable.get("length").ParamsTypes.add("String");
             // also add EOF symbol??
         } catch (Exception e) {
             e.printStackTrace();
