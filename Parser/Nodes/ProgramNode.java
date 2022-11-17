@@ -60,7 +60,7 @@ public class ProgramNode implements JottTree { //TODO
      */
     public String convertToPython()
     {
-        return function_list.convertToPython() + "\n\nmain()";
+        return function_list.convertToPython() + "main()";
     }
 
     /**

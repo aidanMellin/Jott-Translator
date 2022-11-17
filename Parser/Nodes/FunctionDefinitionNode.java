@@ -124,7 +124,7 @@ public class FunctionDefinitionNode implements JottTree {
      */
     public String convertToPython()
     {
-        return "\t".repeat(tabCount) + "def " + subnodes.get(0).convertToPython() + " (" + subnodes.get(1).convertToPython() + "):\n" +
+        return "\t".repeat(tabCount) + "def " + subnodes.get(0).convertToPython() + "(" + subnodes.get(1).convertToPython() + "):\n" +
                 subnodes.get(3).convertToPython() + "\n";
     }
 

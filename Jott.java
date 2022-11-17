@@ -9,12 +9,14 @@ import java.util.Objects;
 
 public class Jott {
     public static void main(String[] args) {
-        String fileName = "fileName";
+        String fileName;
         String lang, inputFile, outputFile;
         try{
             inputFile = args[0];
             outputFile = args[1];
             lang = args[2];
+            String[] fileNameTokens = inputFile.split("\\.");
+            fileName = fileNameTokens[0];
             System.out.printf("Outputting %s, %s, %s%n",inputFile, outputFile, lang);
             try {
                 ArrayList<Token> jottTokens = JottTokenizer.tokenize(inputFile);

@@ -108,7 +108,7 @@ public class WhileLoopNode implements JottTree{
     public String convertToPython()
     {
         return "\t".repeat(tabCount) + "while " + subnodes.get(0).convertToPython() + ":\n" +
-                subnodes.get(1).convertToPython() + "\n";
+                subnodes.get(1).convertToPython();// + "\n";
     }
 
     /**

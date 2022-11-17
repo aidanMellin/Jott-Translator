@@ -73,7 +73,8 @@ public class ReturnStatementNode implements JottTree {
     public String convertToPython()
     {
         return  "\t".repeat(tabCount) + JOTT_RETURN + " " +
-                subnodes.get(0).convertToJott();
+                subnodes.get(0).convertToPython() +
+                subnodes.get(1).convertToPython();
     }
 
     /**

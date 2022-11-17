@@ -28,7 +28,11 @@ public class JottParser {
     }
 
     public static void main(String[] args) {
-        String fileName = "fileName";
+        String fileName;
+        String textFileName = "fileName.jott";
+        String[] fileNameTokens = textFileName.split("\\.");
+        System.out.println(fileNameTokens[0]);
+        fileName = fileNameTokens[0];
         ArrayList<Token> tokens = JottTokenizer.tokenize("Parser/phase3TestCases/largerValid.jott");
         //ArrayList<Token> tokens = JottTokenizer.tokenize("Parser/phase2Tester/parserTestCases/validLoop.jott");
         JottTree jottTree = parse(tokens, fileName);
