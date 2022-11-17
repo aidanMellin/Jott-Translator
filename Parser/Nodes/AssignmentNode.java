@@ -312,14 +312,13 @@ public class AssignmentNode implements JottTree {
                 java_asmt.append(C_MALLOC);
                 //java_asmt.append(subnodes.get(1).convertToC().length()).append(");");
 
-                java_asmt.append("\n");
-                java_asmt.append("\t".repeat(tabCount));
+                java_asmt.append("\n").append("\t".repeat(tabCount));;
             }
         }
 
         java_asmt.append(subnodes.get(0).convertToC()).append(" ");
-        if(tokens.get(0).getToken() == JOTT_STRING)
-            java_asmt.append("[] ");
+        //if(tokens.get(0).getToken() == JOTT_STRING)
+            //java_asmt.append("[] ");
         java_asmt.append(EQ_CHAR + " ");
         java_asmt.append(subnodes.get(1).convertToC());
         java_asmt.append(subnodes.get(2).convertToC());
