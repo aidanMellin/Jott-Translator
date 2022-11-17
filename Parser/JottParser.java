@@ -43,12 +43,12 @@ public class JottParser {
         String textFileName = "largerValid.jott";
         String[] fileNameTokens = textFileName.split("\\.");
         fileName = fileNameTokens[0];
-        ArrayList<Token> tokens = JottTokenizer.tokenize("Parser/phase3TestCases/largerValid.jott");
-        // ArrayList<Token> tokens = JottTokenizer.tokenize("Parser/phase3TestCases/funcCallParamInvalid.jott");
+        // ArrayList<Token> tokens = JottTokenizer.tokenize("Parser/phase3TestCases/largerValid.jott");
+        ArrayList<Token> tokens = JottTokenizer.tokenize("Parser/phase3TestCases/funcCallParamInvalid.jott");
         // ArrayList<Token> tokens = JottTokenizer.tokenize("Parser/phase2Tester/parserTestCases/validLoop.jott");
 
         JottTree jottTree = parse(tokens, fileName);
-        String output = (jottTree != null && validate(jottTree)) ? jottTree.convertToC() : "error resulting in null";
+        String output = (jottTree != null && validate(jottTree)) ? jottTree.convertToJott() : "error resulting in null";
         System.out.println(output);
     }
 }

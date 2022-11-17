@@ -79,8 +79,8 @@ public class ExpressionNode implements JottTree{
             // in s_expr for now, but in phase 3 this will have to change.
             if (!bExprBool && !sExprBool && !iExprBool && !dExprBool) {
                 if (this.tokens.get(0).getTokenType().equals(TokenType.ID_KEYWORD)) {
-                    isVar = true;
                     if (this.tokens.size() == 1) {
+                        isVar = true;
                         subnode = new IdNode(this.tokens.get(0), 0, symbolTable);
                     } else {
                         subnode = new FunctionCallNode(this.tokens, 0, symbolTable);
