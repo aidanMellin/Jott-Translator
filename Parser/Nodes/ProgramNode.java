@@ -18,9 +18,8 @@ public class ProgramNode implements JottTree { //TODO
     Hashtable<String, SymbolData> symbolTable;
 
 
-    public ProgramNode(ArrayList<Token> tokens, int tc, String fileName, Hashtable<String, SymbolData> st){
+    public ProgramNode(ArrayList<Token> tokens, int tc, String fileName, Hashtable<String, SymbolData> symbolTable){
         try {
-            symbolTable = st;
             this.FILE_NAME = fileName;
             tabCount = tc;
             firstToken = tokens.get(0);
@@ -76,6 +75,7 @@ public class ProgramNode implements JottTree { //TODO
             symbolTable.get("length").Params.add("str");
             symbolTable.get("length").ParamsTypes.add("String");
             function_list = new FunctionListNode(tokens, tabCount, symbolTable);
+            this.symbolTable = symbolTable;
 
             // also add EOF symbol??
         } catch (Exception e) {

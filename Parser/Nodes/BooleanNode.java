@@ -19,12 +19,12 @@ public class BooleanNode implements JottTree {
 
     public BooleanNode(Token token, int tc, Hashtable<String, SymbolData> symbolTable) {
         try {
-            this.symbolTable = symbolTable;
             tabCount = tc;
             this.token = token;
             assert this.token != null;
             if (!Objects.equals(this.token.getToken(), JOTT_TRUE) && !Objects.equals(this.token.getToken(), JOTT_FALSE))
                 CreateSyntaxError(ERROR_MSG, this.token);
+            this.symbolTable = symbolTable;
         } catch (Exception e) {
             throw new RuntimeException();
         }

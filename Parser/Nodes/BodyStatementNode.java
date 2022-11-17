@@ -17,19 +17,19 @@ public class BodyStatementNode implements JottTree {
 
     public BodyStatementNode(ArrayList<Token> tokens, int tc, Hashtable<String, SymbolData> symbolTable) {
         try {
-            this.symbolTable = symbolTable;
             tabCount = tc;
             this.tokens = tokens;
             assert this.tokens != null;
             if (this.tokens.get(0).getToken().equals(IF_STR)) {
-                subnodes.add(new IfStatementNode(this.tokens, tabCount, this.symbolTable));
+                subnodes.add(new IfStatementNode(this.tokens, tabCount, symbolTable));
             } else if (this.tokens.get(0).getToken().equals(WHILE_STR)) {
-                subnodes.add(new WhileLoopNode(this.tokens, tabCount, this.symbolTable));
+                subnodes.add(new WhileLoopNode(this.tokens, tabCount, symbolTable));
             } else if (this.tokens.get(0).getTokenType().equals(TokenType.ID_KEYWORD)) {
-                subnodes.add(new StatementNode(this.tokens, tabCount, this.symbolTable));
+                subnodes.add(new StatementNode(this.tokens, tabCount, symbolTable));
             } else {
                 CreateSyntaxError("Unexpected Token - Expected 'Body Statement'", this.tokens.get(0));
             }
+            this.symbolTable = symbolTable;
         } catch (Exception e) {
             throw new RuntimeException();
         }

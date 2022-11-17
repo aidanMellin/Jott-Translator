@@ -16,27 +16,27 @@ public class DoubleNode implements JottTree {
 
     public DoubleNode(ArrayList<Token> tokens, int tc, Hashtable<String, SymbolData> symbolTable) {
         try {
-            this.symbolTable = symbolTable;
             tabCount = tc;
             this.tokens = tokens;
             assert this.tokens != null;
             if (this.tokens.size() == 1) {
-                subnodes.add(new SignNode(null, tabCount, this.symbolTable));
+                subnodes.add(new SignNode(null, tabCount, symbolTable));
                 if (!tokens.get(0).getToken().matches("[0-9]*[.][0-9]+"))
                     CreateSyntaxError("Not a Valid Double Number", this.tokens.get(0));
                 for (int i = 0; i < tokens.get(0).getToken().length(); i++)
                     if (tokens.get(0).getToken().charAt(i) == '.') PERIOD_PLACE = i;
-                    else subnodes.add(new CharNode(tokens.get(0).getToken().charAt(i), tabCount, this.symbolTable));
+                    else subnodes.add(new CharNode(tokens.get(0).getToken().charAt(i), tabCount, symbolTable));
             } else if (this.tokens.size() == 2) {
                 if (!tokens.get(0).getToken().matches("[-+]?"))
                     CreateSyntaxError("Unexpected Token - Expected '+' or '-'", this.tokens.get(0));
                 if (!tokens.get(1).getToken().matches("[0-9]*[.][0-9]+"))
                     CreateSyntaxError("Not a Valid Double Number", this.tokens.get(1));
-                subnodes.add(new SignNode(tokens.get(0), tabCount, this.symbolTable));
+                subnodes.add(new SignNode(tokens.get(0), tabCount, symbolTable));
                 for (int i = 1; i < tokens.get(1).getToken().length(); i++)
                     if (tokens.get(1).getToken().charAt(i) == '.') PERIOD_PLACE = i;
-                    else subnodes.add(new CharNode(tokens.get(1).getToken().charAt(i), tabCount, this.symbolTable));
+                    else subnodes.add(new CharNode(tokens.get(1).getToken().charAt(i), tabCount, symbolTable));
             } else CreateSyntaxError("Unexpected Token", this.tokens.get(3));
+            this.symbolTable = symbolTable;
         } catch (Exception e) {
             throw new RuntimeException();
         }

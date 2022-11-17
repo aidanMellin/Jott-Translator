@@ -22,7 +22,6 @@ public class ParametersTNode implements JottTree{
 
     public ParametersTNode(ArrayList<Token> tokens, int tc, int c, String func, Hashtable<String, SymbolData> symbolTable) {
         try {
-            this.symbolTable = symbolTable;
             function = func;
             cnt = c;
             tabCount = tc;
@@ -45,9 +44,10 @@ public class ParametersTNode implements JottTree{
                     else if (this.tokens.get(0).getTokenType() == TokenType.R_BRACKET) b_count++;
 
                 }
-                expressionNode = new ExpressionNode(expr, tabCount, this.symbolTable);
-                parametersTNode = new ParametersTNode(this.tokens, tabCount, cnt+1, func, this.symbolTable);
+                expressionNode = new ExpressionNode(expr, tabCount, symbolTable);
+                parametersTNode = new ParametersTNode(this.tokens, tabCount, cnt+1, func, symbolTable);
             }
+            this.symbolTable = symbolTable;
         } catch (Exception e) {
             throw new RuntimeException();
         }

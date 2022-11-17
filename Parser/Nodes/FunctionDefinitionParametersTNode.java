@@ -18,7 +18,6 @@ public class FunctionDefinitionParametersTNode implements JottTree {
 
     public FunctionDefinitionParametersTNode(ArrayList<Token> tokens, int tc, String func, Hashtable<String, SymbolData> symbolTable) {
         try {
-            this.symbolTable = symbolTable;
             tabCount = tc;
             this.tokens = tokens;
             if (this.tokens.size() == 0) subnodes = null;
@@ -29,19 +28,19 @@ public class FunctionDefinitionParametersTNode implements JottTree {
                 this.tokens.remove(0);
                 if (this.tokens.get(0).getTokenType() != TokenType.ID_KEYWORD)
                     CreateSyntaxError("Unexpected Token - Expected ID", this.tokens.get(0));
-                subnodes.add(new IdNode(this.tokens.remove(0), tabCount, this.symbolTable));
-                this.symbolTable.get(func).Params.add(subnodes.get(0).convertToJott());
+                subnodes.add(new IdNode(this.tokens.remove(0), tabCount, symbolTable));
+                symbolTable.get(func).Params.add(subnodes.get(0).convertToJott());
 
                 if (this.tokens.get(0).getTokenType() != TokenType.COLON)
                     CreateSyntaxError("Unexpected Token - Expected ':'", this.tokens.get(0));
                 this.tokens.remove(0);
                 if (this.tokens.get(0).getTokenType() != TokenType.ID_KEYWORD)
                     CreateSyntaxError("Unexpected Token - Expected ID", this.tokens.get(0));
-                subnodes.add(new TypeNode(this.tokens.remove(0), tabCount, this.symbolTable));
-                this.symbolTable.get(func).ParamsTypes.add(subnodes.get(0).convertToJott());
+                subnodes.add(new TypeNode(this.tokens.remove(0), tabCount, symbolTable));
+                symbolTable.get(func).ParamsTypes.add(subnodes.get(0).convertToJott());
 
-                subnodes.add(new FunctionDefinitionParametersTNode(this.tokens, tabCount, func, this.symbolTable));
-                this.symbolTable.put(subnodes.get(0).convertToJott(), new SymbolData(
+                subnodes.add(new FunctionDefinitionParametersTNode(this.tokens, tabCount, func, symbolTable));
+                symbolTable.put(subnodes.get(0).convertToJott(), new SymbolData(
                         subnodes.get(0).convertToJott(),
                         subnodes.get(1).convertToJott(),
                         false,
@@ -52,6 +51,7 @@ public class FunctionDefinitionParametersTNode implements JottTree {
                         1
                 ));
             }
+            this.symbolTable = symbolTable;
         } catch (Exception e) {
             throw new RuntimeException();
         }

@@ -15,12 +15,12 @@ public class StrExprNode implements JottTree {
 
     public StrExprNode(Token token, int tc, Hashtable<String, SymbolData> symbolTable) {
         try {
-            this.symbolTable = symbolTable;
             tabCount = tc;
             this.token = token;
             assert this.token != null;
-            if (this.token.getTokenType() == TokenType.STRING) subnode = new StrLiteralNode(this.token, tabCount, this.symbolTable);
-            else if (this.token.getTokenType() == TokenType.ID_KEYWORD) subnode = new IdNode(this.token, tabCount, this.symbolTable);
+            if (this.token.getTokenType() == TokenType.STRING) subnode = new StrLiteralNode(this.token, tabCount, symbolTable);
+            else if (this.token.getTokenType() == TokenType.ID_KEYWORD) subnode = new IdNode(this.token, tabCount, symbolTable);
+            this.symbolTable = symbolTable;
         } catch (Exception e) {
             throw new RuntimeException();
         }
@@ -28,15 +28,15 @@ public class StrExprNode implements JottTree {
 
     public StrExprNode(ArrayList<Token> tokens, int tc, Hashtable<String, SymbolData> symbolTable) {
         tabCount = tc;
-        this.symbolTable = symbolTable;
         this.tokens = tokens;
         assert this.tokens != null;
         if (this.tokens.size() == 1) {
-            if (this.tokens.get(0).getTokenType() == TokenType.STRING) subnode = new StrLiteralNode(this.tokens.get(0), tabCount, this.symbolTable);
-            else if (this.tokens.get(0).getTokenType() == TokenType.ID_KEYWORD) subnode = new IdNode(this.tokens.get(0), tabCount, this.symbolTable);
+            if (this.tokens.get(0).getTokenType() == TokenType.STRING) subnode = new StrLiteralNode(this.tokens.get(0), tabCount, symbolTable);
+            else if (this.tokens.get(0).getTokenType() == TokenType.ID_KEYWORD) subnode = new IdNode(this.tokens.get(0), tabCount, symbolTable);
         } else {
-            subnode = new FunctionCallNode(this.tokens, tabCount, this.symbolTable);
+            subnode = new FunctionCallNode(this.tokens, tabCount, symbolTable);
         }
+        this.symbolTable = symbolTable;
     }
 
     /**

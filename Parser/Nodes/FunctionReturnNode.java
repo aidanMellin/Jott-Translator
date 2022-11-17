@@ -16,12 +16,12 @@ public class FunctionReturnNode implements JottTree{
     Hashtable<String, SymbolData> symbolTable;
     public FunctionReturnNode(Token token, int tc, Hashtable<String, SymbolData> symbolTable) {
         try {
-            this.symbolTable = symbolTable;
             tabCount = tc;
             this.token = token;
             assert this.token != null;
             if (Objects.equals(this.token.getToken(), JOTT_VOID)) subnode = null;
-            else subnode = new TypeNode(this.token, tabCount, this.symbolTable);
+            else subnode = new TypeNode(this.token, tabCount, symbolTable);
+            this.symbolTable = symbolTable;
         } catch (Exception e) {
             throw new RuntimeException();
         }

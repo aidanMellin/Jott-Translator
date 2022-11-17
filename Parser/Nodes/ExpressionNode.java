@@ -18,7 +18,6 @@ public class ExpressionNode implements JottTree{
 
     public ExpressionNode(ArrayList<Token> tokens, int tc, Hashtable<String, SymbolData> symbolTable) {
         try {
-            this.symbolTable = symbolTable;
             tabCount = tc;
             this.tokens = tokens;
             firstToken = this.tokens.get(0);
@@ -29,7 +28,7 @@ public class ExpressionNode implements JottTree{
             for (int i = 0; i < this.tokens.size(); i++) {
                 if (this.tokens.get(i).getTokenType().equals(TokenType.REL_OP)) {
                     bExprBool = true;
-                    subnode = new BoolExprNode(this.tokens, 0, this.symbolTable);
+                    subnode = new BoolExprNode(this.tokens, 0, symbolTable);
                     expr_type = "Boolean";
                     break;
                 }
@@ -43,10 +42,10 @@ public class ExpressionNode implements JottTree{
                     sExprBool = true;
                     if(this.tokens.size() == 1) {
                         Token strToken = this.tokens.get(0);
-                        subnode = new StrExprNode(strToken, 0, this.symbolTable);
+                        subnode = new StrExprNode(strToken, 0, symbolTable);
                     }
                     else {
-                        subnode = new StrExprNode(this.tokens, 0, this.symbolTable);
+                        subnode = new StrExprNode(this.tokens, 0, symbolTable);
                     }
                     expr_type = "String";
 
@@ -63,11 +62,11 @@ public class ExpressionNode implements JottTree{
                         if (this.tokens.get(i).getToken().contains(".")) {
                             dExprBool = true;
                             expr_type = "Double";
-                            subnode = new DoubleExprNode(this.tokens, 0, this.symbolTable);
+                            subnode = new DoubleExprNode(this.tokens, 0, symbolTable);
                         } else {
                             iExprBool = true;
                             expr_type = "Integer";
-                            subnode = new IntExprNode(this.tokens, 0, this.symbolTable);
+                            subnode = new IntExprNode(this.tokens, 0, symbolTable);
                         }
                         break;
                     }
@@ -82,15 +81,16 @@ public class ExpressionNode implements JottTree{
                 if (this.tokens.get(0).getTokenType().equals(TokenType.ID_KEYWORD)) {
                     isVar = true;
                     if (this.tokens.size() == 1) {
-                        subnode = new IdNode(this.tokens.get(0), 0, this.symbolTable);
+                        subnode = new IdNode(this.tokens.get(0), 0, symbolTable);
                     } else {
-                        subnode = new FunctionCallNode(this.tokens, 0, this.symbolTable);
+                        subnode = new FunctionCallNode(this.tokens, 0, symbolTable);
                     }
-                    if (this.symbolTable.containsKey(subnode.convertToJott())) expr_type = this.symbolTable.get(subnode.convertToJott()).ReturnType;
+                    if (symbolTable.containsKey(subnode.convertToJott())) expr_type = symbolTable.get(subnode.convertToJott()).ReturnType;
                 } else {
                     CreateSyntaxError("Unexpected Token - Expected <Expression Type First>", this.tokens.get(0));
                 }
             }
+            this.symbolTable = symbolTable;
         } catch (Exception e) {
             throw new RuntimeException();
         }

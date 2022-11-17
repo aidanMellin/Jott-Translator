@@ -20,14 +20,13 @@ public class BodyNode implements JottTree {
 
     public BodyNode(ArrayList<Token> tokens, int tc, Hashtable<String, SymbolData> symbolTable) {
         try {
-            this.symbolTable = symbolTable;
             tabCount = tc;
             this.tokens = tokens;
 
             if (this.tokens.size() == 0) {
                 return;
             } else if (this.tokens.get(0).getTokenType().equals(TokenType.ID_KEYWORD) && this.tokens.get(0).getToken().equals(RETURN_STR)) {
-                subnodes.add(new ReturnStatementNode(this.tokens, tabCount, this.symbolTable));
+                subnodes.add(new ReturnStatementNode(this.tokens, tabCount, symbolTable));
             } else {
                 ArrayList<Token> bodyStmtTokens = new ArrayList<>();
                 if (this.tokens.get(0).getToken().equals(WHILE_STR)) {
@@ -100,9 +99,10 @@ public class BodyNode implements JottTree {
                         }
                     }
                 }
-                subnodes.add(new BodyStatementNode(new ArrayList<>(bodyStmtTokens), tabCount, this.symbolTable));
-                subnodes.add(new BodyNode(new ArrayList<>(this.tokens), tabCount, this.symbolTable));
+                subnodes.add(new BodyStatementNode(new ArrayList<>(bodyStmtTokens), tabCount, symbolTable));
+                subnodes.add(new BodyNode(new ArrayList<>(this.tokens), tabCount, symbolTable));
             }
+            this.symbolTable = symbolTable;
         } catch (Exception e) {
             throw new RuntimeException();
         }

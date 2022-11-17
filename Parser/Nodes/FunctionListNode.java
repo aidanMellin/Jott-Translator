@@ -15,7 +15,6 @@ public class FunctionListNode implements JottTree { //TODO
 
     public FunctionListNode(ArrayList<Token> tokens, int tc, Hashtable<String, SymbolData> symbolTable){
         try {
-            this.symbolTable = symbolTable;
             this.tokens = tokens;
             tabCount = tc;
             if (this.tokens.size() != 0) {
@@ -40,11 +39,12 @@ public class FunctionListNode implements JottTree { //TODO
                 if(this.tokens.size() != 0) {
                     fDefTokens.add(this.tokens.remove(0));
                 }
-                function_def = new FunctionDefinitionNode(fDefTokens, tabCount, this.symbolTable);
+                function_def = new FunctionDefinitionNode(fDefTokens, tabCount, symbolTable);
                 // functionList
                 assert this.tokens != null;
-                function_list = new FunctionListNode(this.tokens, tabCount, this.symbolTable);
+                function_list = new FunctionListNode(this.tokens, tabCount, symbolTable);
             }
+            this.symbolTable = symbolTable;
         } catch (Exception e) {
             throw new RuntimeException();
         }

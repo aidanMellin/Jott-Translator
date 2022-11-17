@@ -21,7 +21,6 @@ public class ElseNode implements JottTree{
 
     public ElseNode(ArrayList<Token> tokens, int tc, Hashtable<String, SymbolData> symbolTable) {
         try {
-            this.symbolTable = symbolTable;
             tabCount = tc;
             this.tokens = tokens;
             if (this.tokens.size() == 0) body = null;
@@ -37,8 +36,9 @@ public class ElseNode implements JottTree{
                 bodyTokens.remove(0);
                 bodyTokens.remove(0);
                 bodyTokens.remove(bodyTokens.size() - 1);
-                body = new BodyNode(bodyTokens, tabCount + 1, this.symbolTable);
+                body = new BodyNode(bodyTokens, tabCount + 1, symbolTable);
             }
+            this.symbolTable = symbolTable;
         } catch (Exception e) {
             throw new RuntimeException();
         }
