@@ -20,8 +20,10 @@ public class AssignmentNode implements JottTree {
 
     private final String C_DOUBLE = "double";
     private final String C_INTEGER = "int";
-    private final String C_STRING = "char";
+    private final String C_STRING = "char *";
     private final String C_BOOLEAN = "bool";
+
+    private final String C_MALLOC = "= (char*) malloc(sizeof(char) * 1024);";
 
     private final String EQ_CHAR = "=";
     private ArrayList<JottTree> subnodes = new ArrayList<>();
@@ -298,13 +300,23 @@ public class AssignmentNode implements JottTree {
      */
     public String convertToC()
     {
+
         StringBuilder java_asmt = new StringBuilder();
         switch (tokens.get(0).getToken()) {
             case JOTT_DOUBLE -> java_asmt.append(C_DOUBLE + " ");
             case JOTT_BOOLEAN -> java_asmt.append(C_BOOLEAN + " ");
             case JOTT_INTEGER -> java_asmt.append(C_INTEGER + " ");
-            case JOTT_STRING -> java_asmt.append(C_STRING + " ");
+            case JOTT_STRING -> {
+                java_asmt.append(C_STRING + " ");
+                java_asmt.append(subnodes.get(0).convertToC()).append(" ");
+                java_asmt.append(C_MALLOC);
+                //java_asmt.append(subnodes.get(1).convertToC().length()).append(");");
+
+                java_asmt.append("\n");
+                java_asmt.append("\t".repeat(tabCount));
+            }
         }
+
         java_asmt.append(subnodes.get(0).convertToC()).append(" ");
         if(tokens.get(0).getToken() == JOTT_STRING)
             java_asmt.append("[] ");
