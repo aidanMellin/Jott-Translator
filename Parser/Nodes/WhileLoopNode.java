@@ -22,7 +22,6 @@ public class WhileLoopNode implements JottTree{
 
     public WhileLoopNode(ArrayList<Token> tokens, int tc, Hashtable<String, SymbolData> symbolTable) {
         try {
-            this.symbolTable = symbolTable;
             tabCount = tc;
             this.tokens = tokens;
             assert this.tokens != null;
@@ -41,7 +40,7 @@ public class WhileLoopNode implements JottTree{
                     CreateSyntaxError("Error: empty token array", b_expr.get(b_expr.size() - 1));
                 if (this.tokens.get(0).getTokenType() == TokenType.R_BRACKET) b_count--;
             }
-            subnodes.add(new BoolExprNode(b_expr, tabCount, this.symbolTable));
+            subnodes.add(new BoolExprNode(b_expr, tabCount, symbolTable));
             if (this.tokens.get(0).getTokenType() != TokenType.R_BRACKET)
                 CreateSyntaxError("Unexpected Token - Expected ']'", this.tokens.get(0));
             this.tokens.remove(0);
@@ -56,10 +55,11 @@ public class WhileLoopNode implements JottTree{
                 if (this.tokens.size() == 0) CreateSyntaxError("Error: empty token array", body.get(body.size() - 1));
                 if (this.tokens.get(0).getTokenType() == TokenType.R_BRACE) b_count--;
             }
-            subnodes.add(new BodyNode(body, tabCount + 1, this.symbolTable));
+            subnodes.add(new BodyNode(body, tabCount + 1, symbolTable));
             if (this.tokens.get(0).getTokenType() != TokenType.R_BRACE)
                 CreateSyntaxError("Unexpected Token - Expected '}'", this.tokens.get(0));
             this.tokens.remove(0);
+            this.symbolTable = symbolTable;
         } catch (Exception e) {
             throw new RuntimeException();
         }

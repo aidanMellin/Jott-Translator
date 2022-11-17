@@ -19,7 +19,6 @@ public class FunctionCallNode implements JottTree{
 
     public FunctionCallNode(ArrayList<Token> tokens, int tc, Hashtable<String, SymbolData> symbolTable) {
         try {
-            this.symbolTable = symbolTable;
             tabCount = tc;
             this.tokens = tokens;
             firstToken = this.tokens.get(0);
@@ -27,14 +26,15 @@ public class FunctionCallNode implements JottTree{
             if (this.tokens.size() < 3) CreateSyntaxError("Invalid Function Call", this.tokens.get(0));
             if (!this.tokens.get(0).getToken().matches("[a-z][a-zA-z0-9]*"))
                 CreateSyntaxError("Invalid Function Name", this.tokens.get(0));
-            subnodes.add(new IdNode(this.tokens.get(0), tabCount, this.symbolTable));
+            subnodes.add(new IdNode(this.tokens.get(0), tabCount, symbolTable));
             ArrayList<Token> paramsTokens = new ArrayList<>();
             if (this.tokens.get(1).getTokenType() != TokenType.L_BRACKET)
                 CreateSyntaxError("Unexpected Token - Expected '['", this.tokens.get(1));
             if (this.tokens.get(this.tokens.size() - 1).getTokenType() != TokenType.R_BRACKET)
                 CreateSyntaxError("Unexpected Token - Expected ']'", this.tokens.get(1));
             for (int i = 2; i < this.tokens.size() - 1; i++) paramsTokens.add(this.tokens.get(i));
-            subnodes.add(new ParametersNode(paramsTokens, tabCount, subnodes.get(0).convertToJott(), this.symbolTable));
+            subnodes.add(new ParametersNode(paramsTokens, tabCount, subnodes.get(0).convertToJott(), symbolTable));
+            this.symbolTable = symbolTable;
         } catch (Exception e) {
             throw new RuntimeException();
         }

@@ -16,14 +16,14 @@ public class StrNode implements JottTree {
 
     public StrNode(String tokenString, int tc, Hashtable<String, SymbolData> symbolTable) {
         try {
-            this.symbolTable = symbolTable;
             tabCount = tc;
             this.tokenString = tokenString;
             if (!Objects.equals(tokenString, EMPTY_STR)) {
-                subnodes.add(new CharNode(tokenString.charAt(0), tabCount, this.symbolTable));
-                if (tokenString.length() > 1) subnodes.add(new StrNode(tokenString.substring(1), tabCount, this.symbolTable));
-                else subnodes.add(new StrNode(EMPTY_STR, tabCount, this.symbolTable));
+                subnodes.add(new CharNode(tokenString.charAt(0), tabCount, symbolTable));
+                if (tokenString.length() > 1) subnodes.add(new StrNode(tokenString.substring(1), tabCount, symbolTable));
+                else subnodes.add(new StrNode(EMPTY_STR, tabCount, symbolTable));
             }
+            this.symbolTable = symbolTable;
         } catch (Exception e) {
             throw new RuntimeException();
         }

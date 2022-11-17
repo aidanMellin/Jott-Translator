@@ -15,14 +15,14 @@ public class StrLiteralNode implements JottTree {
 
     public StrLiteralNode(Token token, int tc, Hashtable<String, SymbolData> symbolTable) {
         try {
-            this.symbolTable = symbolTable;
             tabCount = tc;
             this.token = token;
             assert this.token != null;
             if (token.getTokenType() != TokenType.STRING)
                 CreateSyntaxError("Unexpected Token - Expected String", this.token);
             if (!token.getToken().matches("\"[a-zA-Z0-9\s]*\"")) CreateSyntaxError("Unrecognized Character", this.token);
-            subnode = new StrNode(token.getToken().substring(1, token.getToken().length()-1), tabCount, this.symbolTable);
+            subnode = new StrNode(token.getToken().substring(1, token.getToken().length()-1), tabCount, symbolTable);
+            this.symbolTable = symbolTable;
         } catch (Exception e) {
             throw new RuntimeException();
         }

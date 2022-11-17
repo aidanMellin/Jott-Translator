@@ -14,19 +14,19 @@ public class StatementNode implements JottTree{
 
     public StatementNode(ArrayList<Token> tokens, int tc, Hashtable<String, SymbolData> symbolTable) {
         try {
-            this.symbolTable = symbolTable;
             tabCount = tc;
             this.tokens = tokens;
             assert this.tokens != null;
             if (this.tokens.get(1).getTokenType() == TokenType.L_BRACKET) {
                 Token end_stmt = this.tokens.remove(this.tokens.size() - 1);
-                subnodes.add(new FunctionCallNode(this.tokens, tabCount, this.symbolTable));
-                subnodes.add(new EndStatementNode(end_stmt, tabCount, this.symbolTable));
+                subnodes.add(new FunctionCallNode(this.tokens, tabCount, symbolTable));
+                subnodes.add(new EndStatementNode(end_stmt, tabCount, symbolTable));
             } else if (this.tokens.size() == 3) {
-                subnodes.add(new VariableDeclarationNode(this.tokens, tabCount, this.symbolTable));
+                subnodes.add(new VariableDeclarationNode(this.tokens, tabCount, symbolTable));
             } else {
-                subnodes.add(new AssignmentNode(this.tokens, tabCount, this.symbolTable));
+                subnodes.add(new AssignmentNode(this.tokens, tabCount, symbolTable));
             }
+            this.symbolTable = symbolTable;
         } catch (Exception e) {
             throw new RuntimeException();
         }
