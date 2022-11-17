@@ -11,11 +11,15 @@ public class BoolExprNode implements JottTree { //TODO
     private ArrayList<Token> tokens;
     private int tabCount;
     Hashtable<String, SymbolData> symbolTable;
+    private Token firstToken;
+
+    private String expr_type;
 
     public BoolExprNode(ArrayList<Token> tokens, int tc, Hashtable<String, SymbolData> symbolTable) {
         try {
             tabCount = tc;
             this.tokens = tokens;
+            firstToken = this.tokens.get(0);
             subnodes = new ArrayList<>();
 
             ArrayList<JottTree> temp_subnodes = new ArrayList<>();
@@ -24,6 +28,7 @@ public class BoolExprNode implements JottTree { //TODO
 
             if (this.tokens.size() == 1 && (this.tokens.get(0).getToken() == "True" || this.tokens.get(0).getToken() == "False")){
                 subnodes.add(new BooleanNode(this.tokens.get(0), 0, symbolTable));
+                expr_type = "bool";
                 return;
             }
             for (int i = 0; i < tokens.size(); i++) {
@@ -121,9 +126,11 @@ public class BoolExprNode implements JottTree { //TODO
                         temp_subnodes.add(new FunctionCallNode(tokens_to_send, 0, symbolTable));
                         i += count-1;
                         tokens_used.addAll(tokens_to_send);
+                        expr_type = "func_call";
                     } else {
                         temp_subnodes.add(new IdNode(temp_token, 0, symbolTable));
                         tokens_used.add(temp_token);
+                        expr_type = "id";
                     }
                 }
 
@@ -131,7 +138,6 @@ public class BoolExprNode implements JottTree { //TODO
             subnodes.addAll(temp_subnodes);
             this.symbolTable = symbolTable;
         } catch (Exception e) {
-            e.printStackTrace();
             throw new RuntimeException();
         }
     }
@@ -197,7 +203,33 @@ public class BoolExprNode implements JottTree { //TODO
      */
     public boolean validateTree()
     {
-        return(true);
+        try {
+            if (subnodes.size() == 1) {
+                switch (expr_type) {
+                    case "bool":
+                        break;
+                    case "func_call":
+                        if (!symbolTable.containsKey(this.tokens.get(0).getToken()) ||
+                                !symbolTable.get(this.tokens.get(0).getToken()).ReturnType.equals("Boolean") ||
+                                !symbolTable.get(this.tokens.get(0).getToken()).IsFunction)
+                            CreateSemanticError("Mis-match typing in boolean expression: invalid function use", firstToken);
+                        break;
+                    case "id":
+                        if (!symbolTable.containsKey(this.tokens.get(0).getToken()) ||
+                                !symbolTable.get(this.tokens.get(0).getToken()).ReturnType.equals("Boolean") ||
+                                symbolTable.get(this.tokens.get(0).getToken()).IsFunction)
+                            CreateSemanticError("Mis-match typing in boolean expression: invalid variable use", firstToken);
+                    default:
+                        CreateSemanticError("Error in validating boolean expr", firstToken);
+                        break;
+                }
+            } else {
+                if (subnodes.get(0).getClass() != subnodes.get(2).getClass())
+                    CreateSemanticError("Mis-matched typing in boolean expression", firstToken);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException();
+        }
     }
 
     public void CreateSyntaxError(String msg, Token token) throws Exception{
