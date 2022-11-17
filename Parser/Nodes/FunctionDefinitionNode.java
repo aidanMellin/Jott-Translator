@@ -15,6 +15,8 @@ public class FunctionDefinitionNode implements JottTree {
     private final String LPARAN_CHAR = "(";
     private final String JAVA_METHOD_STR = "public static ";
     private final String COLON_CHAR = ":";
+    private final String INT_STR = "int";
+    private final String VOID_STR = "void";
     private ArrayList<JottTree> subnodes = new ArrayList<>();
     private final ArrayList<Token> tokens;
     private int tabCount;
@@ -126,6 +128,13 @@ public class FunctionDefinitionNode implements JottTree {
      */
     public String convertToC()
     {
+        if(subnodes.get(0).convertToC().equals("main")){
+            return  INT_STR+ " " + subnodes.get(0).convertToC() +
+                    LPARAN_CHAR + VOID_STR + RPARAN_CHAR + LBRACE_CHAR + "\n" +
+                    subnodes.get(3).convertToC()  +
+                    "\t".repeat(tabCount)+ RBRACE_CHAR +
+                    "\n" + "\n";
+        }
         return  subnodes.get(2).convertToC() + " " + subnodes.get(0).convertToC() +
                 LPARAN_CHAR + subnodes.get(1).convertToC() + RPARAN_CHAR + LBRACE_CHAR + "\n" +
                 subnodes.get(3).convertToC()  +
