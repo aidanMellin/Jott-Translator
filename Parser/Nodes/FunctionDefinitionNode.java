@@ -102,7 +102,8 @@ public class FunctionDefinitionNode implements JottTree {
      */
     public String convertToJava()
     {
-        return "\t".repeat(tabCount) + JAVA_METHOD_STR + subnodes.get(0).convertToJava() +
+        return "\t".repeat(tabCount) + JAVA_METHOD_STR + subnodes.get(2).convertToJava() + " " +
+                subnodes.get(0).convertToJava() +
                 LPARAN_CHAR + subnodes.get(1).convertToJava() + RPARAN_CHAR + LBRACE_CHAR + "\n" +
                 subnodes.get(3).convertToJava()  +
                 "\t".repeat(tabCount)+ RBRACE_CHAR +

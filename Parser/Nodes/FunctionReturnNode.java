@@ -8,6 +8,7 @@ public class FunctionReturnNode implements JottTree{
 
     private final JottTree subnode;
     private final String JOTT_VOID = "Void";
+    private final String JAVA_VOID = "void";
     private final Token token;
 
     private int tabCount;
@@ -39,7 +40,8 @@ public class FunctionReturnNode implements JottTree{
      */
     public String convertToJava()
     {
-        return("");
+        if (subnode == null) return JAVA_VOID;
+        else return subnode.convertToJava();
     }
 
     /**
