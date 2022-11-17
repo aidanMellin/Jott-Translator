@@ -194,7 +194,7 @@ public class BoolExprNode implements JottTree { //TODO
      */
     public boolean validateTree()
     {
-        return(false);
+        return(true);
     }
 
     public void CreateSyntaxError(String msg, Token token) throws Exception{

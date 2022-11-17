@@ -148,7 +148,10 @@ public class IntExprNode implements JottTree {
      */
     public boolean validateTree()
     {
-        return(false);
+        for (JottTree node : subnodes) {
+            if (!node.validateTree()) return false;
+        }
+        return true;
     }
 
     public void CreateSyntaxError(String msg, Token token) throws Exception{

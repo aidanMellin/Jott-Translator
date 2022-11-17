@@ -146,7 +146,7 @@ public class DoubleExprNode implements JottTree {
      */
     public boolean validateTree()
     {
-        return(false);
+        return(true);
     }
 
     public void CreateSyntaxError(String msg, Token token) throws Exception{
