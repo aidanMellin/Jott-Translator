@@ -63,7 +63,7 @@ public class StrExprNode implements JottTree {
      */
     public String convertToC()
     {
-        return("");
+        return subnode.convertToC();
     }
 
     /**

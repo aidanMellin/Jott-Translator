@@ -120,7 +120,7 @@ public class ExpressionNode implements JottTree{
      */
     public String convertToC()
     {
-        return("");
+        return subnode.convertToC();
     }
 
     /**

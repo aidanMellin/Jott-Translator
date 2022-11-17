@@ -83,7 +83,12 @@ public class FunctionListNode implements JottTree { //TODO
      */
     public String convertToC()
     {
-        return("");
+        if(function_def == null) {
+            return("");
+        }
+        else {
+            return function_def.convertToC() + function_list.convertToC();
+        }
     }
 
     /**

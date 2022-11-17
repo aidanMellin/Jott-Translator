@@ -52,7 +52,7 @@ public class StrLiteralNode implements JottTree {
      */
     public String convertToC()
     {
-        return("");
+        return(QUOTE_CHAR + subnode.convertToJott() + QUOTE_CHAR);
     }
 
     /**
