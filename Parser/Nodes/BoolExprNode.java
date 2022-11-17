@@ -223,9 +223,13 @@ public class BoolExprNode implements JottTree { //TODO
                         CreateSemanticError("Error in validating boolean expr", firstToken);
                         break;
                 }
+                return subnodes.get(0).validateTree();
             } else {
                 if (subnodes.get(0).getClass() != subnodes.get(2).getClass())
                     CreateSemanticError("Mis-matched typing in boolean expression", firstToken);
+                return subnodes.get(0).validateTree() &&
+                        subnodes.get(1).validateTree() &&
+                        subnodes.get(2).validateTree();
             }
         } catch (Exception e) {
             throw new RuntimeException();
