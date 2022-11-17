@@ -91,13 +91,17 @@ public class ParametersNode implements JottTree{
     public boolean validateTree()
     {
         try {
-            if (expressionNode == null){
-                if (symbolTable.get(function).Params.size() != cnt)
-                    CreateSemanticError("Unexpected parameters for " + function, firstToken);
-                else return true;
+            if (function.equals("print")) {
+                // check for valid print call?
             } else {
-                if (!symbolTable.get(function).ParamsTypes.get(cnt).equals(expressionNode.expr_type))
-                    CreateSemanticError("Unexpected parameters for " + function, firstToken);
+                if (expressionNode == null) {
+                    if (symbolTable.get(function).Params.size() != cnt)
+                        CreateSemanticError("Unexpected parameters for " + function, firstToken);
+                    else return true;
+                } else {
+                    if (!symbolTable.get(function).ParamsTypes.get(cnt).equals(expressionNode.expr_type))
+                        CreateSemanticError("Unexpected parameters for " + function, firstToken);
+                }
             }
             return expressionNode.validateTree() && parametersTNode.validateTree();
         } catch (Exception e) {

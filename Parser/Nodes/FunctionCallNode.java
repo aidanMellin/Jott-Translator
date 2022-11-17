@@ -93,7 +93,7 @@ public class FunctionCallNode implements JottTree{
     public boolean validateTree()
     {
         try {
-            if (!symbolTable.containsKey(subnodes.get(0).convertToJott()) )
+            if (!symbolTable.containsKey(subnodes.get(0).convertToJott()))
                 CreateSemanticError("Unrecognized function call", firstToken);
             else if (!symbolTable.get(subnodes.get(0).convertToJott()).IsFunction)
                 CreateSemanticError("Cannot call a function that is a variable", firstToken);

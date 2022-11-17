@@ -97,14 +97,18 @@ public class ParametersTNode implements JottTree{
     public boolean validateTree()
     {
         try {
-            if (expressionNode == null)
-                if (symbolTable.get(function).Params.size() != cnt)
+            if (function.equals("print")) {
+                // check for valid print call?
+            } else {
+                if (expressionNode == null)
+                    if (symbolTable.get(function).Params.size() != cnt)
+                        CreateSemanticError("Unexpected parameters for " + function, firstToken);
+                    else return true;
+                else if (!symbolTable.get(function).ParamsTypes.get(cnt).equals(expressionNode.expr_type))
                     CreateSemanticError("Unexpected parameters for " + function, firstToken);
-                else return true;
-            else
-            if (!symbolTable.get(function).ParamsTypes.get(cnt).equals(expressionNode.expr_type))
-                CreateSemanticError("Unexpected parameters for " + function, firstToken);
-            return expressionNode.validateTree() &&  parametersTNode.validateTree();
+                return expressionNode.validateTree() &&  parametersTNode.validateTree();
+            }
+            return expressionNode == null;
         } catch (Exception e) {
             throw new RuntimeException();
         }

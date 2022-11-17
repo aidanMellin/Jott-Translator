@@ -38,6 +38,16 @@ public class FunctionDefinitionParametersTNode implements JottTree {
                 symbolTable.get(func).ParamsTypes.add(subnodes.get(0).convertToJott());
 
                 subnodes.add(new FunctionDefinitionParametersTNode(this.tokens, tabCount, func));
+                symbolTable.put(subnodes.get(0).convertToJott(), new SymbolData(
+                        subnodes.get(0).convertToJott(),
+                        subnodes.get(1).convertToJott(),
+                        false,
+                        true,
+                        false,
+                        new ArrayList<>(),
+                        new ArrayList<>(),
+                        1
+                ));
             }
         } catch (Exception e) {
             throw new RuntimeException();

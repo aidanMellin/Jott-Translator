@@ -21,6 +21,16 @@ public class ProgramNode implements JottTree { //TODO
             tabCount = tc;
             firstToken = tokens.get(0);
             function_list = new FunctionListNode(tokens, tabCount);
+            symbolTable.put("print", new SymbolData(
+                    "print",
+                    "Void",
+                    false,
+                    true,
+                    true,
+                    new ArrayList<>(),
+                    new ArrayList<>(),
+                    1
+            ));
             // also add EOF symbol??
         } catch (Exception e) {
             e.printStackTrace();

@@ -33,6 +33,16 @@ public class FunctionDefinitionParametersNode implements JottTree {
                 subnodes.add(new TypeNode(this.tokens.remove(0), tabCount));
                 symbolTable.get(func).ParamsTypes.add(subnodes.get(0).convertToJott());
                 subnodes.add(new FunctionDefinitionParametersTNode(this.tokens, tabCount, func));
+                symbolTable.put(subnodes.get(0).convertToJott(), new SymbolData(
+                        subnodes.get(0).convertToJott(),
+                        subnodes.get(1).convertToJott(),
+                        false,
+                        true,
+                        false,
+                        new ArrayList<>(),
+                        new ArrayList<>(),
+                        1
+                ));
             }
         } catch (Exception e) {
             throw new RuntimeException();
@@ -90,7 +100,7 @@ public class FunctionDefinitionParametersNode implements JottTree {
     {
         try {
             if (subnodes == null) return true;
-            else if (symbolTable.containsKey(subnodes.get(0).convertToJott()))
+            else if (symbolTable.get(subnodes.get(0).convertToJott()).varCount > 1)
                 CreateSemanticError("Variable is already declared in program", firstToken);
             return subnodes.get(0).validateTree() &&
                     subnodes.get(1).validateTree() &&
