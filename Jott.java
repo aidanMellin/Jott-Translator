@@ -3,7 +3,9 @@ import Parser.JottTree;
 import Tokenizer.JottTokenizer;
 import Tokenizer.Token;
 
+import java.io.BufferedWriter;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -34,9 +36,18 @@ public class Jott {
                     System.out.println("Unknown language");
                     System.exit(1);
                 }
-                FileWriter writer = new FileWriter(outputFile);
-                writer.write(output);
-                writer.close();
+
+                try {
+                    BufferedWriter f_writer = new BufferedWriter(new FileWriter(outputFile));
+                    f_writer.write(output);
+                    System.out.print(output);
+                    System.out.print(
+                        "File is created successfully with the content.");
+                    f_writer.close();
+                }
+                catch (IOException e) {
+                    System.out.print(e.getMessage());
+                }
             } catch (Exception e) {
                 System.out.println(e.getMessage());
                 System.exit(1);
