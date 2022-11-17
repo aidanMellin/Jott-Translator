@@ -38,9 +38,7 @@ public class Jott {
                 }
 
                 try {
-                    BufferedWriter f_writer
-                        = new BufferedWriter(new FileWriter(
-                            outputFile));
+                    BufferedWriter f_writer = new BufferedWriter(new FileWriter(outputFile));
                     f_writer.write(output);
                     System.out.print(output);
                     System.out.print(
