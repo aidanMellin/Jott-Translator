@@ -14,8 +14,6 @@ import java.util.Hashtable;
 
 public interface JottTree {
 
-    Hashtable<String, SymbolData> symbolTable = new Hashtable<>();
-
     /**
      * Will output a string of this tree in Jott
      * @return a string representing the Jott code of this tree

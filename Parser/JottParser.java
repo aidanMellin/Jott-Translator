@@ -10,6 +10,7 @@ import Tokenizer.*;
 import Parser.Nodes.*;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 
 public class JottParser {
 
@@ -21,7 +22,8 @@ public class JottParser {
      */
     public static JottTree parse(ArrayList<Token> tokens, String fileName){
         try {
-            return new ProgramNode(tokens, 0, fileName);
+            Hashtable<String, SymbolData> symbolTable = new Hashtable<>();
+            return new ProgramNode(tokens, 0, fileName, symbolTable);
         } catch (Exception e) {
             return null;
         }

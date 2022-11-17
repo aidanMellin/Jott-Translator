@@ -3,6 +3,7 @@ import Tokenizer.*;
 import Parser.*;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 
 public class FunctionDefinitionNode implements JottTree {
 
@@ -19,17 +20,19 @@ public class FunctionDefinitionNode implements JottTree {
     private int tabCount;
     private boolean funcExists = false;
     private Token firstToken;
+    Hashtable<String, SymbolData> symbolTable;
 
-    public FunctionDefinitionNode(ArrayList<Token> tokens, int tc) {
+    public FunctionDefinitionNode(ArrayList<Token> tokens, int tc, Hashtable<String, SymbolData> symbolTable) {
         try {
+            this.symbolTable = new Hashtable<>(symbolTable);
             tabCount = tc;
             this.tokens = tokens;
             firstToken = this.tokens.get(0);
             if (this.tokens.get(0).getTokenType() != TokenType.ID_KEYWORD)
                 CreateSyntaxError("Unexpected Token - Expected ID", this.tokens.get(0));
-            subnodes.add(new IdNode(this.tokens.remove(0), tabCount));
-            if (symbolTable.containsKey(subnodes.get(0).convertToJott()) && symbolTable.get(subnodes.get(0).convertToJott()).IsFunction) funcExists = true;
-            else symbolTable.put(subnodes.get(0).convertToJott(), new SymbolData(
+            subnodes.add(new IdNode(this.tokens.remove(0), tabCount, this.symbolTable));
+            if (this.symbolTable.containsKey(subnodes.get(0).convertToJott()) && this.symbolTable.get(subnodes.get(0).convertToJott()).IsFunction) funcExists = true;
+            else this.symbolTable.put(subnodes.get(0).convertToJott(), new SymbolData(
                     subnodes.get(0).convertToJott(),
                     null,
                     (subnodes.get(0).convertToJott().equals("main")),
@@ -47,7 +50,7 @@ public class FunctionDefinitionNode implements JottTree {
                 func_def_params.add(this.tokens.remove(0));
                 assert this.tokens.size() != 0;
             }
-            subnodes.add(new FunctionDefinitionParametersNode(func_def_params, tabCount, subnodes.get(0).convertToJott()));
+            subnodes.add(new FunctionDefinitionParametersNode(func_def_params, tabCount, subnodes.get(0).convertToJott(), this.symbolTable));
             if (this.tokens.get(0).getTokenType() != TokenType.R_BRACKET)
                 CreateSyntaxError("Unexpected Token - Expected ']'", this.tokens.get(0));
             this.tokens.remove(0);
@@ -56,9 +59,9 @@ public class FunctionDefinitionNode implements JottTree {
             this.tokens.remove(0);
             if (this.tokens.get(0).getTokenType() != TokenType.ID_KEYWORD)
                 CreateSyntaxError("Unexpected Token - Expected ID", this.tokens.get(0));
-            subnodes.add(new FunctionReturnNode(this.tokens.remove(0), tabCount));
+            subnodes.add(new FunctionReturnNode(this.tokens.remove(0), tabCount, this.symbolTable));
 
-            symbolTable.get(subnodes.get(0).convertToJott()).ReturnType = subnodes.get(2).convertToJott();
+            this.symbolTable.get(subnodes.get(0).convertToJott()).ReturnType = subnodes.get(2).convertToJott();
 
             if (this.tokens.get(0).getTokenType() != TokenType.L_BRACE)
                 CreateSyntaxError("Unexpected Token - Expected '{'", this.tokens.get(0));
@@ -71,7 +74,7 @@ public class FunctionDefinitionNode implements JottTree {
                 if (this.tokens.size() == 0) CreateSyntaxError("Error: empty token array", body.get(body.size() - 1));
                 if (this.tokens.get(0).getTokenType() == TokenType.R_BRACE) b_count--;
             }
-            subnodes.add(new BodyNode(body, tabCount + 1));
+            subnodes.add(new BodyNode(body, tabCount + 1, this.symbolTable));
             if (this.tokens.get(0).getTokenType() != TokenType.R_BRACE)
                 CreateSyntaxError("Unexpected Token - Expected '}'", this.tokens.get(0));
             this.tokens.remove(0);

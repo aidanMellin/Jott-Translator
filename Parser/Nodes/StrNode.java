@@ -3,6 +3,7 @@ import Tokenizer.*;
 import Parser.*;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.Objects;
 
 public class StrNode implements JottTree {
@@ -11,15 +12,17 @@ public class StrNode implements JottTree {
     private final String EMPTY_STR = "";
     private final String tokenString;
     private int tabCount;
+    Hashtable<String, SymbolData> symbolTable;
 
-    public StrNode(String tokenString, int tc) {
+    public StrNode(String tokenString, int tc, Hashtable<String, SymbolData> symbolTable) {
         try {
+            this.symbolTable = symbolTable;
             tabCount = tc;
             this.tokenString = tokenString;
             if (!Objects.equals(tokenString, EMPTY_STR)) {
-                subnodes.add(new CharNode(tokenString.charAt(0), tabCount));
-                if (tokenString.length() > 1) subnodes.add(new StrNode(tokenString.substring(1), tabCount));
-                else subnodes.add(new StrNode(EMPTY_STR, tabCount));
+                subnodes.add(new CharNode(tokenString.charAt(0), tabCount, this.symbolTable));
+                if (tokenString.length() > 1) subnodes.add(new StrNode(tokenString.substring(1), tabCount, this.symbolTable));
+                else subnodes.add(new StrNode(EMPTY_STR, tabCount, this.symbolTable));
             }
         } catch (Exception e) {
             throw new RuntimeException();

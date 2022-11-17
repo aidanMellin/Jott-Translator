@@ -2,6 +2,8 @@ package Parser.Nodes;
 import Tokenizer.*;
 import Parser.*;
 
+import java.util.Hashtable;
+
 public class EndStatementNode implements JottTree {
 
     private final String JOTT_JAVA_C_END = ";\n";
@@ -9,9 +11,11 @@ public class EndStatementNode implements JottTree {
 
     private Token token;
     private int tabCount;
+    Hashtable<String, SymbolData> symbolTable;
 
-    public EndStatementNode(Token token, int tc) {
+    public EndStatementNode(Token token, int tc, Hashtable<String, SymbolData> symbolTable) {
         try {
+            this.symbolTable = symbolTable;
             tabCount = tc;
             this.token = token;
             if (this.token.getTokenType() != TokenType.SEMICOLON)

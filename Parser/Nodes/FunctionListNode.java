@@ -3,6 +3,7 @@ import Tokenizer.*;
 import Parser.*;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 
 public class FunctionListNode implements JottTree { //TODO
 
@@ -10,9 +11,11 @@ public class FunctionListNode implements JottTree { //TODO
     private JottTree function_def;
     private JottTree function_list;
     private int tabCount;
+    Hashtable<String, SymbolData> symbolTable;
 
-    public FunctionListNode(ArrayList<Token> tokens, int tc){
+    public FunctionListNode(ArrayList<Token> tokens, int tc, Hashtable<String, SymbolData> symbolTable){
         try {
+            this.symbolTable = symbolTable;
             this.tokens = tokens;
             tabCount = tc;
             if (this.tokens.size() != 0) {
@@ -37,10 +40,10 @@ public class FunctionListNode implements JottTree { //TODO
                 if(this.tokens.size() != 0) {
                     fDefTokens.add(this.tokens.remove(0));
                 }
-                function_def = new FunctionDefinitionNode(fDefTokens, tabCount);
+                function_def = new FunctionDefinitionNode(fDefTokens, tabCount, this.symbolTable);
                 // functionList
                 assert this.tokens != null;
-                function_list = new FunctionListNode(this.tokens, tabCount);
+                function_list = new FunctionListNode(this.tokens, tabCount, this.symbolTable);
             }
         } catch (Exception e) {
             throw new RuntimeException();

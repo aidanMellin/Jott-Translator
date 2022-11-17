@@ -4,6 +4,7 @@ import Parser.*;
 
 import java.security.spec.ECField;
 import java.util.ArrayList;
+import java.util.Hashtable;
 
 public class ParametersNode implements JottTree{
 
@@ -17,9 +18,11 @@ public class ParametersNode implements JottTree{
     private int cnt = 0;
     private String function;
     private Token firstToken;
+    Hashtable<String, SymbolData> symbolTable;
 
-    public ParametersNode(ArrayList<Token> tokens, int tc, String func) {
+    public ParametersNode(ArrayList<Token> tokens, int tc, String func, Hashtable<String, SymbolData> symbolTable) {
         try {
+            this.symbolTable = symbolTable;
             function = func;
             this.tokens = tokens;
             if (this.tokens.size() == 0) {
@@ -36,8 +39,8 @@ public class ParametersNode implements JottTree{
                     if (this.tokens.get(0).getTokenType() == TokenType.L_BRACKET) b_count++;
                     else if (this.tokens.get(0).getTokenType() == TokenType.R_BRACKET) b_count--;
                 }
-                expressionNode = new ExpressionNode(expr, tabCount);
-                parametersTNode = new ParametersTNode(this.tokens, tabCount, cnt+1, func);
+                expressionNode = new ExpressionNode(expr, tabCount, this.symbolTable);
+                parametersTNode = new ParametersTNode(this.tokens, tabCount, cnt+1, func, this.symbolTable);
             }
         } catch (Exception e) {
             throw new RuntimeException();

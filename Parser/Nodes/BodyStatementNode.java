@@ -3,6 +3,7 @@ import Tokenizer.*;
 import Parser.*;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 
 public class BodyStatementNode implements JottTree {
 
@@ -12,18 +13,20 @@ public class BodyStatementNode implements JottTree {
     private final String IF_STR = "if";
     private final String WHILE_STR = "while";
     private int tabCount;
+    Hashtable<String, SymbolData> symbolTable;
 
-    public BodyStatementNode(ArrayList<Token> tokens, int tc) {
+    public BodyStatementNode(ArrayList<Token> tokens, int tc, Hashtable<String, SymbolData> symbolTable) {
         try {
+            this.symbolTable = symbolTable;
             tabCount = tc;
             this.tokens = tokens;
             assert this.tokens != null;
             if (this.tokens.get(0).getToken().equals(IF_STR)) {
-                subnodes.add(new IfStatementNode(this.tokens, tabCount));
+                subnodes.add(new IfStatementNode(this.tokens, tabCount, this.symbolTable));
             } else if (this.tokens.get(0).getToken().equals(WHILE_STR)) {
-                subnodes.add(new WhileLoopNode(this.tokens, tabCount));
+                subnodes.add(new WhileLoopNode(this.tokens, tabCount, this.symbolTable));
             } else if (this.tokens.get(0).getTokenType().equals(TokenType.ID_KEYWORD)) {
-                subnodes.add(new StatementNode(this.tokens, tabCount));
+                subnodes.add(new StatementNode(this.tokens, tabCount, this.symbolTable));
             } else {
                 CreateSyntaxError("Unexpected Token - Expected 'Body Statement'", this.tokens.get(0));
             }

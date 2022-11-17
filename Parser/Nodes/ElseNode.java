@@ -5,6 +5,7 @@ import Parser.*;
 import javax.crypto.BadPaddingException;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Hashtable;
 
 public class ElseNode implements JottTree{
 
@@ -15,10 +16,12 @@ public class ElseNode implements JottTree{
     private final String EMPTY_STRING = "";
     private ArrayList<Token> tokens;
     private int tabCount;
+    Hashtable<String, SymbolData> symbolTable;
 
 
-    public ElseNode(ArrayList<Token> tokens, int tc) {
+    public ElseNode(ArrayList<Token> tokens, int tc, Hashtable<String, SymbolData> symbolTable) {
         try {
+            this.symbolTable = symbolTable;
             tabCount = tc;
             this.tokens = tokens;
             if (this.tokens.size() == 0) body = null;
@@ -34,7 +37,7 @@ public class ElseNode implements JottTree{
                 bodyTokens.remove(0);
                 bodyTokens.remove(0);
                 bodyTokens.remove(bodyTokens.size() - 1);
-                body = new BodyNode(bodyTokens, tabCount + 1);
+                body = new BodyNode(bodyTokens, tabCount + 1, this.symbolTable);
             }
         } catch (Exception e) {
             throw new RuntimeException();

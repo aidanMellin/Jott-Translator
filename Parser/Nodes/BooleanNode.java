@@ -3,6 +3,7 @@ import Tokenizer.*;
 import Parser.*;
 
 import java.lang.reflect.Array;
+import java.util.Hashtable;
 import java.util.Objects;
 
 public class BooleanNode implements JottTree {
@@ -14,9 +15,11 @@ public class BooleanNode implements JottTree {
     private final String JAVA_FALSE = "false";
     private final Token token;
     private int tabCount;
+    Hashtable<String, SymbolData> symbolTable;
 
-    public BooleanNode(Token token, int tc) {
+    public BooleanNode(Token token, int tc, Hashtable<String, SymbolData> symbolTable) {
         try {
+            this.symbolTable = symbolTable;
             tabCount = tc;
             this.token = token;
             assert this.token != null;
