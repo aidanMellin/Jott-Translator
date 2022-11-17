@@ -85,7 +85,7 @@ public class ParametersNode implements JottTree{
     {
         if (expressionNode == null) return EMPTY_STRING;
         if (function.equals("concat")) {
-            return expressionNode + " + " + parametersTNode.convertToPython();
+            return expressionNode.convertToPython() + " + " + parametersTNode.convertToPython();
         }
         return expressionNode.convertToPython() + parametersTNode.convertToPython();
     }

@@ -91,7 +91,7 @@ public class FunctionCallNode implements JottTree{
     public String convertToPython()
     {
         if (subnodes.get(0).convertToJott().equals("concat")) {
-            subnodes.get(1).convertToPython();
+            return subnodes.get(1).convertToPython();
         }
         return subnodes.get(0).convertToPython() +
                 LPARAN_STRING +
