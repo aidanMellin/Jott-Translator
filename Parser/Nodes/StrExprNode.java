@@ -12,13 +12,17 @@ public class StrExprNode implements JottTree {
     private ArrayList<Token> tokens;
     private int tabCount;
     Hashtable<String, SymbolData> symbolTable;
+    private boolean isString = false;
 
     public StrExprNode(Token token, int tc, Hashtable<String, SymbolData> symbolTable) {
         try {
             tabCount = tc;
             this.token = token;
             assert this.token != null;
-            if (this.token.getTokenType() == TokenType.STRING) subnode = new StrLiteralNode(this.token, tabCount, symbolTable);
+            if (this.token.getTokenType() == TokenType.STRING) {
+                subnode = new StrLiteralNode(this.token, tabCount, symbolTable);
+                isString = true;
+            }
             else if (this.token.getTokenType() == TokenType.ID_KEYWORD) subnode = new IdNode(this.token, tabCount, symbolTable);
             this.symbolTable = symbolTable;
         } catch (Exception e) {
@@ -29,6 +33,7 @@ public class StrExprNode implements JottTree {
     public StrExprNode(ArrayList<Token> tokens, int tc, Hashtable<String, SymbolData> symbolTable) {
         tabCount = tc;
         this.tokens = tokens;
+        token = this.tokens.get(0);
         assert this.tokens != null;
         if (this.tokens.size() == 1) {
             if (this.tokens.get(0).getTokenType() == TokenType.STRING) subnode = new StrLiteralNode(this.tokens.get(0), tabCount, symbolTable);
@@ -82,7 +87,17 @@ public class StrExprNode implements JottTree {
      */
     public boolean validateTree()
     {
-        return(true);
+        try {
+            if (!isString) {
+                if (!symbolTable.containsKey(token.getToken())) {
+                    CreateSemanticError("Invalid variable or function call: not declared", this.token);
+                } else if (!symbolTable.get(token.getToken()).ReturnType.equals("String"))
+                    CreateSemanticError("Mis-matching type: expecting string type", token);
+            }
+            return subnode.validateTree();
+        } catch (Exception e) {
+            throw new RuntimeException();
+        }
     }
 
     public void CreateSyntaxError(String msg, Token token) throws Exception{
