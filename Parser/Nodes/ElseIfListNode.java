@@ -9,6 +9,7 @@ import java.util.Objects;
 public class ElseIfListNode implements JottTree{
 
     private final String ELSEIF = "elseif";
+    private final String C_ELSEIF = "else if";
     private final String LBRACKET_CHAR = "[";
     private final String RBRACKET_CHAR = "]";
     private final String LBRACE_CHAR = "{";
@@ -101,21 +102,10 @@ public class ElseIfListNode implements JottTree{
      */
     public String convertToC()
     {
-        String C_Code;
-        if(subnodes == null){
-            return EMPTY_STRING;
-        }
-
-        C_Code = "else if(";
-        C_Code += subnodes.get(0).convertToC();
-        C_Code += "){\n";
-        C_Code += subnodes.get(1).convertToC();
-        C_Code += "\n" + "\t".repeat(tabCount);
-        C_Code += subnodes.get(2).convertToC();
-        C_Code += "\n" + "\t".repeat(tabCount) + "}";
-
-        return C_Code;
-
+        if(subnodes == null) return EMPTY_STRING;
+        else return C_ELSEIF + LPARAN_CHAR + subnodes.get(0).convertToC() + RPARAN_CHAR + LBRACE_CHAR + "\n" +
+                subnodes.get(1).convertToC() +
+                "\t".repeat(tabCount) + RBRACE_CHAR + subnodes.get(2).convertToC();
     }
 
     /**

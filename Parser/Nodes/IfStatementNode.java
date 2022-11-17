@@ -84,7 +84,7 @@ public class IfStatementNode implements JottTree{
     {
         return "\t".repeat(tabCount) + IF + LBRACKET_CHAR + subnodes.get(0).convertToJott() + RBRACKET_CHAR + LBRACE_CHAR + "\n" +
                 subnodes.get(1).convertToJott() +
-                "\t".repeat(tabCount) + RBRACE_CHAR + subnodes.get(2).convertToJott() + subnodes.get(3).convertToJott() + "\n";
+                "\t".repeat(tabCount) + RBRACE_CHAR + subnodes.get(2).convertToJott() + subnodes.get(3).convertToJott();
     }
 
     /**
@@ -94,8 +94,8 @@ public class IfStatementNode implements JottTree{
     public String convertToJava()
     {
         return "\t".repeat(tabCount) + IF + LPARAN_CHAR + subnodes.get(0).convertToJava() + RPARAN_CHAR + LBRACE_CHAR + "\n" +
-                subnodes.get(1).convertToJava() + "\n" +
-                "\t".repeat(tabCount) + RBRACE_CHAR + subnodes.get(2).convertToJava() + subnodes.get(3).convertToJava() + "\n";
+                subnodes.get(1).convertToJava() +
+                "\t".repeat(tabCount) + RBRACE_CHAR + subnodes.get(2).convertToJava() + subnodes.get(3).convertToJava();
     }
 
     /**
@@ -104,16 +104,9 @@ public class IfStatementNode implements JottTree{
      */
     public String convertToC()
     {
-        String C_Code;
-        C_Code = "\t".repeat(tabCount) + "if(";
-        C_Code += subnodes.get(0).convertToC();
-        C_Code += ") {\n";
-        C_Code += subnodes.get(1).convertToC();
-        C_Code += "\t".repeat(tabCount) + "}";
-        C_Code += subnodes.get(2).convertToC() + subnodes.get(3).convertToC() + "\n";
-
-        return(C_Code);
-
+        return "\t".repeat(tabCount) + IF + LPARAN_CHAR + subnodes.get(0).convertToC() + RPARAN_CHAR + LBRACE_CHAR + "\n" +
+                subnodes.get(1).convertToC() +
+                "\t".repeat(tabCount) + RBRACE_CHAR + subnodes.get(2).convertToC() + subnodes.get(3).convertToC();
     }
 
     /**

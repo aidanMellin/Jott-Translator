@@ -2,6 +2,7 @@
 
 main[]:Void{
     print["Hello World"];
+    String str = "GetMalloc";
     String i = input["enter msg", 256];
     String s = concat["foo", "bar"];
     Integer l = length["foo"];
