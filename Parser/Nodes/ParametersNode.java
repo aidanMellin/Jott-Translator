@@ -70,7 +70,8 @@ public class ParametersNode implements JottTree{
      */
     public String convertToC()
     {
-        return("");
+        if (expressionNode == null) return EMPTY_STRING;
+        return expressionNode.convertToC() + parametersTNode.convertToC();
     }
 
     /**

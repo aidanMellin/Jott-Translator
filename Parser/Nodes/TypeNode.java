@@ -18,6 +18,11 @@ public class TypeNode implements JottTree{
     private final String JAVA_STRING = "String";
     private final String JAVA_BOOLEAN = "boolean";
 
+    private final String C_DOUBLE = "double";
+    private final String C_INTEGER = "int";
+    private final String C_STRING = "char *";
+    private final String C_BOOLEAN = "bool";
+
     private int tabCount;
     public TypeNode(Token token, int tc) {
         try {
@@ -57,7 +62,7 @@ public class TypeNode implements JottTree{
         if (Objects.equals(token.getToken(), JOTT_BOOLEAN)) return JAVA_BOOLEAN;
         else if (Objects.equals(token.getToken(), JOTT_DOUBLE)) return JAVA_DOUBLE;
         else if (Objects.equals(token.getToken(), JOTT_INTEGER)) return JAVA_INTEGER;
-        else return JOTT_STRING;
+        else return JAVA_STRING;
     }
 
     /**
@@ -66,7 +71,10 @@ public class TypeNode implements JottTree{
      */
     public String convertToC()
     {
-        return("");
+        if (Objects.equals(token.getToken(), JOTT_BOOLEAN)) return C_BOOLEAN;
+        else if (Objects.equals(token.getToken(), JOTT_DOUBLE)) return C_DOUBLE;
+        else if (Objects.equals(token.getToken(), JOTT_INTEGER)) return C_INTEGER;
+        else return C_STRING;
     }
 
     /**

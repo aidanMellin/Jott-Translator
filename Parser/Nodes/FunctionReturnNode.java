@@ -50,7 +50,8 @@ public class FunctionReturnNode implements JottTree{
      */
     public String convertToC()
     {
-        return("");
+        if (subnode == null) return JAVA_VOID;
+        else return subnode.convertToC();
     }
 
     /**

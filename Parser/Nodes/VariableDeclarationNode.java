@@ -62,7 +62,7 @@ public class VariableDeclarationNode implements JottTree{
      */
     public String convertToC()
     {
-        return("");
+        return subnodes.get(1).convertToC();
     }
 
     /**

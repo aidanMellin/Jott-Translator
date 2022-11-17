@@ -59,7 +59,7 @@ public class IdNode implements JottTree {
     public String convertToC()
     {
         StringBuilder c_id = new StringBuilder();
-        for (JottTree node : subnodes) c_id.append(node.convertToJava());
+        for (JottTree node : subnodes) c_id.append(node.convertToC());
         if(c_id.toString().equals(JOTT_PRINT)){
             return C_PRINT;
         }

@@ -53,8 +53,8 @@ public class ReturnStatementNode implements JottTree {
     public String convertToJava()
     {
         return  "\t".repeat(tabCount) + JOTT_RETURN + " " +
-                subnodes.get(0).convertToJott() +
-                subnodes.get(1).convertToJott();
+                subnodes.get(0).convertToJava() +
+                subnodes.get(1).convertToJava();
     }
 
     /**
@@ -63,7 +63,9 @@ public class ReturnStatementNode implements JottTree {
      */
     public String convertToC()
     {
-        return("");
+        return  "\t".repeat(tabCount) + JOTT_RETURN + " " +
+                subnodes.get(0).convertToC() +
+                subnodes.get(1).convertToC();
     }
 
     /**

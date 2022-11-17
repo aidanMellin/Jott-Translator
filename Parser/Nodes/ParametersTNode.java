@@ -67,7 +67,7 @@ public class ParametersTNode implements JottTree{
     public String convertToJava()
     {
         if (expressionNode == null) return EMPTY_STRING;
-        return ", "+expressionNode.convertToJott() + parametersTNode.convertToJott();
+        return ", "+expressionNode.convertToJava() + parametersTNode.convertToJava();
     }
 
     /**
@@ -76,7 +76,8 @@ public class ParametersTNode implements JottTree{
      */
     public String convertToC()
     {
-        return("");
+        if (expressionNode == null) return EMPTY_STRING;
+        return ", "+expressionNode.convertToC() + parametersTNode.convertToC();
     }
 
     /**
@@ -86,7 +87,7 @@ public class ParametersTNode implements JottTree{
     public String convertToPython()
     {
         if (expressionNode == null) return EMPTY_STRING;
-        return ", "+expressionNode.convertToJott() + parametersTNode.convertToJott();
+        return ", "+expressionNode.convertToPython() + parametersTNode.convertToPython();
     }
 
     /**

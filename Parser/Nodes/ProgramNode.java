@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class ProgramNode implements JottTree { //TODO
 
-    private final String C_CLASSES = "";
+    private final String C_LIBRARIES = "#include <stdio.h>\n#include <stdlib.h>\n#include <string.h>";
     private final String JAVA_CLASS = "public class ";
     private final String LBRACE_CHAR = "{";
     private final String RBRACE_CHAR = "}";
@@ -61,7 +61,7 @@ public class ProgramNode implements JottTree { //TODO
      */
     public String convertToC()
     {
-        return function_list.convertToC();
+        return C_LIBRARIES + "\n\n" + function_list.convertToC();
     }
 
     /**

@@ -53,7 +53,8 @@ public class BooleanNode implements JottTree {
      */
     public String convertToC()
     {
-        return("");
+        if (Objects.equals(this.token.getToken(), JOTT_TRUE)) return JAVA_TRUE;
+        else return JAVA_FALSE;
     }
 
     /**

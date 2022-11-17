@@ -84,7 +84,8 @@ public class FunctionDefinitionParametersTNode implements JottTree {
      */
     public String convertToC()
     {
-        return("");
+        if (subnodes == null) return EMPTY_STRING;
+        return ", " + subnodes.get(0).convertToC() + subnodes.get(2).convertToC();
     }
 
     /**

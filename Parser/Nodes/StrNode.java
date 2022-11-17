@@ -56,7 +56,10 @@ public class StrNode implements JottTree {
      */
     public String convertToC()
     {
-        return("");
+        StringBuilder C_string = new StringBuilder();
+        if (Objects.equals(tokenString, EMPTY_STR)) return C_string.toString();
+        for (JottTree node : subnodes) C_string.append(node.convertToC());
+        return C_string.toString();
     }
 
     /**

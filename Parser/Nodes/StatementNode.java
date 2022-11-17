@@ -57,7 +57,9 @@ public class StatementNode implements JottTree{
      */
     public String convertToC()
     {
-        return("");
+        StringBuilder C_stmt = new StringBuilder();
+        for (JottTree node : subnodes) C_stmt.append(node.convertToC());
+        return "\t".repeat(tabCount) + C_stmt;
     }
 
     /**
