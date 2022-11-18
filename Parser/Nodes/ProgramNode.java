@@ -61,7 +61,7 @@ public class ProgramNode implements JottTree { //TODO
             symbolTable.get("concat").Params.add("str1");
             symbolTable.get("concat").Params.add("str2");
             symbolTable.get("concat").ParamsTypes.add("String");
-            symbolTable.get("concat").ParamsTypes.add("Integer");
+            symbolTable.get("concat").ParamsTypes.add("String");
             symbolTable.put("length", new SymbolData(
                     "length",
                     "Integer",
