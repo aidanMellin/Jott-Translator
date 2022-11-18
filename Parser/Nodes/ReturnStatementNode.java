@@ -16,6 +16,7 @@ public class ReturnStatementNode implements JottTree {
     private int tabCount;
     Hashtable<String, SymbolData> symbolTable;
     private String function;
+    private Token firstToken;
 
     public ReturnStatementNode(ArrayList<Token> tokens, int tc, Hashtable<String, SymbolData> symbolTable, String func) {
         try {
@@ -23,6 +24,7 @@ public class ReturnStatementNode implements JottTree {
             tabCount = tc;
             this.tokens = tokens;
             assert tokens != null;
+            firstToken = this.tokens.get(0);
             if (!Objects.equals(this.tokens.get(0).getToken(), JOTT_RETURN))
                 CreateSyntaxError("Unexpected Token - Expected 'return'", this.tokens.get(0));
             if (this.tokens.size() == 1)
@@ -95,9 +97,9 @@ public class ReturnStatementNode implements JottTree {
     {
         try {
             if (symbolTable.get(function).ReturnType.equals("Void"))
-                CreateSemanticError("Invalid return statement in a Void function", tokens.get(0));
+                CreateSemanticError("Invalid return statement in a Void function", firstToken);
             else if (!symbolTable.get(function).ReturnType.equals(expressionNode.expr_type))
-                CreateSemanticError("Invalid return: returned value is not correct type", tokens.get(0));
+                CreateSemanticError("Invalid return: returned value is not correct type", firstToken);
             return expressionNode.validateTree() && endStatementNode.validateTree();
         } catch (Exception e) {
             throw new RuntimeException();

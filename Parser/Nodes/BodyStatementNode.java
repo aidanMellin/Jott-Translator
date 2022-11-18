@@ -15,6 +15,8 @@ public class BodyStatementNode implements JottTree {
     private int tabCount;
     Hashtable<String, SymbolData> symbolTable;
     private String function;
+    private IfStatementNode ifStatementNode;
+    public boolean containsReturn;
 
     public BodyStatementNode(ArrayList<Token> tokens, int tc, Hashtable<String, SymbolData> symbolTable, String func) {
         try {
@@ -23,7 +25,9 @@ public class BodyStatementNode implements JottTree {
             this.tokens = tokens;
             assert this.tokens != null;
             if (this.tokens.get(0).getToken().equals(IF_STR)) {
-                subnodes.add(new IfStatementNode(this.tokens, tabCount, symbolTable, function));
+                ifStatementNode = new IfStatementNode(this.tokens, tabCount, symbolTable, function);
+                subnodes.add(ifStatementNode);
+                containsReturn = ifStatementNode.containsReturn;
             } else if (this.tokens.get(0).getToken().equals(WHILE_STR)) {
                 subnodes.add(new WhileLoopNode(this.tokens, tabCount, symbolTable, function));
             } else if (this.tokens.get(0).getTokenType().equals(TokenType.ID_KEYWORD)) {

@@ -11,13 +11,14 @@ public class ElseNode implements JottTree{
 
     private final String ELSE = "else";
     private final String LBRACE_CHAR = "{";
-    private JottTree body;
+    private BodyNode body;
     private final String RBRACE_CHAR = "}";
     private final String EMPTY_STRING = "";
     private ArrayList<Token> tokens;
     private int tabCount;
     Hashtable<String, SymbolData> symbolTable;
     private String function;
+    public boolean containsReturn;
 
 
     public ElseNode(ArrayList<Token> tokens, int tc, Hashtable<String, SymbolData> symbolTable, String func) {
@@ -39,6 +40,7 @@ public class ElseNode implements JottTree{
                 bodyTokens.remove(0);
                 bodyTokens.remove(bodyTokens.size() - 1);
                 body = new BodyNode(bodyTokens, tabCount + 1, symbolTable, function);
+                containsReturn = body.containsReturn;
             }
             this.symbolTable = symbolTable;
         } catch (Exception e) {

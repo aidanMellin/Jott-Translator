@@ -23,6 +23,10 @@ public class IfStatementNode implements JottTree{
     private int tabCount;
     Hashtable<String, SymbolData> symbolTable;
     private String function;
+    public boolean containsReturn;
+    private BodyNode bodyNode;
+    private ElseIfListNode elseIfListNode;
+    private ElseNode elseNode;
 
     public IfStatementNode(ArrayList<Token> tokens, int tc, Hashtable<String, SymbolData> symbolTable, String func) {
         try {
@@ -57,7 +61,9 @@ public class IfStatementNode implements JottTree{
                     bodyTokens.add(this.tokens.get(0));
                     this.tokens.remove(0);
                 }
-                subnodes.add(new BodyNode(bodyTokens, tabCount + 1, symbolTable, function));
+                bodyNode = new BodyNode(bodyTokens, tabCount + 1, symbolTable, function);
+                subnodes.add(bodyNode);
+                containsReturn = bodyNode.containsReturn;
                 // }
                 assert this.tokens.get(0).getTokenType() == TokenType.R_BRACE;
                 this.tokens.remove(0);
@@ -69,8 +75,12 @@ public class IfStatementNode implements JottTree{
                     else if (this.tokens.get(0).getTokenType() == TokenType.R_BRACE) b_count--;
                     elseif.add(this.tokens.remove(0));
                 }
-                subnodes.add(new ElseIfListNode(elseif, tabCount, symbolTable, function));
-                subnodes.add(new ElseNode(this.tokens, tabCount, symbolTable, function));
+                elseIfListNode = new ElseIfListNode(elseif, tabCount, symbolTable, function);
+                subnodes.add(elseIfListNode);
+                elseNode = new ElseNode(this.tokens, tabCount, symbolTable, function);
+                subnodes.add(elseNode);
+                if ((!elseIfListNode.containsReturn && !elseIfListNode.convertToJott().equals("")) || !elseNode.containsReturn)
+                    containsReturn = false;
             }
             this.symbolTable = symbolTable;
         } catch (Exception e) {

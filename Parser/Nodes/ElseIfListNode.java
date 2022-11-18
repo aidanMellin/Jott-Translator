@@ -23,6 +23,9 @@ public class ElseIfListNode implements JottTree{
     private int tabCount;
     Hashtable<String, SymbolData> symbolTable;
     private String function;
+    public boolean containsReturn;
+    private BodyNode bodyNode;
+    private ElseIfListNode elseIfListNode;
 
     public ElseIfListNode(ArrayList<Token> tokens, int tc, Hashtable<String, SymbolData> symbolTable, String func) {
         try {
@@ -62,11 +65,15 @@ public class ElseIfListNode implements JottTree{
                         CreateSyntaxError("Error: empty token array", body.get(body.size() - 1));
                     if (this.tokens.get(0).getTokenType() == TokenType.R_BRACE) b_count--;
                 }
-                subnodes.add(new BodyNode(body, tabCount + 1, symbolTable, function));
+                bodyNode = new BodyNode(body, tabCount + 1, symbolTable, function);
+                subnodes.add(bodyNode);
                 if (this.tokens.get(0).getTokenType() != TokenType.R_BRACE)
                     CreateSyntaxError("Unexpected Token - Expected '}'", this.tokens.get(0));
                 this.tokens.remove(0);
-                subnodes.add(new ElseIfListNode(this.tokens, tabCount, symbolTable, function));
+                elseIfListNode = new ElseIfListNode(this.tokens, tabCount, symbolTable, function);
+                subnodes.add(elseIfListNode);
+                containsReturn = bodyNode.containsReturn && elseIfListNode.containsReturn;
+
             }
             this.symbolTable = symbolTable;
         } catch (Exception e) {

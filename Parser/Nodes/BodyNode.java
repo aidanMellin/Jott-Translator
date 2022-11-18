@@ -18,6 +18,9 @@ public class BodyNode implements JottTree {
     private int tabCount;
     Hashtable<String, SymbolData> symbolTable;
     private String function;
+    public boolean containsReturn;
+    private BodyNode bodyNode;
+    private BodyStatementNode bodyStatementNode;
 
     public BodyNode(ArrayList<Token> tokens, int tc, Hashtable<String, SymbolData> symbolTable, String func) {
         try {
@@ -28,6 +31,7 @@ public class BodyNode implements JottTree {
                 return;
             } else if (this.tokens.get(0).getTokenType().equals(TokenType.ID_KEYWORD) && this.tokens.get(0).getToken().equals(RETURN_STR)) {
                 subnodes.add(new ReturnStatementNode(this.tokens, tabCount, symbolTable, function));
+                containsReturn = true;
             } else {
                 ArrayList<Token> bodyStmtTokens = new ArrayList<>();
                 if (this.tokens.get(0).getToken().equals(WHILE_STR)) {
@@ -100,12 +104,14 @@ public class BodyNode implements JottTree {
                         }
                     }
                 }
-                subnodes.add(new BodyStatementNode(new ArrayList<>(bodyStmtTokens), tabCount, symbolTable, function));
-                subnodes.add(new BodyNode(new ArrayList<>(this.tokens), tabCount, symbolTable, function));
+                bodyStatementNode = new BodyStatementNode(new ArrayList<>(bodyStmtTokens), tabCount, symbolTable, function);
+                subnodes.add(bodyStatementNode);
+                bodyNode = new BodyNode(new ArrayList<>(this.tokens), tabCount, symbolTable, function);
+                subnodes.add(bodyNode);
+                containsReturn = bodyStatementNode.containsReturn || bodyNode.containsReturn;
             }
             this.symbolTable = symbolTable;
         } catch (Exception e) {
-            e.printStackTrace();
             throw new RuntimeException();
         }
     }

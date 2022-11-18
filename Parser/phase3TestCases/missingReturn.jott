@@ -3,3 +3,5 @@
 foo[x:String]:String{
     print[x];
 }
+
+main[]:Void{}
