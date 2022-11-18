@@ -216,15 +216,13 @@ public class BoolExprNode implements JottTree { //TODO
                     case "func_call":
                         if (!symbolTable.containsKey(this.tokens.get(0).getToken()))
                             CreateSemanticError("Function is not defined", this.tokens.get(0));
-                        else if (!symbolTable.get(this.tokens.get(0).getToken()).ReturnType.equals("Boolean") ||
-                                !symbolTable.get(this.tokens.get(0).getToken()).IsFunction)
+                        else if (!symbolTable.get(this.tokens.get(0).getToken()).IsFunction)
                             CreateSemanticError("Mis-match typing in integer expression: invalid function use", this.tokens.get(0));
                         break;
                     case "id":
                         if (!symbolTable.containsKey(this.tokens.get(0).getToken()))
                             CreateSemanticError("Variable is not defined", this.tokens.get(0));
-                        else if (!symbolTable.get(this.tokens.get(0).getToken()).ReturnType.equals("Boolean") ||
-                                symbolTable.get(this.tokens.get(0).getToken()).IsFunction)
+                        else if (symbolTable.get(this.tokens.get(0).getToken()).IsFunction)
                             CreateSemanticError("Mis-match typing in integer expression: invalid variable use", this.tokens.get(0));
                         break;
                     default:

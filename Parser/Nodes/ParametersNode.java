@@ -20,16 +20,17 @@ public class ParametersNode implements JottTree{
     private Token firstToken;
     Hashtable<String, SymbolData> symbolTable;
 
-    public ParametersNode(ArrayList<Token> tokens, int tc, String func, Hashtable<String, SymbolData> symbolTable) {
+    public ParametersNode(ArrayList<Token> tokens, int tc, String func, Hashtable<String, SymbolData> symbolTable, Token firstToken) {
         try {
             function = func;
             this.tokens = tokens;
             if (this.tokens.size() == 0) {
                 expressionNode = null;
                 parametersTNode = null;
+                this.firstToken = firstToken;
             }
             else {
-                firstToken = this.tokens.get(0);
+                this.firstToken = this.tokens.get(0);
                 ArrayList<Token> expr = new ArrayList<>();
                 int b_count = 0;
                 while ((b_count != 0 || this.tokens.get(0).getTokenType() != TokenType.COMMA) && this.tokens.size() != 0) {
@@ -39,7 +40,7 @@ public class ParametersNode implements JottTree{
                     else if (this.tokens.get(0).getTokenType() == TokenType.R_BRACKET) b_count--;
                 }
                 expressionNode = new ExpressionNode(expr, tabCount, symbolTable);
-                parametersTNode = new ParametersTNode(this.tokens, tabCount, cnt+1, func, symbolTable);
+                parametersTNode = new ParametersTNode(this.tokens, tabCount, cnt+1, func, symbolTable, firstToken);
             }
             this.symbolTable = symbolTable;
         } catch (Exception e) {
