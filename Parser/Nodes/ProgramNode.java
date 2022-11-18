@@ -79,7 +79,6 @@ public class ProgramNode implements JottTree { //TODO
 
             // also add EOF symbol??
         } catch (Exception e) {
-            e.printStackTrace();
             throw new RuntimeException();
         }
     }

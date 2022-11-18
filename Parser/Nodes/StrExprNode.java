@@ -33,8 +33,8 @@ public class StrExprNode implements JottTree {
     public StrExprNode(ArrayList<Token> tokens, int tc, Hashtable<String, SymbolData> symbolTable) {
         tabCount = tc;
         this.tokens = tokens;
-        token = this.tokens.get(0);
         assert this.tokens != null;
+        token = this.tokens.get(0);
         if (this.tokens.size() == 1) {
             if (this.tokens.get(0).getTokenType() == TokenType.STRING) {
                 subnode = new StrLiteralNode(this.tokens.get(0), tabCount, symbolTable);

@@ -6,6 +6,4 @@ foo[]:Void{
 	print[while];
 }
 
-main[]:Void{
-    print["hello world"];
-}
+main[]:Void{}

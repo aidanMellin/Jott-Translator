@@ -25,7 +25,6 @@ public class JottParser {
             Hashtable<String, SymbolData> symbolTable = new Hashtable<>();
             return new ProgramNode(tokens, 0, fileName, symbolTable);
         } catch (Exception e) {
-            e.printStackTrace();
             return null;
         }
     }
@@ -43,7 +42,7 @@ public class JottParser {
         String textFileName = "largerValid.jott";
         String[] fileNameTokens = textFileName.split("\\.");
         fileName = fileNameTokens[0];
-        ArrayList<Token> tokens = JottTokenizer.tokenize("Parser/phase3TestCases/everything.jott");
+        ArrayList<Token> tokens = JottTokenizer.tokenize("Parser/phase3TestCases/whileKeyword.jott");
         // ArrayList<Token> tokens = JottTokenizer.tokenize("Parser/phase2Tester/parserTestCases/validLoop.jott");
 
         JottTree jottTree = parse(tokens, fileName);

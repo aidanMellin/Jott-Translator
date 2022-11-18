@@ -22,7 +22,6 @@ public class BodyNode implements JottTree {
         try {
             tabCount = tc;
             this.tokens = tokens;
-
             if (this.tokens.size() == 0) {
                 return;
             } else if (this.tokens.get(0).getTokenType().equals(TokenType.ID_KEYWORD) && this.tokens.get(0).getToken().equals(RETURN_STR)) {
@@ -104,6 +103,7 @@ public class BodyNode implements JottTree {
             }
             this.symbolTable = symbolTable;
         } catch (Exception e) {
+            e.printStackTrace();
             throw new RuntimeException();
         }
     }
