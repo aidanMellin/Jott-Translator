@@ -129,7 +129,7 @@ public class IfStatementNode implements JottTree{
     {
         return "\t".repeat(tabCount) + "if " + subnodes.get(0).convertToPython() + ":\n" +
                 subnodes.get(1).convertToPython() +
-                "\t".repeat(tabCount) + subnodes.get(2).convertToPython() + subnodes.get(3).convertToPython();
+                "\t".repeat(tabCount) + subnodes.get(2).convertToPython() + subnodes.get(3).convertToPython() + "\n";
     }
 
     /**

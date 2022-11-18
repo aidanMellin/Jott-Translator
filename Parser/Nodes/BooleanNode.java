@@ -11,7 +11,7 @@ public class BooleanNode implements JottTree {
     private final String ERROR_MSG = "Unexpected Token - Expected True or False";
     private final String JOTT_TRUE = "True";
     private final String JOTT_FALSE = "False";
-    private final String JAVA_TRUE = "false";
+    private final String JAVA_TRUE = "true";
     private final String JAVA_FALSE = "false";
     private final Token token;
     private int tabCount;

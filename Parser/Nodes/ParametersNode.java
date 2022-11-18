@@ -107,7 +107,7 @@ public class ParametersNode implements JottTree{
                         CreateSemanticError("Unexpected number of parameters for " + function, firstToken);
                     else return true;
                 } else {
-                    if (!symbolTable.get(function).ParamsTypes.get(cnt).equals(expressionNode.expr_type))
+                    if (symbolTable.get(function).ParamsTypes.size() > cnt && !symbolTable.get(function).ParamsTypes.get(cnt).equals(expressionNode.expr_type))
                         CreateSemanticError("Unexpected parameters for " + function, firstToken);
                 }
             }

@@ -1,0 +1,18 @@
+foo[]:Integer{
+    return 6 + 2;
+}
+
+main[]:Void{
+    if [5>3]{
+        print[9];
+    } elseif [5==3] {
+        print["hello"];
+    }
+
+    Integer y = foo[];
+    Integer f = 6;
+}
+
+bar[x:Double]:Double{
+    return 3.0;
+}
