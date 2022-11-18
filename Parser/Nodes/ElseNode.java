@@ -17,10 +17,12 @@ public class ElseNode implements JottTree{
     private ArrayList<Token> tokens;
     private int tabCount;
     Hashtable<String, SymbolData> symbolTable;
+    private String function;
 
 
-    public ElseNode(ArrayList<Token> tokens, int tc, Hashtable<String, SymbolData> symbolTable) {
+    public ElseNode(ArrayList<Token> tokens, int tc, Hashtable<String, SymbolData> symbolTable, String func) {
         try {
+            function = func;
             tabCount = tc;
             this.tokens = tokens;
             if (this.tokens.size() == 0) body = null;
@@ -36,7 +38,7 @@ public class ElseNode implements JottTree{
                 bodyTokens.remove(0);
                 bodyTokens.remove(0);
                 bodyTokens.remove(bodyTokens.size() - 1);
-                body = new BodyNode(bodyTokens, tabCount + 1, symbolTable);
+                body = new BodyNode(bodyTokens, tabCount + 1, symbolTable, function);
             }
             this.symbolTable = symbolTable;
         } catch (Exception e) {

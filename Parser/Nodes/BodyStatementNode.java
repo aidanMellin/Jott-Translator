@@ -14,16 +14,18 @@ public class BodyStatementNode implements JottTree {
     private final String WHILE_STR = "while";
     private int tabCount;
     Hashtable<String, SymbolData> symbolTable;
+    private String function;
 
-    public BodyStatementNode(ArrayList<Token> tokens, int tc, Hashtable<String, SymbolData> symbolTable) {
+    public BodyStatementNode(ArrayList<Token> tokens, int tc, Hashtable<String, SymbolData> symbolTable, String func) {
         try {
+            function = func;
             tabCount = tc;
             this.tokens = tokens;
             assert this.tokens != null;
             if (this.tokens.get(0).getToken().equals(IF_STR)) {
-                subnodes.add(new IfStatementNode(this.tokens, tabCount, symbolTable));
+                subnodes.add(new IfStatementNode(this.tokens, tabCount, symbolTable, function));
             } else if (this.tokens.get(0).getToken().equals(WHILE_STR)) {
-                subnodes.add(new WhileLoopNode(this.tokens, tabCount, symbolTable));
+                subnodes.add(new WhileLoopNode(this.tokens, tabCount, symbolTable, function));
             } else if (this.tokens.get(0).getTokenType().equals(TokenType.ID_KEYWORD)) {
                 subnodes.add(new StatementNode(this.tokens, tabCount, symbolTable));
             } else {

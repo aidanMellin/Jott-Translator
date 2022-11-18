@@ -22,9 +22,11 @@ public class IfStatementNode implements JottTree{
     private ArrayList<Token> tokens;
     private int tabCount;
     Hashtable<String, SymbolData> symbolTable;
+    private String function;
 
-    public IfStatementNode(ArrayList<Token> tokens, int tc, Hashtable<String, SymbolData> symbolTable) {
+    public IfStatementNode(ArrayList<Token> tokens, int tc, Hashtable<String, SymbolData> symbolTable, String func) {
         try {
+            function = func;
             tabCount = tc;
             this.tokens = tokens;
             if (this.tokens.size() == 0) subnodes = null;
@@ -55,7 +57,7 @@ public class IfStatementNode implements JottTree{
                     bodyTokens.add(this.tokens.get(0));
                     this.tokens.remove(0);
                 }
-                subnodes.add(new BodyNode(bodyTokens, tabCount + 1, symbolTable));
+                subnodes.add(new BodyNode(bodyTokens, tabCount + 1, symbolTable, function));
                 // }
                 assert this.tokens.get(0).getTokenType() == TokenType.R_BRACE;
                 this.tokens.remove(0);
@@ -67,8 +69,8 @@ public class IfStatementNode implements JottTree{
                     else if (this.tokens.get(0).getTokenType() == TokenType.R_BRACE) b_count--;
                     elseif.add(this.tokens.remove(0));
                 }
-                subnodes.add(new ElseIfListNode(elseif, tabCount, symbolTable));
-                subnodes.add(new ElseNode(this.tokens, tabCount, symbolTable));
+                subnodes.add(new ElseIfListNode(elseif, tabCount, symbolTable, function));
+                subnodes.add(new ElseNode(this.tokens, tabCount, symbolTable, function));
             }
             this.symbolTable = symbolTable;
         } catch (Exception e) {

@@ -17,15 +17,17 @@ public class BodyNode implements JottTree {
     private final String WHILE_STR = "while";
     private int tabCount;
     Hashtable<String, SymbolData> symbolTable;
+    private String function;
 
-    public BodyNode(ArrayList<Token> tokens, int tc, Hashtable<String, SymbolData> symbolTable) {
+    public BodyNode(ArrayList<Token> tokens, int tc, Hashtable<String, SymbolData> symbolTable, String func) {
         try {
+            function = func;
             tabCount = tc;
             this.tokens = tokens;
             if (this.tokens.size() == 0) {
                 return;
             } else if (this.tokens.get(0).getTokenType().equals(TokenType.ID_KEYWORD) && this.tokens.get(0).getToken().equals(RETURN_STR)) {
-                subnodes.add(new ReturnStatementNode(this.tokens, tabCount, symbolTable));
+                subnodes.add(new ReturnStatementNode(this.tokens, tabCount, symbolTable, function));
             } else {
                 ArrayList<Token> bodyStmtTokens = new ArrayList<>();
                 if (this.tokens.get(0).getToken().equals(WHILE_STR)) {
@@ -98,8 +100,8 @@ public class BodyNode implements JottTree {
                         }
                     }
                 }
-                subnodes.add(new BodyStatementNode(new ArrayList<>(bodyStmtTokens), tabCount, symbolTable));
-                subnodes.add(new BodyNode(new ArrayList<>(this.tokens), tabCount, symbolTable));
+                subnodes.add(new BodyStatementNode(new ArrayList<>(bodyStmtTokens), tabCount, symbolTable, function));
+                subnodes.add(new BodyNode(new ArrayList<>(this.tokens), tabCount, symbolTable, function));
             }
             this.symbolTable = symbolTable;
         } catch (Exception e) {

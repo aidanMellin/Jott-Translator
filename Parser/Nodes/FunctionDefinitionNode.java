@@ -23,6 +23,7 @@ public class FunctionDefinitionNode implements JottTree {
     private boolean funcExists = false;
     private Token firstToken;
     Hashtable<String, SymbolData> symbolTable;
+    private String function;
 
     public FunctionDefinitionNode(ArrayList<Token> tokens, int tc, Hashtable<String, SymbolData> symbolTable) {
         try {
@@ -33,16 +34,19 @@ public class FunctionDefinitionNode implements JottTree {
                 CreateSyntaxError("Unexpected Token - Expected ID", this.tokens.get(0));
             subnodes.add(new IdNode(this.tokens.remove(0), tabCount, symbolTable));
             if (symbolTable.containsKey(subnodes.get(0).convertToJott()) && symbolTable.get(subnodes.get(0).convertToJott()).IsFunction) funcExists = true;
-            else symbolTable.put(subnodes.get(0).convertToJott(), new SymbolData(
-                    subnodes.get(0).convertToJott(),
-                    null,
-                    (subnodes.get(0).convertToJott().equals("main")),
-                    true,
-                    true,
-                    new ArrayList<>(),
-                    new ArrayList<>(),
-                    1
-            ));
+            else {
+                symbolTable.put(subnodes.get(0).convertToJott(), new SymbolData(
+                        subnodes.get(0).convertToJott(),
+                        null,
+                        (subnodes.get(0).convertToJott().equals("main")),
+                        true,
+                        true,
+                        new ArrayList<>(),
+                        new ArrayList<>(),
+                        1
+                ));
+                function = subnodes.get(0).convertToJott();
+            }
             this.symbolTable = new Hashtable<>(symbolTable);
             String[] keys = this.symbolTable.keySet().toArray(new String[0]);
             for (String key : keys) {
@@ -84,7 +88,7 @@ public class FunctionDefinitionNode implements JottTree {
                     if (this.tokens.size() == 0) CreateSyntaxError("Error: empty token array", body.get(body.size() - 1));
                     if (this.tokens.get(0).getTokenType() == TokenType.R_BRACE) b_count--;
                 }
-            subnodes.add(new BodyNode(body, tabCount + 1, this.symbolTable));
+            subnodes.add(new BodyNode(body, tabCount + 1, this.symbolTable, function));
             if (this.tokens.get(0).getTokenType() != TokenType.R_BRACE)
                 CreateSyntaxError("Unexpected Token - Expected '}'", this.tokens.get(0));
             this.tokens.remove(0);

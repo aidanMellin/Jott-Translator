@@ -9,13 +9,17 @@ public class ReturnStatementNode implements JottTree {
 
     private ArrayList<Token> tokens;
     private ArrayList<JottTree> subnodes = new ArrayList<>();
+    private ExpressionNode expressionNode;
+    private EndStatementNode endStatementNode;
 
     private final String JOTT_RETURN = "return";
     private int tabCount;
     Hashtable<String, SymbolData> symbolTable;
+    private String function;
 
-    public ReturnStatementNode(ArrayList<Token> tokens, int tc, Hashtable<String, SymbolData> symbolTable) {
+    public ReturnStatementNode(ArrayList<Token> tokens, int tc, Hashtable<String, SymbolData> symbolTable, String func) {
         try {
+            function = func;
             tabCount = tc;
             this.tokens = tokens;
             assert tokens != null;
@@ -29,8 +33,8 @@ public class ReturnStatementNode implements JottTree {
                 expr.add(this.tokens.remove(0));
             if (this.tokens.size() != 1 && this.tokens.get(0).getTokenType() != TokenType.SEMICOLON)
                 CreateSyntaxError("Unexpected Token - Expected ';'", this.tokens.get(0));
-            subnodes.add(new ExpressionNode(expr, tabCount, symbolTable));
-            subnodes.add(new EndStatementNode(this.tokens.remove(0), tabCount, symbolTable));
+            expressionNode = new ExpressionNode(expr, tabCount, symbolTable);
+            endStatementNode = new EndStatementNode(this.tokens.remove(0), tabCount, symbolTable);
             if (this.tokens.size() != 0) CreateSyntaxError("Expected } got <id>", this.tokens.get(0));
             this.symbolTable = symbolTable;
         } catch (Exception e) {
@@ -45,8 +49,8 @@ public class ReturnStatementNode implements JottTree {
     public String convertToJott()
     {
         return  "\t".repeat(tabCount) + JOTT_RETURN + " " +
-                subnodes.get(0).convertToJott() +
-                subnodes.get(1).convertToJott();
+                expressionNode.convertToJott() +
+                endStatementNode.convertToJott();
     }
 
     /**
@@ -56,8 +60,8 @@ public class ReturnStatementNode implements JottTree {
     public String convertToJava()
     {
         return  "\t".repeat(tabCount) + JOTT_RETURN + " " +
-                subnodes.get(0).convertToJava() +
-                subnodes.get(1).convertToJava();
+                expressionNode.convertToJava() +
+                endStatementNode.convertToJava();
     }
 
     /**
@@ -67,8 +71,8 @@ public class ReturnStatementNode implements JottTree {
     public String convertToC()
     {
         return  "\t".repeat(tabCount) + JOTT_RETURN + " " +
-                subnodes.get(0).convertToC() +
-                subnodes.get(1).convertToC();
+                expressionNode.convertToC() +
+                endStatementNode.convertToC();
     }
 
     /**
@@ -78,8 +82,8 @@ public class ReturnStatementNode implements JottTree {
     public String convertToPython()
     {
         return  "\t".repeat(tabCount) + JOTT_RETURN + " " +
-                subnodes.get(0).convertToPython() +
-                subnodes.get(1).convertToPython();
+                expressionNode.convertToPython() +
+                endStatementNode.convertToPython();
     }
 
     /**
@@ -89,7 +93,15 @@ public class ReturnStatementNode implements JottTree {
      */
     public boolean validateTree()
     {
-        return(true);
+        try {
+            if (symbolTable.get(function).ReturnType.equals("Void"))
+                CreateSemanticError("Invalid return statement in a Void function", tokens.get(0));
+            else if (!symbolTable.get(function).ReturnType.equals(expressionNode.expr_type))
+                CreateSemanticError("Invalid return: returned value is not correct type", tokens.get(0));
+            return expressionNode.validateTree() && endStatementNode.validateTree();
+        } catch (Exception e) {
+            throw new RuntimeException();
+        }
     }
 
     public void CreateSyntaxError(String msg, Token token) throws Exception{
