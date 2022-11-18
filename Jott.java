@@ -18,8 +18,10 @@ public class Jott {
             inputFile = args[0];
             outputFile = args[1];
             lang = args[2];
-            if(args.length == 4 && args[3].equals("verbose"))
-                verbose = true;
+            if(args.length == 4){
+                if(args[3].equals("verbose"))
+                    verbose = true;
+            }
             
             String[] fileNameTokens = inputFile.split("\\.");
             fileName = fileNameTokens[0];
