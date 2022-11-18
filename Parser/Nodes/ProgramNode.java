@@ -97,6 +97,10 @@ public class ProgramNode implements JottTree { //TODO
      */
     public String convertToJava()
     {
+        while(FILE_NAME.contains("/")){
+            FILE_NAME = FILE_NAME.substring(FILE_NAME.indexOf("/") + 1);
+        }
+
         return JAVA_CLASS + FILE_NAME + LBRACE_CHAR + "\n" + function_list.convertToJava() + RBRACE_CHAR;
     }
 
@@ -127,7 +131,9 @@ public class ProgramNode implements JottTree { //TODO
     public boolean validateTree()
     {
         try {
-            if (!symbolTable.containsKey("main") && !symbolTable.get("main").IsMain)
+            if (!symbolTable.containsKey("main"))
+                CreateSemanticError("Missing main function from program", firstToken);
+            if (!symbolTable.get("main").IsMain)
                 CreateSemanticError("Missing main function from program", firstToken);
             return function_list.validateTree();
         } catch (Exception e) {

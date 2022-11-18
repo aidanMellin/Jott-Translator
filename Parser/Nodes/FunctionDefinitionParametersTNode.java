@@ -37,7 +37,7 @@ public class FunctionDefinitionParametersTNode implements JottTree {
                 if (this.tokens.get(0).getTokenType() != TokenType.ID_KEYWORD)
                     CreateSyntaxError("Unexpected Token - Expected ID", this.tokens.get(0));
                 subnodes.add(new TypeNode(this.tokens.remove(0), tabCount, symbolTable));
-                symbolTable.get(func).ParamsTypes.add(subnodes.get(0).convertToJott());
+                symbolTable.get(func).ParamsTypes.add(subnodes.get(1).convertToJott());
 
                 subnodes.add(new FunctionDefinitionParametersTNode(this.tokens, tabCount, func, symbolTable));
                 symbolTable.put(subnodes.get(0).convertToJott(), new SymbolData(
@@ -110,8 +110,9 @@ public class FunctionDefinitionParametersTNode implements JottTree {
     {
         try {
             if (subnodes == null) return true;
-            else if (symbolTable.containsKey(subnodes.get(0).convertToJott()))
+            else if (symbolTable.get(subnodes.get(0).convertToJott()).varCount > 1) {
                 CreateSemanticError("Variable is already declared in program", firstToken);
+            }
             return subnodes.get(0).validateTree() &&
                     subnodes.get(1).validateTree() &&
                     subnodes.get(2).validateTree();

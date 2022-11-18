@@ -164,16 +164,19 @@ public class DoubleExprNode implements JottTree {
                     case "dbl":
                         break;
                     case "func_call":
-                        if (!symbolTable.containsKey(this.Tokens.get(0).getToken()) ||
-                                !symbolTable.get(this.Tokens.get(0).getToken()).ReturnType.equals("Double") ||
+                        if (!symbolTable.containsKey(this.Tokens.get(0).getToken()))
+                            CreateSemanticError("Function is not defined", this.Tokens.get(0));
+                        else if (!symbolTable.get(this.Tokens.get(0).getToken()).ReturnType.equals("Double") ||
                                 !symbolTable.get(this.Tokens.get(0).getToken()).IsFunction)
-                            CreateSemanticError("Mis-match typing in double expression: invalid function use", this.Tokens.get(0));
+                            CreateSemanticError("Mis-match typing in integer expression: invalid function use", this.Tokens.get(0));
                         break;
                     case "id":
-                        if (!symbolTable.containsKey(this.Tokens.get(0).getToken()) ||
-                                !symbolTable.get(this.Tokens.get(0).getToken()).ReturnType.equals("Boolean") ||
+                        if (!symbolTable.containsKey(this.Tokens.get(0).getToken()))
+                            CreateSemanticError("Variable is not defined", this.Tokens.get(0));
+                        else if (!symbolTable.get(this.Tokens.get(0).getToken()).ReturnType.equals("Double") ||
                                 symbolTable.get(this.Tokens.get(0).getToken()).IsFunction)
-                            CreateSemanticError("Mis-match typing in double expression: invalid variable use", this.Tokens.get(0));
+                            CreateSemanticError("Mis-match typing in integer expression: invalid variable use", this.Tokens.get(0));
+                        break;
                     default:
                         CreateSemanticError("Error in validating double expr", Tokens.get(0));
                         break;
@@ -217,7 +220,6 @@ public class DoubleExprNode implements JottTree {
                 }
                 else if(param1Symbol && !param2Symbol){
                     String param2ReturnType = "";
-                    System.out.println(subnodes.get(2).getClass().toString());
                     switch (subnodes.get(2).getClass().toString()) {
                         case "class Parser.Nodes.IntNode": param2ReturnType = JOTT_INTEGER;
                             break;

@@ -20,7 +20,7 @@ public class ParametersTNode implements JottTree{
     private Token firstToken;
     Hashtable<String, SymbolData> symbolTable;
 
-    public ParametersTNode(ArrayList<Token> tokens, int tc, int c, String func, Hashtable<String, SymbolData> symbolTable) {
+    public ParametersTNode(ArrayList<Token> tokens, int tc, int c, String func, Hashtable<String, SymbolData> symbolTable, Token firstToken) {
         try {
             function = func;
             cnt = c;
@@ -29,9 +29,10 @@ public class ParametersTNode implements JottTree{
             if (this.tokens.size() == 0) {
                 expressionNode = null;
                 parametersTNode = null;
+                this.firstToken = firstToken;
             }
             else {
-                firstToken = this.tokens.get(0);
+                this.firstToken = this.tokens.get(0);
                 if (this.tokens.get(0).getTokenType() != TokenType.COMMA)
                     CreateSyntaxError("Unexpected Token - Expected ','", this.tokens.get(0));
                 this.tokens.remove(0);
@@ -45,7 +46,7 @@ public class ParametersTNode implements JottTree{
 
                 }
                 expressionNode = new ExpressionNode(expr, tabCount, symbolTable);
-                parametersTNode = new ParametersTNode(this.tokens, tabCount, cnt+1, func, symbolTable);
+                parametersTNode = new ParametersTNode(this.tokens, tabCount, cnt+1, func, symbolTable, firstToken);
             }
             this.symbolTable = symbolTable;
         } catch (Exception e) {
@@ -114,8 +115,9 @@ public class ParametersTNode implements JottTree{
                     if (symbolTable.get(function).Params.size() != cnt)
                         CreateSemanticError("Unexpected number of parameters for " + function, firstToken);
                     else return true;
-                else if (!symbolTable.get(function).ParamsTypes.get(cnt).equals(expressionNode.expr_type))
+                else if (!symbolTable.get(function).ParamsTypes.get(cnt).equals(expressionNode.expr_type)) {
                     CreateSemanticError("Unexpected parameters for " + function, firstToken);
+                }
                 return expressionNode.validateTree() &&  parametersTNode.validateTree();
             }
             return expressionNode == null;
