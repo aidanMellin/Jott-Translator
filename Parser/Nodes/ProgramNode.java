@@ -97,6 +97,10 @@ public class ProgramNode implements JottTree { //TODO
      */
     public String convertToJava()
     {
+        while(FILE_NAME.contains("/")){
+            FILE_NAME = FILE_NAME.substring(FILE_NAME.indexOf("/") + 1);
+        }
+
         return JAVA_CLASS + FILE_NAME + LBRACE_CHAR + "\n" + function_list.convertToJava() + RBRACE_CHAR;
     }
 
