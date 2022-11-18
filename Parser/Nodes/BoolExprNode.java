@@ -215,13 +215,15 @@ public class BoolExprNode implements JottTree { //TODO
                         break;
                     case "func_call":
                         if (!symbolTable.containsKey(this.tokens.get(0).getToken()) ||
-                                !symbolTable.get(this.tokens.get(0).getToken()).ReturnType.equals("Boolean") ||
+                                // (This was causing an issue. Don't believe it doesn't anything useful)
+                                //!symbolTable.get(this.tokens.get(0).getToken()).ReturnType.equals("Boolean") ||
                                 !symbolTable.get(this.tokens.get(0).getToken()).IsFunction)
                             CreateSemanticError("Mis-match typing in boolean expression: invalid function use", firstToken);
                         break;
                     case "id":
                         if (!symbolTable.containsKey(this.tokens.get(0).getToken()) ||
-                                !symbolTable.get(this.tokens.get(0).getToken()).ReturnType.equals("Boolean") ||
+                                // (This was causing an issue. Don't believe it doesn't anything useful)
+                                //!symbolTable.get(this.tokens.get(0).getToken()).ReturnType.equals("Boolean") ||
                                 symbolTable.get(this.tokens.get(0).getToken()).IsFunction)
                             CreateSemanticError("Mis-match typing in boolean expression: invalid variable use", firstToken);
                     default:
