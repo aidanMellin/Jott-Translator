@@ -7,6 +7,11 @@ import java.util.Hashtable;
 
 public class BoolExprNode implements JottTree { //TODO
 
+    private final String JOTT_INTEGER = "Integer";
+    private final String JOTT_DOUBLE = "Double";
+    private final String JOTT_STRING = "String";
+    private final String JOTT_BOOLEAN = "Boolean";
+
     private ArrayList<JottTree> subnodes;
     private ArrayList<Token> tokens;
     private int tabCount;
@@ -225,8 +230,64 @@ public class BoolExprNode implements JottTree { //TODO
                 }
                 return subnodes.get(0).validateTree();
             } else {
-                if (subnodes.get(0).getClass() != subnodes.get(2).getClass())
+                boolean param1Symbol = false;
+                boolean param2Symbol = false;
+
+                if (symbolTable.containsKey(subnodes.get(0).convertToJott())) {
+                    param1Symbol = true;
+                }
+                if (symbolTable.containsKey(subnodes.get(2).convertToJott())) {
+                    param2Symbol = true;
+                }
+                if(param1Symbol && param2Symbol){
+                    if (symbolTable.get(subnodes.get(0).convertToJott()).ReturnType != symbolTable.get(subnodes.get(0).convertToJott()).ReturnType) {
+                        CreateSemanticError("Mis-matched typing in boolean expression", firstToken);
+                    }
+                }
+                else if(!param1Symbol && param2Symbol){
+                    String param1ReturnType = "";
+                    switch (subnodes.get(0).getClass().toString()) {
+                        case "class Parser.Nodes.IntExprNode": param1ReturnType = JOTT_INTEGER;
+                            break;
+                        case "class Parser.Nodes.DoubleExprNode": param1ReturnType = JOTT_DOUBLE;
+                            break;
+                        case "class Parser.Nodes.BoolExprNode": param1ReturnType = JOTT_BOOLEAN;
+                            break;
+                        case "class Parser.Nodes.StrExprNode": param1ReturnType = JOTT_STRING;
+                            break;
+                    }
+                    if (!symbolTable.get(subnodes.get(2).convertToJott()).ReturnType.equals(param1ReturnType) ) {
+                        CreateSemanticError("Mis-matched typing in boolean expression", firstToken);
+                    }
+
+                }
+                else if(param1Symbol && !param2Symbol){
+                    String param2ReturnType = "";
+                    switch (subnodes.get(2).getClass().toString()) {
+                        case "class Parser.Nodes.IntExprNode": param2ReturnType = JOTT_INTEGER;
+                            break;
+                        case "class Parser.Nodes.DoubleExprNode": param2ReturnType = JOTT_DOUBLE;
+                            break;
+                        case "class Parser.Nodes.BoolExprNode": param2ReturnType = JOTT_BOOLEAN;
+                            break;
+                        case "class Parser.Nodes.StrExprNode": param2ReturnType = JOTT_STRING;
+                            break;
+                    }
+                    if (!symbolTable.get(subnodes.get(0).convertToJott()).ReturnType.equals(param2ReturnType)) {
+                        CreateSemanticError("Mis-matched typing in boolean expression", firstToken);
+                    }
+                }
+                else {
+                    if (subnodes.get(0).getClass() != subnodes.get(2).getClass()) {
+                        CreateSemanticError("Mis-matched typing in boolean expression", firstToken);
+                    }
+                }
+
+
+                /*if (subnodes.get(0).getClass() != subnodes.get(2).getClass()) {
                     CreateSemanticError("Mis-matched typing in boolean expression", firstToken);
+                }*/
+
                 return subnodes.get(0).validateTree() &&
                         subnodes.get(1).validateTree() &&
                         subnodes.get(2).validateTree();

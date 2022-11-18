@@ -7,6 +7,11 @@ import java.util.Hashtable;
 
 public class DoubleExprNode implements JottTree {
 
+    private final String JOTT_INTEGER = "Integer";
+    private final String JOTT_DOUBLE = "Double";
+    private final String JOTT_STRING = "String";
+    private final String JOTT_BOOLEAN = "Boolean";
+
     private ArrayList<JottTree> subnodes;
     private ArrayList<Token> Tokens;
     private int tabCount;
@@ -175,10 +180,63 @@ public class DoubleExprNode implements JottTree {
                 }
                 return subnodes.get(0).validateTree();
             } else {
-                if (subnodes.get(0).getClass() != subnodes.get(2).getClass() ||
+                /*if (subnodes.get(0).getClass() != subnodes.get(2).getClass() ||
                         subnodes.get(0).getClass() != this.getClass() ||
                         subnodes.get(2).getClass() != this.getClass())
-                    CreateSemanticError("Mis-matching types in expression", Tokens.get(0));
+                    CreateSemanticError("Mis-matching types in expression", Tokens.get(0));*/
+                boolean param1Symbol = false;
+                boolean param2Symbol = false;
+
+                if (symbolTable.containsKey(subnodes.get(0).convertToJott())) {
+                    param1Symbol = true;
+                }
+                if (symbolTable.containsKey(subnodes.get(2).convertToJott())) {
+                    param2Symbol = true;
+                }
+                if(param1Symbol && param2Symbol){
+                    if (symbolTable.get(subnodes.get(0).convertToJott()).ReturnType != symbolTable.get(subnodes.get(0).convertToJott()).ReturnType) {
+                        CreateSemanticError("Mis-matching types in expression", Tokens.get(0));
+                    }
+                }
+                else if(!param1Symbol && param2Symbol){
+                    String param1ReturnType = "";
+                    switch (subnodes.get(0).getClass().toString()) {
+                        case "class Parser.Nodes.IntNode": param1ReturnType = JOTT_INTEGER;
+                            break;
+                        case "class Parser.Nodes.DoubleNode": param1ReturnType = JOTT_DOUBLE;
+                            break;
+                        case "class Parser.Nodes.BoolNode": param1ReturnType = JOTT_BOOLEAN;
+                            break;
+                        case "class Parser.Nodes.StrNode": param1ReturnType = JOTT_STRING;
+                            break;
+                    }
+                    if (!symbolTable.get(subnodes.get(2).convertToJott()).ReturnType.equals(param1ReturnType) ) {
+                        CreateSemanticError("Mis-matching types in expression", Tokens.get(0));
+                    }
+
+                }
+                else if(param1Symbol && !param2Symbol){
+                    String param2ReturnType = "";
+                    System.out.println(subnodes.get(2).getClass().toString());
+                    switch (subnodes.get(2).getClass().toString()) {
+                        case "class Parser.Nodes.IntNode": param2ReturnType = JOTT_INTEGER;
+                            break;
+                        case "class Parser.Nodes.DoubleNode": param2ReturnType = JOTT_DOUBLE;
+                            break;
+                        case "class Parser.Nodes.BoolNode": param2ReturnType = JOTT_BOOLEAN;
+                            break;
+                        case "class Parser.Nodes.StrNode": param2ReturnType = JOTT_STRING;
+                            break;
+                    }
+                    if (!symbolTable.get(subnodes.get(0).convertToJott()).ReturnType.equals(param2ReturnType)) {
+                        CreateSemanticError("Mis-matching types in expression", Tokens.get(0));
+                    }
+                }
+                else {
+                    if (subnodes.get(0).getClass() != subnodes.get(2).getClass()) {
+                        CreateSemanticError("Mis-matching types in expression", Tokens.get(0));
+                    }
+                }
                 return subnodes.get(0).validateTree() &&
                         subnodes.get(1).validateTree() &&
                         subnodes.get(2).validateTree();
