@@ -13,10 +13,14 @@ public class Jott {
     public static void main(String[] args) {
         String fileName;
         String lang, inputFile, outputFile;
+        boolean verbose = false;
         try{
             inputFile = args[0];
             outputFile = args[1];
             lang = args[2];
+            if(args.length == 4 && args[3].equals("verbose"))
+                verbose = true;
+            
             String[] fileNameTokens = inputFile.split("\\.");
             fileName = fileNameTokens[0];
             System.out.printf("Outputting %s, %s, %s%n",inputFile, outputFile, lang);
@@ -40,9 +44,8 @@ public class Jott {
                 try {
                     BufferedWriter f_writer = new BufferedWriter(new FileWriter(outputFile));
                     f_writer.write(output);
-                    System.out.print(output);
-                    System.out.print(
-                        "File is created successfully with the content.");
+                    if(verbose)
+                        System.out.print(output);
                     f_writer.close();
                 }
                 catch (IOException e) {
