@@ -25,7 +25,6 @@ public class Jott {
             
             String[] fileNameTokens = inputFile.split("\\.");
             fileName = fileNameTokens[0];
-            System.out.printf("Outputting %s, %s, %s%n",inputFile, outputFile, lang);
             try {
                 ArrayList<Token> jottTokens = JottTokenizer.tokenize(inputFile);
                 JottTree jottTree = JottParser.parse(jottTokens, fileName);
@@ -62,11 +61,4 @@ public class Jott {
             System.exit(1);
         }
     }
-
-    public static String validateTree(String inputFile, String lang){
-        if(true){
-            return "";
-        }
-        return "bad.";
-    } 
 }
