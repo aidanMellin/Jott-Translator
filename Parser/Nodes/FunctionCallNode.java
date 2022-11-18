@@ -71,9 +71,23 @@ public class FunctionCallNode implements JottTree{
     public String convertToC()
     {
         if(subnodes.get(0).convertToC().equals("printf")) {
+            String formatType = "";
+            if(symbolTable.containsKey(subnodes.get(1).convertToJott())){
+                System.out.println(symbolTable.get(subnodes.get(1).convertToJott()).ReturnType);
+                switch (symbolTable.get(subnodes.get(1).convertToJott()).ReturnType) {
+                    case "Integer" -> formatType = "%d";
+                    case "Double" -> formatType = "%f";
+                    case "Boolean" -> formatType = "%d";
+                    case "String" -> formatType = "%s";
+                }
+            }
+            else if(subnodes.get(1).convertToJott().contains("\"")) {
+                formatType = "%s";
+            }
+            
             return subnodes.get(0).convertToC() +
                     LPARAN_STRING +
-                    "\"\\n\", " +
+                    "\""+ formatType +"\\n\", " +
                     subnodes.get(1).convertToC() +
                     RPARAN_STRING;
         }
