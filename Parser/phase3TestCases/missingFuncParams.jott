@@ -7,7 +7,7 @@ foo[x:Integer, b:String]:Integer{
 main[]:Void{
     Integer x = 0;
 	while[x<10]{
-	    x = foo[7];
+	    x = foo[7, "hello"];
 		print[x];
 	}
 }

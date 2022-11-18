@@ -37,7 +37,7 @@ public class FunctionDefinitionParametersTNode implements JottTree {
                 if (this.tokens.get(0).getTokenType() != TokenType.ID_KEYWORD)
                     CreateSyntaxError("Unexpected Token - Expected ID", this.tokens.get(0));
                 subnodes.add(new TypeNode(this.tokens.remove(0), tabCount, symbolTable));
-                symbolTable.get(func).ParamsTypes.add(subnodes.get(0).convertToJott());
+                symbolTable.get(func).ParamsTypes.add(subnodes.get(1).convertToJott());
 
                 subnodes.add(new FunctionDefinitionParametersTNode(this.tokens, tabCount, func, symbolTable));
                 symbolTable.put(subnodes.get(0).convertToJott(), new SymbolData(
