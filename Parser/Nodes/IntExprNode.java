@@ -166,16 +166,19 @@ public class IntExprNode implements JottTree {
                     case "int":
                         break;
                     case "func_call":
-                        if (!symbolTable.containsKey(this.Tokens.get(0).getToken()) ||
-                                !symbolTable.get(this.Tokens.get(0).getToken()).ReturnType.equals("Integer") ||
+                        if (!symbolTable.containsKey(this.Tokens.get(0).getToken()))
+                            CreateSemanticError("Function is not defined", this.Tokens.get(0));
+                        else if (!symbolTable.get(this.Tokens.get(0).getToken()).ReturnType.equals("Integer") ||
                                 !symbolTable.get(this.Tokens.get(0).getToken()).IsFunction)
                             CreateSemanticError("Mis-match typing in integer expression: invalid function use", this.Tokens.get(0));
                         break;
                     case "id":
-                        if (!symbolTable.containsKey(this.Tokens.get(0).getToken()) ||
-                                !symbolTable.get(this.Tokens.get(0).getToken()).ReturnType.equals("Boolean") ||
+                        if (!symbolTable.containsKey(this.Tokens.get(0).getToken()))
+                            CreateSemanticError("Variable is not defined", this.Tokens.get(0));
+                        else if (!symbolTable.get(this.Tokens.get(0).getToken()).ReturnType.equals("Integer") ||
                                 symbolTable.get(this.Tokens.get(0).getToken()).IsFunction)
                             CreateSemanticError("Mis-match typing in integer expression: invalid variable use", this.Tokens.get(0));
+                        break;
                     default:
                         CreateSemanticError("Error in validating integer expr", Tokens.get(0));
                         break;
