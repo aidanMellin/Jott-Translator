@@ -34,6 +34,7 @@ public class AssignmentNode implements JottTree {
     private String expr_type;
     private Token firstToken;
     Hashtable<String, SymbolData> symbolTable;
+    private boolean notDeclared;
 
     public AssignmentNode(ArrayList<Token> tokens, int tc, Hashtable<String, SymbolData> symbolTable) {
         try {
@@ -247,6 +248,9 @@ public class AssignmentNode implements JottTree {
                         null,
                         1)
                 );
+            } else {
+                if (symbolTable.containsKey(subnodes.get(0).convertToJott()) && !symbolTable.get(subnodes.get(0).convertToJott()).IsFunction)
+                    symbolTable.get(subnodes.get(0).convertToJott()).IsInitialized = true;
             }
             this.symbolTable = symbolTable;
         } catch (Exception e) {

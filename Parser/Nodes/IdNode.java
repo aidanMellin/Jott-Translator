@@ -16,9 +16,25 @@ public class IdNode implements JottTree {
     private String idStored;
     private int tabCount;
     Hashtable<String, SymbolData> symbolTable;
+    private boolean isVarDeclarationId;
 
     public IdNode(Token token, int tc, Hashtable<String, SymbolData> symbolTable){
         try {
+            tabCount = tc;
+            this.idToken = token;
+            assert idToken != null;
+            this.idStored = idToken.getToken();
+            if (!idStored.matches("[a-z][a-zA-z0-9]*")) CreateSyntaxError("Unexpected Character", idToken);
+            for (int i = 0; i < idStored.length(); i++) subnodes.add(new CharNode(idStored.charAt(i), tabCount, symbolTable));
+            this.symbolTable = symbolTable;
+        } catch (Exception e) {
+            throw new RuntimeException();
+        }
+    }
+
+    public IdNode(Token token, int tc, Hashtable<String, SymbolData> symbolTable, boolean isVarDeclaration){
+        try {
+            isVarDeclarationId = isVarDeclaration;
             tabCount = tc;
             this.idToken = token;
             assert idToken != null;
@@ -88,7 +104,13 @@ public class IdNode implements JottTree {
      */
     public boolean validateTree()
     {
-        return idStored.matches("[a-z][a-zA-z0-9]*");
+        try {
+            if (symbolTable.containsKey(idStored) && !isVarDeclarationId && !symbolTable.get(idStored).IsInitialized)
+                CreateSemanticError("Use of uninitialized variable", idToken);
+            return idStored.matches("[a-z][a-zA-z0-9]*");
+        } catch (Exception e) {
+            throw new RuntimeException();
+        }
     }
 
     public void CreateSyntaxError(String msg, Token token) throws Exception{

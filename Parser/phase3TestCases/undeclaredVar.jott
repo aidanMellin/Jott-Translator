@@ -1,0 +1,6 @@
+foo[]:Void{
+    Integer hello;
+	print[hello];
+}
+
+main[]:Void{}

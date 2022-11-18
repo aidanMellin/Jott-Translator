@@ -21,7 +21,7 @@ public class VariableDeclarationNode implements JottTree{
             firstToken = this.tokens.get(0);
             if (this.tokens.size() != 3) CreateSyntaxError("Invalid Variable Declaration", this.tokens.get(0));
             subnodes.add(new TypeNode(this.tokens.get(0), tabCount, symbolTable));
-            subnodes.add(new IdNode(this.tokens.get(1), tabCount, symbolTable));
+            subnodes.add(new IdNode(this.tokens.get(1), tabCount, symbolTable, true));
             subnodes.add(new EndStatementNode(this.tokens.get(2), tabCount, symbolTable));
             symbolTable.put(subnodes.get(1).convertToJott(), new SymbolData(
                     subnodes.get(1).convertToJott(),
@@ -85,7 +85,7 @@ public class VariableDeclarationNode implements JottTree{
     public boolean validateTree()
     {
         try {
-            if (symbolTable.containsKey(subnodes.get(1).convertToJott()) && !symbolTable.get(subnodes.get(1).convertToJott()).IsFunction)
+            if (symbolTable.containsKey(subnodes.get(1).convertToJott()) && !symbolTable.get(subnodes.get(1).convertToJott()).IsFunction && symbolTable.get(subnodes.get(1).convertToJott()).varCount > 1)
                 CreateSemanticError("Variable has already been declared", firstToken);
             if (keywords.contains(subnodes.get(1).convertToJott()))
                 CreateSemanticError("Cannot use a keyword as a variable", firstToken);
