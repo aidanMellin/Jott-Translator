@@ -219,7 +219,6 @@ public class IntExprNode implements JottTree {
                 }
                 else if(param1Symbol && !param2Symbol){
                     String param2ReturnType = "";
-                    System.out.println(subnodes.get(2).getClass().toString());
                     switch (subnodes.get(2).getClass().toString()) {
                         case "class Parser.Nodes.IntNode": param2ReturnType = JOTT_INTEGER;
                             break;
